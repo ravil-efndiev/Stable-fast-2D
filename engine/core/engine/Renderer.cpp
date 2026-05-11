@@ -1,0 +1,3 @@
+namespace s2f
+{
+}
