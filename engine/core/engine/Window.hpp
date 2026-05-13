@@ -17,9 +17,10 @@ namespace s2f
 		void pollEvents();
 		f64 getTime() const;
 
+		glm::ivec2 size() const { return mSize; }
+
 	private:
 		void initGLFW();
-		void initGLAD();
 		void setupCallbacks();
 
 	private:

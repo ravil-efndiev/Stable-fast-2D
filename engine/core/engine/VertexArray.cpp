@@ -2,22 +2,24 @@
 
 namespace s2f
 {
-	VertexArray::VertexArray()
+	void VertexArray::create()
 	{
 		glCreateVertexArrays(1, &mID);
+		S2F_INFO("Created vertex array with ID " << mID);
 	}
 
 	VertexArray::~VertexArray()
 	{
-		for (u32 i{ 0 }; i < mCurrentAttribIndex; i++)
-			glDisableVertexAttribArray(i);
 		glDeleteVertexArrays(1, &mID);
+		S2F_INFO("Deleted vertex array with ID " << mID);
 	}
 
-	void VertexArray::setVertexBuffer(const Buffer& vertexBuffer, const Layout& layout) const
+	void VertexArray::setVertexBuffer(const Buffer& vertexBuffer, const Layout& layout)
 	{
 		S2F_ASSERT(vertexBuffer.type() == BufferType::Vertex, 
 			"Buffer passed to setVertexBuffer must be of type Vertex");
+
+		S2F_ASSERT(vertexBuffer.valid(), "Attempted to set an invalid or empty vertex buffer for a vertex array");
 
 		glBindVertexArray(mID);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.id());
@@ -55,8 +57,14 @@ namespace s2f
 		}
 	}
 
-	GLuint VertexArray::id() const 
+	void VertexArray::setIndexBuffer(const Buffer& indexBuffer)
 	{
-		return mID;
+		S2F_ASSERT(indexBuffer.type() == BufferType::Index,
+			"Buffer passed to setIndexBuffer must be of type Index");
+
+		S2F_ASSERT(indexBuffer.valid(), "Attempted to set an invalid or empty index buffer for a vertex array");
+
+		glBindVertexArray(mID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.id());
 	}
 }

@@ -7,12 +7,15 @@ namespace s2f
 	class VertexArray
 	{
 	public:
-		VertexArray();
+		VertexArray() = default;
 		~VertexArray();
-	
-		void setVertexBuffer(const Buffer& vertexBuffer, const Layout& layout) const;
 
-		GLuint id() const;
+		void create();
+	
+		void setVertexBuffer(const Buffer& vertexBuffer, const Layout& layout);
+		void setIndexBuffer(const Buffer& indexBuffer);
+
+		GLuint id() const { return mID; }
 
 	private:
 		GLuint mID{ 0 };

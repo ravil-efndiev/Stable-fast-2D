@@ -2,24 +2,35 @@
 
 namespace s2f
 {
-	void Buffer::create(void* data, size_t size)
+	Buffer::Buffer(BufferType type, size_t size, void* data)
 	{
-		glCreateBuffers(1, &mID);
-		glNamedBufferData(mID, size, data, GL_STATIC_DRAW);
+		create(type, size, data);
 	}
 
 	Buffer::~Buffer()
 	{
-		glDeleteBuffers(1, &mId);
+		glDeleteBuffers(1, &mID);
+		S2F_INFO("Deleted buffer with ID " << mID);
 	}
 
-	GLuint Buffer::id() const
+	void Buffer::create(BufferType type, size_t size, void* data)
 	{
-		return mID;
+		mType = type;
+		S2F_ASSERT(mType != BufferType::Uninitialized,
+			"Buffer type must be specified when creating a buffer");
+		glCreateBuffers(1, &mID);
+		glNamedBufferData(mID, size, data, GL_DYNAMIC_DRAW);
+		S2F_INFO("Created buffer with ID " << mID << ", size = " << size);
 	}
 
-	BufferType Buffer::type() const
+	void Buffer::setData(size_t size, void* data) const
 	{
-		return mType;
+		S2F_ASSERT(valid(), "Attempted to set data for an empty or invalid buffer");
+		glNamedBufferSubData(mID, 0, size, data);
+	}
+
+	bool Buffer::valid() const
+	{
+		return mType != BufferType::Uninitialized;
 	}
 }

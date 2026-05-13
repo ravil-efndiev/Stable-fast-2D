@@ -5,7 +5,10 @@ namespace s2f
 {
 	Engine::Engine(const WindowInfo& windowInfo, const RenderInfo& renderInfo) 
 		: mWindowInfo(windowInfo), mRenderInfo(renderInfo), 
-		mWindow(mWindowInfo.size, mWindowInfo.title) {}
+		mWindow(mWindowInfo.size, mWindowInfo.title) 
+	{
+		start();
+	}
 
 	Engine::~Engine()
 	{
@@ -14,17 +17,21 @@ namespace s2f
 	void Engine::start()
 	{
 		glapi::init();
+		glapi::setViewport(mWindow.size());
 		mTime.lastTime = mWindow.getTime();
+		mRenderer.init();
 	}
 
 	void Engine::startFrame()
 	{
 		updateTime(mTime, mWindow.getTime());
 		glapi::clearScreen(mRenderInfo.clearColor);
+		mRenderer.begin();
 	}
 
 	void Engine::endFrame()
 	{
+		mRenderer.end();
 		mWindow.swapBuffers();
 		mWindow.pollEvents();
 	}
@@ -32,20 +39,5 @@ namespace s2f
 	bool Engine::runs() const
 	{
 		return !mWindow.shouldClose();
-	}
-
-	f32 Engine::deltaTime() const
-	{
-		return static_cast<f32>(mTime.deltaTime);
-	}
-
-	Time Engine::time() const
-	{
-		return mTime;
-	}
-
-	RenderInfo& Engine::renderInfo()
-	{
-		return mRenderInfo;
 	}
 }

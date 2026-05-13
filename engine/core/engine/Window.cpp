@@ -6,7 +6,6 @@ namespace s2f
 		: mSize(size), mTitle(title)
 	{
 		initGLFW();
-		initGLAD();
 		setupCallbacks();
 	}
 
@@ -21,8 +20,8 @@ namespace s2f
 		auto initRes = glfwInit();
 		S2F_ASSERT(initRes, "Failed to initialize GLFW");
 
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -31,14 +30,6 @@ namespace s2f
 		S2F_ASSERT(mWindow, "Failed to create GLFW window");
 
 		glfwMakeContextCurrent(mWindow);
-	}
-
-	void Window::initGLAD()
-	{
-		auto res = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		S2F_ASSERT(res, "Failed to initialize GLAD");
-
-		glViewport(0, 0, mSize.x, mSize.y);
 	}
 
 	void Window::setupCallbacks()

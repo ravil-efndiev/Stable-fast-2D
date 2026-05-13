@@ -11,29 +11,10 @@ namespace s2f
 		activeVA = id;
 	}
 
-	void GLState::bindBuffer(const Buffer& buffer)
-	{
-		GLuint id = buffer.id();
-		BufferType type = buffer.type();
-
-		if (type == BufferType::Vertex) 
-		{
-			if (activeVB == id) return;
-			glBindBuffer(GL_ARRAY_BUFFER, id);
-			activeVB = id;
-		}
-		else if (type == BufferType::Index)
-		{
-			if (activeIB == id) return;
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-			activeIB = id;
-		}
-	}
-
 	void GLState::bindShader(const Shader& shader)
 	{
 		GLuint id = shader.id();
-		if (activeShader == id) return;
+		if (activeShader == id || !shader.valid()) return;
 
 		glUseProgram(id);
 		activeShader = id;

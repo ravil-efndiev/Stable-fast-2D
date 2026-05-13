@@ -1,0 +1,30 @@
+#pragma once
+#include "include.hpp"
+
+namespace s2f
+{
+	namespace meshes
+	{
+		struct QuadVertex
+		{
+			glm::vec3 position{ 0.f };
+			glm::vec4 tint{ 0.f };
+			//glm::vec2 texCoord;
+			//float texIndex;
+		};
+
+		static std::array<glm::vec4, 4> quadVertices
+		{
+			glm::vec4( 0.5f,  0.5f, 0.0f, 1.f),
+			glm::vec4( 0.5f, -0.5f, 0.0f, 1.f),
+			glm::vec4(-0.5f, -0.5f, 0.0f, 1.f),
+			glm::vec4(-0.5f,  0.5f, 0.0f, 1.f)
+		};
+
+		static std::array<u32, 6> quadIndices
+		{
+			0, 1, 3,
+			1, 2, 3
+		};
+	}
+}

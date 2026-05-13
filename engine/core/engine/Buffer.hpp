@@ -3,30 +3,28 @@
 
 namespace s2f
 {
-	enum class BufferType
+	enum class BufferType : u8
 	{
-		Vertex, Index
+		Uninitialized = 0, Vertex, Index
 	};
 
 	class Buffer
 	{
 	public:
-		template <class T>
-		Buffer(BufferType type, const std::vector<T>& data)
-			: mType(type)
-		{
-			create(data.data(), data.size() * sizeof(T));
-		}
+		Buffer() = default;
+		Buffer(BufferType type, size_t size, void* data = nullptr);
 		~Buffer();
 
-		GLuint id() const;
-		BufferType type() const;
+		void create(BufferType type, size_t size, void* data = nullptr);
 
-	private:
-		void create(void* data, size_t size);
+		GLuint id() const { return mID; }
+		BufferType type() const { return mType; }
+
+		bool valid() const;
+		void setData(size_t size, void* data) const;
 
 	private:
 		GLuint mID{ 0 };
-		BufferType mType;
+		BufferType mType{ BufferType::Uninitialized };
 	};
 }

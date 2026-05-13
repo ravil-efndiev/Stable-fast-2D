@@ -18,3 +18,5 @@ project ("rv2d")
 add_subdirectory ("external/glfw")
 add_subdirectory ("engine")
 add_subdirectory ("sandbox")
+
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR}/sandbox)

@@ -1,6 +1,7 @@
 #pragma once
 #include "Window.hpp"
 #include "time.hpp"
+#include "Renderer.hpp"
 
 namespace s2f
 {
@@ -26,10 +27,10 @@ namespace s2f
 		void startFrame();
 		void endFrame();
 
-		f32 deltaTime() const;
-		Time time() const;
-
-		RenderInfo& renderInfo();
+		f32 deltaTime() const { return (f32)mTime.deltaTime; }
+		Time time() const { return mTime; }
+		RenderInfo& renderInfo() { return mRenderInfo; }
+		Renderer& renderer() { return mRenderer; }
 
 	private:
 		void start();
@@ -37,7 +38,8 @@ namespace s2f
 	private:
 		WindowInfo mWindowInfo;
 		RenderInfo mRenderInfo;
-		Window mWindow;
 		Time mTime;
+		Window mWindow;
+		Renderer mRenderer;
 	};
 }
