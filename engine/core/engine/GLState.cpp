@@ -1,8 +1,15 @@
 #include "GLState.hpp"
+#include "GLAPI.hpp"
 
 namespace s2f
 {
-	void GLState::bindVA(const VertexArray& va)
+    GLState::GLState()
+    {
+		auto maxTextureSlots = glapi::getMaxTextureSlots();
+		activeTextures.resize(maxTextureSlots);
+    }
+
+    void GLState::bindVA(const VertexArray& va)
 	{
 		GLuint id = va.id();
 		if (activeVA == id) return;
@@ -19,4 +26,14 @@ namespace s2f
 		glUseProgram(id);
 		activeShader = id;
 	}
+
+    void GLState::bindTexture(const Texture &texture, u32 textureSlot)
+    {
+		GLuint id = texture.id();
+		if (activeTextures[textureSlot] == id || !texture.valid()) return;
+
+		glActiveTexture(GL_TEXTURE0 + textureSlot);
+		glBindTexture(GL_TEXTURE_2D, id);
+		activeTextures[textureSlot] = id;
+    }
 }
