@@ -10,6 +10,7 @@ namespace s2f
 
 	void Renderer::init()
 	{
+		mGLState.init();
 		mQuadVA.create();
 		mQuadVB.create(BufferType::Vertex, sQuadVerticesPerDraw * sizeof(meshes::QuadVertex));
 
@@ -22,9 +23,9 @@ namespace s2f
 		mQuadVBLayout = Layout
 		{
 			{
-				LayoutElement(LayoutElementType::Vec3, offsetof(meshes::QuadVertex, position)),
-				LayoutElement(LayoutElementType::Vec4, offsetof(meshes::QuadVertex, tint)),
-				LayoutElement(LayoutElementType::Vec2, offsetof(meshes::QuadVertex, texCoord)),
+				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadVertex, position)),
+				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadVertex, tint)),
+				LayoutElement(LayoutElementType::Float2, offsetof(meshes::QuadVertex, texCoord)),
 				LayoutElement(LayoutElementType::Float, offsetof(meshes::QuadVertex, texIndex))
 			},
 			sizeof(meshes::QuadVertex)
@@ -39,14 +40,8 @@ namespace s2f
 		for (i32 i{ 0 }; i < maxTexSlots; i++)
 			texSlotIndices[i] = i;
 
-		mTextureSlots.resize(maxTexSlots);
-		auto whiteTexData = 0xffffff;
-		auto texStatus = mWhiteTexture.create(1, 1, &whiteTexData);
-		S2F_INFO(texStatus.success);
-
-		mTextureSlots[0] = mWhiteTexture.id();
-
-		mQuadShader.setUniformIntArray("uTextureIndices", maxTexSlots, texSlotIndices.data(), &mGLState);
+		mTextures.resize(maxTexSlots);
+		mQuadShader.setUniformIntArray("uTextures", maxTexSlots, texSlotIndices.data(), &mGLState);
 	}
 
 	void Renderer::fillQuadBatchIndices()
@@ -83,6 +78,10 @@ namespace s2f
 
 		mGLState.bindShader(mQuadShader);
 		mGLState.bindVA(mQuadVA);
+
+		for (size_t i{ 1 }; i < mTextureSlotIndex; i++)
+			mGLState.bindTexture(*mTextures[i], (u32)i);
+		
 		glapi::drawIndexed(mQuadIndexCount);
 		mStats.drawCalls++;
 	}
@@ -109,16 +108,16 @@ namespace s2f
 		mStats.quadCount++;
 	}
 
-    void Renderer::drawQuad(const Transform &tf, const Texture &texture, const glm::vec4 &tint)
+    void Renderer::drawQuad(const Transform& tf, Texture* texture, const glm::vec4& tint)
     {
 		if (mQuadIndexCount >= sQuadIndicesPerDraw) 
 			reset();
 
-		GLuint texID = texture.id();
+		GLuint texID = texture->id();
 		f32 textureIndex{ 0.f };
 		for (size_t i{ 1 }; i < mTextureSlotIndex; i++)
 		{
-			if (mTextureSlots[i] == texID)
+			if (mTextures[i]->id() == texID)
 			{
 				textureIndex = (f32)i;
 				break;
@@ -127,11 +126,14 @@ namespace s2f
 
 		if (textureIndex == 0.f)
 		{
-			if (mTextureSlotIndex >= mTextureSlots.size())
+			if (mTextureSlotIndex >= mTextures.size())
+			{
+				S2F_WARN("Texture slot limit reached for this batch, consider using sprite atlases");
 				reset();
+			}
 
 			textureIndex = (f32)mTextureSlotIndex;
-			mTextureSlots[mTextureSlotIndex] = texID;
+			mTextures[mTextureSlotIndex] = texture;
 			mTextureSlotIndex++;
 		}
 
@@ -146,6 +148,8 @@ namespace s2f
 				textureIndex
 			);
 		}
+
+		S2F_INFO(textureIndex);
 
 		mQuadVertexCount += 4;
 		mQuadIndexCount += 6;

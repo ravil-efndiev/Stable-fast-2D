@@ -7,10 +7,10 @@ namespace s2f
 	{
 		struct QuadVertex
 		{
-			glm::vec3 position{ 0.f };
+			glm::vec4 position{ 0.f };
 			glm::vec4 tint{ 0.f };
-			glm::vec2 texCoord;
-			float texIndex;
+			glm::vec2 texCoord{ 0.f };
+			f32 texIndex{ 0.f };
 		};
 
 		static std::array<glm::vec4, 4> quadVertexPositions

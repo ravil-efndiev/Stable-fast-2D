@@ -6,6 +6,7 @@
 #include "GLState.hpp"
 #include "meshes.hpp"
 #include "transform.hpp"
+#include "Texture.hpp"
 
 namespace s2f
 {
@@ -27,7 +28,7 @@ namespace s2f
 		void begin();
 		void end();
 		void drawQuad(const Transform& tf, const glm::vec4& tint);
-		void drawQuad(const Transform& tf, const Texture& texture, const glm::vec4& tint);
+		void drawQuad(const Transform& tf, Texture* texture, const glm::vec4& tint);
 
 		RendererStatistics frameStatistics() const { return mStats; }
 		void resetStatistics() { mStats = {}; }
@@ -45,7 +46,6 @@ namespace s2f
 		Buffer mQuadIB;
 		Shader mQuadShader;
 		Layout mQuadVBLayout;
-		Texture mWhiteTexture;
 
 		static constexpr size_t sQuadsPerDraw{ 5000 };
 		static constexpr size_t sQuadVerticesPerDraw{ 4 * sQuadsPerDraw };
@@ -56,7 +56,7 @@ namespace s2f
 		u32 mQuadVertexCount{ 0 };
 		u32 mQuadIndexCount{ 0 };
 
-		std::vector<u32> mTextureSlots;
+		std::vector<Texture*> mTextures;
 		u32 mTextureSlotIndex{ 1 };
 
 		RendererStatistics mStats{};

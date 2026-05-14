@@ -1,6 +1,7 @@
 #include "Shader.hpp"
 #include "GLState.hpp"
 #include "utils.hpp"
+#include "GLAPI.hpp"
 
 namespace s2f
 {
@@ -36,6 +37,13 @@ namespace s2f
 
 	void Shader::init()
 	{
+		auto maxTextureSlots = glapi::getMaxTextureSlots();
+		std::string fragmentShaderHeader
+			= (mShaderHeader + "#define MAX_TEXTURE_SLOTS ") + std::to_string(maxTextureSlots) + "\n";
+
+		mVertexShaderSource = mShaderHeader + mVertexShaderSource;
+		mFragmentShaderSource = fragmentShaderHeader + mFragmentShaderSource;
+
 		mID = glCreateProgram();
 		mVertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 		mFragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);

@@ -4,6 +4,8 @@ namespace s2f
 {
 	namespace glapi
 	{
+		static i32 maxTextureSlotsCached{ -1 };
+
 		void init()
 		{
 			auto res = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -12,6 +14,11 @@ namespace s2f
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+			const GLubyte* version = glGetString(GL_VERSION);
+			const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+			S2F_INFO("OpenGL Version: " << version);
+			S2F_INFO("GLSL Version: " << glslVersion);
 		}
 
 		void setViewport(const glm::ivec2& size)
@@ -28,6 +35,7 @@ namespace s2f
 
 		i32 getMaxTextureSlots()
 		{
+			if (maxTextureSlotsCached != -1) return maxTextureSlotsCached;
 			GLint maxTextureUnits = 0;
 			glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
 			return std::min(maxTextureUnits, 32);

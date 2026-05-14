@@ -13,7 +13,7 @@ namespace s2f
 		GLuint activeShader{ 0 };
 		std::vector<GLuint> activeTextures;
 
-		GLState();
+		void init();
 
 		void bindVA(const VertexArray& va);
 		void bindShader(const Shader& shader);

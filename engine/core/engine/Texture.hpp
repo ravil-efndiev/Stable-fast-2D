@@ -19,8 +19,8 @@ namespace s2f
 
     private:
         GLuint mID{ 0 };
-        i32 mWidth;
-        i32 mHeight;
+        i32 mWidth{ 0 };
+        i32 mHeight{ 0 };
         i32 mNumChannels{ 3 };
         bool mValid{ false };
     };

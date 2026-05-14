@@ -3,14 +3,13 @@
 
 namespace s2f 
 {
-    // enum value represents attribute count
     enum class LayoutElementType : u8
     {
-        Float = 1,
-        Vec2  = 2,
-        Vec3  = 3,
-        Vec4  = 4,
-        Mat4  = 4, // 4 Vec4 attributes
+        Float,
+        Float2,
+        Float3,
+        Float4,
+        Float4x4
     };
 
     struct LayoutElement
@@ -28,4 +27,6 @@ namespace s2f
         std::vector<LayoutElement> elements;
         size_t stride{ 0 };
 	};
+
+	i32 getLayoutElementComponentCount(LayoutElementType type);
 }

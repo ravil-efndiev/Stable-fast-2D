@@ -25,9 +25,9 @@ namespace s2f
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.id());
 		for (const auto& element : layout.elements)
 		{
-			if (element.type == LayoutElementType::Mat4)
+			if (element.type == LayoutElementType::Float4x4)
 			{
-				i32 vec4Count = static_cast<i32>(element.type);
+				i32 vec4Count = getLayoutElementComponentCount(element.type);
 				for (i32 matVecIdx{ 0 }; matVecIdx < vec4Count; matVecIdx++)
 				{
 					glEnableVertexAttribArray(mCurrentAttribIndex);
@@ -44,7 +44,7 @@ namespace s2f
 			else
 			{
 				glEnableVertexAttribArray(mCurrentAttribIndex);
-				i32 floatCount = static_cast<i32>(element.type);
+				i32 floatCount = getLayoutElementComponentCount(element.type);
 				glVertexAttribPointer(
 					mCurrentAttribIndex, 
 					floatCount, GL_FLOAT,
