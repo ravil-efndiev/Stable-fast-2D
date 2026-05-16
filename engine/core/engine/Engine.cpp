@@ -1,11 +1,12 @@
 #include "Engine.hpp"
 #include "GLAPI.hpp"
+#include "api/Input.hpp"
 
 namespace s2f
 {
 	Engine::Engine(const WindowInfo& windowInfo, const RenderInfo& renderInfo) 
 		: mWindowInfo(windowInfo), mRenderInfo(renderInfo), 
-		mWindow(mWindowInfo.size, mWindowInfo.title) 
+		mWindow(mWindowInfo.size, mWindowInfo.title, mInputState) 
 	{
 		start();
 	}
@@ -20,6 +21,7 @@ namespace s2f
 		glapi::setViewport(mWindow.size());
 		mTime.lastTime = mWindow.getTime();
 		mRenderer.init();
+		Input::init(&mInputState);
 	}
 
 	void Engine::startFrame()
@@ -33,6 +35,8 @@ namespace s2f
 	{
 		mRenderer.end();
 		mWindow.swapBuffers();
+		mInputState.previousKeys = mInputState.keys;
+		mInputState.previousMouseButtons = mInputState.mouseButtons;
 		mWindow.pollEvents();
 	}
 

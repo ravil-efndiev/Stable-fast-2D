@@ -1,12 +1,14 @@
 #include "Window.hpp"
+#include "GLAPI.hpp"
 
 namespace s2f 
 {
-	Window::Window(const glm::ivec2& size, const char* title)
-		: mSize(size), mTitle(title)
+	Window::Window(const glm::ivec2& size, const char* title, InputState& inputState)
+		: mSize(size), mTitle(title), mInputState(inputState)
 	{
 		initGLFW();
 		setupCallbacks();
+		S2F_INFO_VERBOSE("Created window with title \"" << mTitle << "\", size (" << mSize.x << ", " << mSize.y << ")");
 	}
 
 	Window::~Window() 
@@ -40,7 +42,13 @@ namespace s2f
 		{
 			auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
 			win->mSize = { width, height };
-			glViewport(0, 0, width, height);
+			glapi::setViewport(win->mSize);
+		});
+
+		glfwSetKeyCallback(mWindow, [](GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mods)
+		{
+			auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
+			win->mInputState.keys[key] = action;
 		});
 	}
 

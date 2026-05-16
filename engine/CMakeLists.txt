@@ -1,4 +1,4 @@
-﻿add_library (sf2dlib "../external/glad/src/glad.c" "../external/stb/stb_image.cpp" "sf2d.hpp"  "core/engine/Window.hpp" "core/engine/Window.cpp" "core/engine/Engine.cpp"   "core/utils.cpp" "core/status.cpp" "core/engine/GLState.cpp" "core/engine/GLAPI.cpp" "core/engine/time.cpp" "core/engine/Renderer.cpp" "core/engine/VertexArray.cpp" "core/engine/Buffer.cpp" "core/engine/Shader.cpp" "core/engine/Texture.cpp" "core/engine/transform.cpp" "core/engine/layout.cpp" "core/api/objects/Camera.cpp" "core/engine/projview.cpp")
+﻿add_library (sf2dlib "../external/glad/src/glad.c" "../external/stb/stb_image.cpp" "sf2d.hpp"  "core/engine/Window.hpp" "core/engine/Window.cpp" "core/engine/Engine.cpp"   "core/utils.cpp" "core/status.cpp" "core/engine/GLState.cpp" "core/engine/GLAPI.cpp" "core/engine/time.cpp" "core/engine/Renderer.cpp" "core/engine/VertexArray.cpp" "core/engine/Buffer.cpp" "core/engine/Shader.cpp" "core/engine/Texture.cpp" "core/engine/transform.cpp" "core/engine/layout.cpp" "core/api/objects/Camera.cpp" "core/engine/projview.cpp" "core/api/Input.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET sf2dlib PROPERTY CXX_STANDARD 20)

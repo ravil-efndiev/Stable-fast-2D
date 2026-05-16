@@ -23,7 +23,7 @@ namespace s2f
 
 		void setViewport(const glm::ivec2& size)
 		{
-			S2F_INFO("glapi::setViewport() size = (" << size.x << ", " << size.y << ")");
+			S2F_INFO_VERBOSE("glapi::setViewport() size = (" << size.x << ", " << size.y << ")");
 			glViewport(0, 0, size.x, size.y);
 		}
 

@@ -1,14 +1,16 @@
 #pragma once
-#include <include.hpp>
+#include "include.hpp"
+#include "inputState.hpp"
 
 namespace s2f 
 {
 	class Window 
 	{
 	public:
-		Window(const glm::ivec2& size, const char* title);
+		Window(const glm::ivec2& size, const char* title, InputState& inputState);
 		~Window();
 
+		Window() = delete;
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
 
@@ -27,6 +29,7 @@ namespace s2f
 		glm::ivec2 mSize;
 		const char* mTitle;
 		GLFWwindow* mWindow;
+		InputState& mInputState;
 	};
 
 }

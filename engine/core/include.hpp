@@ -12,6 +12,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "config.hpp"
+#include "keys.hpp"
 
 #define S2F_DEBUG
 
@@ -35,13 +37,18 @@ namespace s2f
 
 	const std::filesystem::path ASSETS_PATH{ "assets" };
 	const std::filesystem::path SHADER_PATH{ ASSETS_PATH / "shaders" };
-}
 
-#ifdef S2F_DEBUG
+	inline GlobalConfig gConfig{};
+}
 
 #define S2F_INFO(s) std::cout << s2f::COL_GREEN << "[Info] " << s2f::COL_WHITE << s << "\n"
 #define S2F_WARN(s) std::cout << s2f::COL_YELLOW << "[Warn] " << s2f::COL_WHITE << s << "\n"
 #define S2F_ERROR(s) std::cerr << s2f::COL_RED << "[Error] " << s2f::COL_WHITE << s << std::endl
+
+#define S2F_INFO_VERBOSE(s) \
+	if (s2f::gConfig.logMode == s2f::LogMode::Verbose) S2F_INFO(s); 
+
+#ifdef S2F_DEBUG
 
 #define S2F_ASSERT(cond, s) \
 	if (!(cond)) { \
@@ -51,9 +58,6 @@ namespace s2f
 
 #else
 
-#define S2F_INFO(s)
-#define S2F_WARN(s)
-#define S2F_ERROR(s)
 #define S2F_ASSERT(cond, s)
 
 #endif

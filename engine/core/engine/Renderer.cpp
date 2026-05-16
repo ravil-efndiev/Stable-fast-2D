@@ -45,6 +45,9 @@ namespace s2f
 
 		mTextures.resize(maxTexSlots);
 		mQuadShader.setUniformIntArray("uTextures", maxTexSlots, texSlotIndices.data(), &mGLState);
+
+		S2F_INFO_VERBOSE("Renderer: Initialized");
+		S2F_INFO_VERBOSE("Renderer: Maximum GPU supported texture slots = " << maxTexSlots);
 	}
 
 	void Renderer::fillQuadBatchIndices()

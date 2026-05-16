@@ -2,6 +2,7 @@
 #include "Window.hpp"
 #include "time.hpp"
 #include "Renderer.hpp"
+#include "inputState.hpp"
 
 namespace s2f
 {
@@ -41,5 +42,6 @@ namespace s2f
 		Time mTime;
 		Window mWindow;
 		Renderer mRenderer;
+		InputState mInputState{};
 	};
 }

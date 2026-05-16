@@ -25,7 +25,7 @@ namespace s2f
     struct Layout
     {
         std::vector<LayoutElement> elements;
-        size_t stride{ 0 };
+        u64 stride{ 0 };
 	};
 
 	i32 getLayoutElementComponentCount(LayoutElementType type);

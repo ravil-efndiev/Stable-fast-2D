@@ -18,7 +18,7 @@ namespace s2f
 	Shader::~Shader()
 	{
 		glDeleteProgram(mID);
-		S2F_INFO("Deleted shader with ID " << mID);
+		S2F_INFO_VERBOSE("Deleted shader with ID " << mID);
 	}
 
 	void Shader::create(const Path& vertexShaderPath, const Path& fragmentShaderPath)
@@ -57,7 +57,7 @@ namespace s2f
 			glDeleteProgram(mID);
 		}
 
-		S2F_INFO("Created shader with ID " << mID << " (valid = " << mValid << ")");
+		S2F_INFO_VERBOSE("Created shader with ID " << mID << " valid = " << mValid);
 	}
 
 	Status Shader::compileShader(GLuint shaderID, const char* shaderSource)

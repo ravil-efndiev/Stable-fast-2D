@@ -45,6 +45,6 @@ namespace s2f
 		GLuint mVertexShaderID{ 0 };
 		GLuint mFragmentShaderID{ 0 };
 		bool mValid{ false };
-		std::string mShaderHeader = "#version 330 core\n";
+		std::string mShaderHeader = "#version 450 core\n";
 	};
 }
