@@ -8,18 +8,16 @@ int main()
 	s2f::Texture texture;
 	texture.create(s2f::ASSETS_PATH / "textures" / "container.jpg");
 
+	s2f::Camera camera;
+
 	while (engine.runs()) 
 	{
 		engine.startFrame();
+		renderer.setProjview(camera.projview());
 		renderer.drawQuad({ {0.3, 0.3, 0}, {0, 0, 0}, {1, 1, 1} }, &texture, { 1 ,0, 0, 1 });
 		renderer.drawQuad({ {0, 0, 0}, {0, 0, 0}, {1, 1, 1} }, { 1 ,1, 1, 1 });
 		//renderer.drawQuad({ {0.3, 0.3, 0}, {0, 0, 0}, {1, 1, 1} }, { 1 ,0, 0, 1 });
 		engine.endFrame();
-
-		auto stats = renderer.frameStatistics();
-		S2F_INFO("quad count: " << stats.quadCount);
-		S2F_INFO("draw calls: " << stats.drawCalls);
-		renderer.resetStatistics();
 	}
 
 	return 0;

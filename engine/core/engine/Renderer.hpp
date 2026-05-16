@@ -7,6 +7,7 @@
 #include "meshes.hpp"
 #include "transform.hpp"
 #include "Texture.hpp"
+#include "projview.hpp"
 
 namespace s2f
 {
@@ -27,8 +28,10 @@ namespace s2f
 
 		void begin();
 		void end();
-		void drawQuad(const Transform& tf, const glm::vec4& tint);
-		void drawQuad(const Transform& tf, Texture* texture, const glm::vec4& tint);
+		void drawQuad(const Transform& tf, const glm::vec4& color);
+		void drawQuad(const Transform& tf, Texture* texture, const glm::vec4& tint = glm::vec4(1.f));
+
+		void setProjview(const ProjViewData& projview) { mProjview = projview; }
 
 		RendererStatistics frameStatistics() const { return mStats; }
 		void resetStatistics() { mStats = {}; }
@@ -41,6 +44,7 @@ namespace s2f
 
 	private:
 		GLState mGLState;
+		ProjViewData mProjview;
 		VertexArray mQuadVA;
 		Buffer mQuadVB;
 		Buffer mQuadIB;

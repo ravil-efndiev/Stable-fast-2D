@@ -45,5 +45,12 @@ namespace s2f
 		{
 			glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 		}
+
+		glm::ivec2 getViewportSize()
+		{
+			int viewport[4];
+			glGetIntegerv(GL_VIEWPORT, viewport);
+			return { viewport[2], viewport[3] };
+		}
 	}
 }

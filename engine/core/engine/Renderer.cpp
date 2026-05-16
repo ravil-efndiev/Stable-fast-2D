@@ -11,6 +11,9 @@ namespace s2f
 	void Renderer::init()
 	{
 		mGLState.init();
+		auto viewport = glapi::getViewportSize();
+		mProjview = makeOrthoPojectionView({ 0.f, 0.f }, 0.f, 1.f, (f32)viewport.x / (f32)viewport.y);
+
 		mQuadVA.create();
 		mQuadVB.create(BufferType::Vertex, sQuadVerticesPerDraw * sizeof(meshes::QuadVertex));
 
@@ -26,7 +29,7 @@ namespace s2f
 				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadVertex, position)),
 				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadVertex, tint)),
 				LayoutElement(LayoutElementType::Float2, offsetof(meshes::QuadVertex, texCoord)),
-				LayoutElement(LayoutElementType::Float, offsetof(meshes::QuadVertex, texIndex))
+				LayoutElement(LayoutElementType::Float,  offsetof(meshes::QuadVertex, texIndex))
 			},
 			sizeof(meshes::QuadVertex)
 		};
@@ -59,6 +62,7 @@ namespace s2f
 
 	void Renderer::begin()
 	{
+		mQuadShader.setUniformMat4("uProjview", mProjview.projection * mProjview.view, &mGLState);
 		beginBatch();
 	}
 
@@ -79,25 +83,25 @@ namespace s2f
 		mGLState.bindShader(mQuadShader);
 		mGLState.bindVA(mQuadVA);
 
-		for (size_t i{ 1 }; i < mTextureSlotIndex; i++)
+		for (u32 i{ 1 }; i < mTextureSlotIndex; i++)
 			mGLState.bindTexture(*mTextures[i], (u32)i);
 		
 		glapi::drawIndexed(mQuadIndexCount);
 		mStats.drawCalls++;
 	}
 
-	void Renderer::drawQuad(const Transform& tf, const glm::vec4& tint)
+	void Renderer::drawQuad(const Transform& tf, const glm::vec4& color)
 	{
 		if (mQuadIndexCount >= sQuadIndicesPerDraw) 
 			reset();
 
 		glm::mat4 tfMatrix = tf.matrix();
-		for (size_t i{ 0 }; i < 4; i++)
+		for (u32 i{ 0 }; i < 4; i++)
 		{
 			S2F_ASSERT((mQuadVertexCount + i) < mQuadVertexData.capacity(), "Vertex data indexing error in drawQuad")
 			mQuadVertexData.emplace_back(
 				tfMatrix * meshes::quadVertexPositions[i],
-				tint,
+				color,
 				meshes::quadTextureCoords[i],
 				0.f
 			);
@@ -115,7 +119,7 @@ namespace s2f
 
 		GLuint texID = texture->id();
 		f32 textureIndex{ 0.f };
-		for (size_t i{ 1 }; i < mTextureSlotIndex; i++)
+		for (u32 i{ 1 }; i < mTextureSlotIndex; i++)
 		{
 			if (mTextures[i]->id() == texID)
 			{
@@ -138,7 +142,7 @@ namespace s2f
 		}
 
 		glm::mat4 tfMatrix = tf.matrix();
-		for (size_t i{ 0 }; i < 4; i++)
+		for (u32 i{ 0 }; i < 4; i++)
 		{
 			S2F_ASSERT((mQuadVertexCount + i) < mQuadVertexData.capacity(), "Vertex data indexing error in drawQuad")
 			mQuadVertexData.emplace_back(
@@ -148,8 +152,6 @@ namespace s2f
 				textureIndex
 			);
 		}
-
-		S2F_INFO(textureIndex);
 
 		mQuadVertexCount += 4;
 		mQuadIndexCount += 6;

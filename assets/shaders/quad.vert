@@ -7,10 +7,12 @@ out vec4 vTint;
 out vec2 vTextureCoords;
 flat out float vTextureIndex;
 
+uniform mat4 uProjview;
+
 void main()
 {
 	vTint = aTint;
 	vTextureCoords = aTextureCoords;
 	vTextureIndex = aTextureIndex;
-	gl_Position = aWorldPosition;
+	gl_Position = uProjview * aWorldPosition;
 }
