@@ -93,17 +93,16 @@ namespace s2f
 		mStats.drawCalls++;
 	}
 
-	void Renderer::drawQuad(const Transform& tf, const glm::vec4& color)
+	void Renderer::drawQuad(const glm::mat4& transform, const glm::vec4& color)
 	{
 		if (mQuadIndexCount >= sQuadIndicesPerDraw) 
 			reset();
 
-		glm::mat4 tfMatrix = tf.matrix();
 		for (u32 i{ 0 }; i < 4; i++)
 		{
 			S2F_ASSERT((mQuadVertexCount + i) < mQuadVertexData.capacity(), "Vertex data indexing error in drawQuad")
 			mQuadVertexData.emplace_back(
-				tfMatrix * meshes::quadVertexPositions[i],
+				transform * meshes::quadVertexPositions[i],
 				color,
 				meshes::quadTextureCoords[i],
 				0.f
@@ -115,7 +114,7 @@ namespace s2f
 		mStats.quadCount++;
 	}
 
-    void Renderer::drawQuad(const Transform& tf, Texture* texture, const glm::vec4& tint)
+    void Renderer::drawQuad(const glm::mat4& transform, Texture* texture, const glm::vec4& tint)
     {
 		if (mQuadIndexCount >= sQuadIndicesPerDraw) 
 			reset();
@@ -144,12 +143,11 @@ namespace s2f
 			mTextureSlotIndex++;
 		}
 
-		glm::mat4 tfMatrix = tf.matrix();
 		for (u32 i{ 0 }; i < 4; i++)
 		{
 			S2F_ASSERT((mQuadVertexCount + i) < mQuadVertexData.capacity(), "Vertex data indexing error in drawQuad")
 			mQuadVertexData.emplace_back(
-				tfMatrix * meshes::quadVertexPositions[i],
+				transform * meshes::quadVertexPositions[i],
 				tint,
 				meshes::quadTextureCoords[i],
 				textureIndex

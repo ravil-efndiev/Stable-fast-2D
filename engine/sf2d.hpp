@@ -1,4 +1,11 @@
 #pragma once
 #include "core/engine/Engine.hpp"
-#include "core/api/objects/Camera.hpp"
+#include "core/api/objects/camera.hpp"
 #include "core/api/Input.hpp"
+#include "core/api/Application/Application.hpp"
+#include "core/api/Application/Layer.hpp"
+#include "core/api/ECS/Scene.hpp"
+#include "core/api/ECS/Entity.hpp"
+#include "core/api/ECS/SceneRenderer.hpp"
+#include "core/api/ECS/DefaultComponents/sprite.hpp"
+#include "core/api/ECS/DefaultComponents/transform.hpp"

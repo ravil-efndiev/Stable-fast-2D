@@ -12,6 +12,7 @@ namespace s2f
 
         Status create(const std::filesystem::path& texturePath);
         Status create(i32 width, i32 height, void* data);
+        void destroy();
 
         GLuint id() const { return mID; }
         glm::ivec2 size() const { return { mWidth, mHeight }; }

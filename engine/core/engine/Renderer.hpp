@@ -5,7 +5,6 @@
 #include "GLAPI.hpp"
 #include "GLState.hpp"
 #include "meshes.hpp"
-#include "transform.hpp"
 #include "Texture.hpp"
 #include "projview.hpp"
 
@@ -28,8 +27,8 @@ namespace s2f
 
 		void begin();
 		void end();
-		void drawQuad(const Transform& tf, const glm::vec4& color);
-		void drawQuad(const Transform& tf, Texture* texture, const glm::vec4& tint = glm::vec4(1.f));
+		void drawQuad(const glm::mat4& transform, const glm::vec4& color);
+		void drawQuad(const glm::mat4& transform, Texture* texture, const glm::vec4& tint = glm::vec4(1.f));
 
 		void setProjview(const ProjViewData& projview) { mProjview = projview; }
 
@@ -51,9 +50,9 @@ namespace s2f
 		Shader mQuadShader;
 		Layout mQuadVBLayout;
 
-		static constexpr size_t sQuadsPerDraw{ 5000 };
-		static constexpr size_t sQuadVerticesPerDraw{ 4 * sQuadsPerDraw };
-		static constexpr size_t sQuadIndicesPerDraw{ 6 * sQuadsPerDraw };
+		static constexpr u64 sQuadsPerDraw{ 5000 };
+		static constexpr u64 sQuadVerticesPerDraw{ 4 * sQuadsPerDraw };
+		static constexpr u64 sQuadIndicesPerDraw{ 6 * sQuadsPerDraw };
 
 		std::vector<u32> mQuadBatchIndices;
 		std::vector<meshes::QuadVertex> mQuadVertexData;

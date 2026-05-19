@@ -54,9 +54,18 @@ namespace s2f
         return statusSuccess();
     }
 
-    Texture::~Texture()
+    void Texture::destroy()
     {
         glDeleteTextures(1, &mID);
-		S2F_INFO_VERBOSE("Deleted texture with ID " << mID);
+        S2F_INFO_VERBOSE("Deleted texture with ID " << mID);
+        mValid = false;
+        mWidth = 0;
+        mHeight = 0;
+        mNumChannels = 3;
+    }
+
+    Texture::~Texture()
+    {
+        destroy();
     }
 }

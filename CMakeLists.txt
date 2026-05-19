@@ -17,6 +17,8 @@ project ("rv2d")
 # Include sub-projects.
 add_subdirectory ("external/glfw")
 add_subdirectory ("engine")
-add_subdirectory ("sandbox")
+add_subdirectory ("sandbox_lowlevel")
+add_subdirectory ("sandbox_application")
 
-file(COPY assets DESTINATION ${CMAKE_BINARY_DIR}/sandbox)
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR}/sandbox_lowlevel)
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR}/sandbox_application)

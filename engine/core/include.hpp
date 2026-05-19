@@ -7,6 +7,9 @@
 #include <fstream>
 #include <sstream>
 #include <optional>
+#include <memory>
+#include <functional>
+#include <stack>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -30,6 +33,10 @@ namespace s2f
 	using f32 = float;
 	using f64 = double;
 
+	using EntityId = u32;
+	using ComponentTypeId = u32;
+	using SystemId = u32;
+
 	constexpr auto COL_RED = "\033[31m";
 	constexpr auto COL_GREEN = "\033[32m";
 	constexpr auto COL_YELLOW = "\033[33m";
@@ -37,8 +44,11 @@ namespace s2f
 
 	const std::filesystem::path ASSETS_PATH{ "assets" };
 	const std::filesystem::path SHADER_PATH{ ASSETS_PATH / "shaders" };
-
-	inline GlobalConfig gConfig{};
+	
+	namespace globals
+	{
+		inline GlobalConfig gConfig{};
+	}
 }
 
 #define S2F_INFO(s) std::cout << s2f::COL_GREEN << "[Info] " << s2f::COL_WHITE << s << "\n"
@@ -46,7 +56,7 @@ namespace s2f
 #define S2F_ERROR(s) std::cerr << s2f::COL_RED << "[Error] " << s2f::COL_WHITE << s << std::endl
 
 #define S2F_INFO_VERBOSE(s) \
-	if (s2f::gConfig.logMode == s2f::LogMode::Verbose) S2F_INFO(s); 
+	if (s2f::globals::gConfig.logMode == s2f::LogMode::Verbose) S2F_INFO(s); 
 
 #ifdef S2F_DEBUG
 
