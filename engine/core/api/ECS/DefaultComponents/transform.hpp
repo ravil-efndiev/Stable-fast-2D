@@ -10,7 +10,5 @@ namespace s2f
 		glm::vec3 scale{ 1.f };
 
 		glm::mat4 matrix() const;
-
-		Transform() = default;
 	};
 }

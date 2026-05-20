@@ -1,4 +1,5 @@
 #include "Texture.hpp"
+#include "Engine.hpp"
 #include <stb_image.h>
 
 namespace s2f
@@ -66,6 +67,7 @@ namespace s2f
 
     Texture::~Texture()
     {
+        Engine::get()->renderer().glState().invalidateTexture(mID);
         destroy();
     }
 }

@@ -75,6 +75,7 @@ namespace s2f
 		mQuadIndexCount = 0;
 		mQuadVertexCount = 0;
 		mTextureSlotIndex = 1;
+		std::fill(mTextures.begin(), mTextures.end(), nullptr);
 	}
 
 	void Renderer::end()
@@ -116,14 +117,32 @@ namespace s2f
 
     void Renderer::drawQuad(const glm::mat4& transform, Texture* texture, const glm::vec4& tint)
     {
-		if (mQuadIndexCount >= sQuadIndicesPerDraw) 
+		drawQuad(transform, texture, meshes::quadTextureCoords, tint);
+    }
+
+	void Renderer::drawQuad(
+		const glm::mat4& transform, 
+		Texture* texture, 
+		const SubTexture& subTexture, 
+		const glm::vec4& tint
+	) {
+		drawQuad(transform, texture, subTexture.textureCoords(), tint);
+	}
+
+	void Renderer::drawQuad(
+		const glm::mat4& transform,
+		Texture* texture,
+		const std::array<glm::vec2, 4>& textureCoords,
+		const glm::vec4& tint
+	) {
+		if (mQuadIndexCount >= sQuadIndicesPerDraw)
 			reset();
 
 		GLuint texID = texture->id();
 		f32 textureIndex{ 0.f };
 		for (u32 i{ 1 }; i < mTextureSlotIndex; i++)
 		{
-			if (mTextures[i]->id() == texID)
+			if (mTextures[i] && mTextures[i]->id() == texID)
 			{
 				textureIndex = (f32)i;
 				break;
@@ -149,7 +168,7 @@ namespace s2f
 			mQuadVertexData.emplace_back(
 				transform * meshes::quadVertexPositions[i],
 				tint,
-				meshes::quadTextureCoords[i],
+				textureCoords[i],
 				textureIndex
 			);
 		}
@@ -157,7 +176,7 @@ namespace s2f
 		mQuadVertexCount += 4;
 		mQuadIndexCount += 6;
 		mStats.quadCount++;
-    }
+	}
 
     void Renderer::reset()
 	{

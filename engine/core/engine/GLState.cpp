@@ -41,4 +41,12 @@ namespace s2f
 		glBindTexture(GL_TEXTURE_2D, id);
 		activeTextures[textureSlot] = id;
     }
+
+	void GLState::invalidateTexture(GLuint id)
+	{
+		for (auto& active : activeTextures)
+		{
+			if (active == id) active = 0;
+		}
+	}
 }

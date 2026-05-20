@@ -3,6 +3,6 @@
 
 namespace s2f
 {
-	Layer::Layer(Application& application)
-		: mApplication(application), mSceneRenderer(mScene, mApplication.renderer()) {}
+	Layer::Layer() 
+		: mSceneRenderer(mScene, Application::get()->renderer()) {}
 }

@@ -4,10 +4,19 @@
 
 namespace s2f
 {
+	static Engine* sInstance{ nullptr };
+
+	Engine* Engine::get()
+	{
+		return sInstance;
+	}
+
 	Engine::Engine(const WindowInfo& windowInfo, const RenderInfo& renderInfo) 
 		: mWindowInfo(windowInfo), mRenderInfo(renderInfo), 
 		mWindow(mWindowInfo.size, mWindowInfo.title, mInputState) 
 	{
+		S2F_ASSERT(!sInstance, "Engine instance can only be created once");
+		sInstance = this;
 		start();
 	}
 

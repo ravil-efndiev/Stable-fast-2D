@@ -13,7 +13,7 @@ int main()
 	SceneRenderer sr(scene, renderer);
 	Entity sprite = scene.newEntity();
 	sprite.add<Transform>();
-	sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg", glm::vec4(1.f));
+	sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
 
 	while (engine.runs()) 
 	{

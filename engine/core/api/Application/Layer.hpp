@@ -8,15 +8,18 @@ namespace s2f
 	class Layer
 	{
 	public:
-		Layer(Application& application);
+		Layer();
 		virtual ~Layer() = default;
 
 		virtual void start() = 0;
 		virtual void update(f32 dt) = 0;
 		virtual void render() = 0;
 
-	private:
-		Application& mApplication;
+		template <class ToLayerT, class... Args>
+		void transitionTo(Args&& ...args)
+		{
+			Application::get()->template enqueueLayerTransition<ToLayerT>(this, std::forward<Args>(args)...);
+		}
 
 	protected:
 		Scene mScene;

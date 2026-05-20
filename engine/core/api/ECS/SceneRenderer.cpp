@@ -14,7 +14,12 @@ namespace s2f
 			auto* sprite = entity.get<Sprite>();
 
 			if (sprite->texture->valid())
-				renderer.drawQuad(transform->matrix(), sprite->texture.get(), sprite->color);
+			{
+				if (sprite->subTexture.valid())
+					renderer.drawQuad(transform->matrix(), sprite->texture.get(), sprite->subTexture, sprite->color);
+				else
+					renderer.drawQuad(transform->matrix(), sprite->texture.get(), sprite->color);
+			}
 			else
 				renderer.drawQuad(transform->matrix(), sprite->color);
 		}

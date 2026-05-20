@@ -10,6 +10,7 @@
 #include <memory>
 #include <functional>
 #include <stack>
+#include <unordered_map>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

@@ -33,6 +33,8 @@ namespace s2f
 		RenderInfo& renderInfo() { return mRenderInfo; }
 		Renderer& renderer() { return mRenderer; }
 
+		static Engine* get();
+
 	private:
 		void start();
 

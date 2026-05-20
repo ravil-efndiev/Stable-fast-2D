@@ -15,18 +15,18 @@ namespace s2f
 
 		static std::array<glm::vec4, 4> quadVertexPositions
 		{
+			glm::vec4(-0.5f,  0.5f, 0.0f, 1.f),
 			glm::vec4( 0.5f,  0.5f, 0.0f, 1.f),
 			glm::vec4( 0.5f, -0.5f, 0.0f, 1.f),
-			glm::vec4(-0.5f, -0.5f, 0.0f, 1.f),
-			glm::vec4(-0.5f,  0.5f, 0.0f, 1.f)
+			glm::vec4(-0.5f, -0.5f, 0.0f, 1.f)
 		};
-		
+
 		static std::array<glm::vec2, 4> quadTextureCoords
 		{
+			glm::vec2(0.f, 1.f),
 			glm::vec2(1.f, 1.f),
 			glm::vec2(1.f, 0.f),
-			glm::vec2(0.f, 0.f),
-			glm::vec2(0.f, 1.f)
+			glm::vec2(0.f, 0.f)
 		};
 
 		static std::array<u32, 6> quadIndices

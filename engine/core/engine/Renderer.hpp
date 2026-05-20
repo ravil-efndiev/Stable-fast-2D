@@ -7,6 +7,7 @@
 #include "meshes.hpp"
 #include "Texture.hpp"
 #include "projview.hpp"
+#include "SubTexture.hpp"
 
 namespace s2f
 {
@@ -29,11 +30,25 @@ namespace s2f
 		void end();
 		void drawQuad(const glm::mat4& transform, const glm::vec4& color);
 		void drawQuad(const glm::mat4& transform, Texture* texture, const glm::vec4& tint = glm::vec4(1.f));
+		void drawQuad(
+			const glm::mat4& transform, 
+			Texture* texture, 
+			const SubTexture& subTexture, 
+			const glm::vec4& tint = glm::vec4(1.f)
+		);
+		void drawQuad(
+			const glm::mat4& transform,
+			Texture* texture,
+			const std::array<glm::vec2, 4>& textureCoords,
+			const glm::vec4& tint = glm::vec4(1.f)
+		);
 
 		void setProjview(const ProjViewData& projview) { mProjview = projview; }
 
 		RendererStatistics frameStatistics() const { return mStats; }
 		void resetStatistics() { mStats = {}; }
+
+		GLState& glState() { return mGLState; }
 
 	private:
 		void fillQuadBatchIndices();

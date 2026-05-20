@@ -2,20 +2,56 @@
 
 namespace s2f
 {
-	std::unique_ptr<Application> Application::sInstance;
+    static Application* sInstance{ nullptr };
+
+    Application* Application::get()
+    {
+        return sInstance;
+    }
 
 	Application::Application(const WindowInfo& windowInfo, const RenderInfo& renderInfo)
-		: mEngine(windowInfo, renderInfo) {}
+		: mEngine(windowInfo, renderInfo) 
+    {
+        S2F_ASSERT(!sInstance, "Application instance can only be created once");
+        sInstance = this;
+    }
 
-	void Application::mainLoop()
-	{
-		mLayers.top()->start();
-		while (mEngine.runs())
-		{
-			mEngine.startFrame();
-			mLayers.top()->update(mEngine.deltaTime());
-			mLayers.top()->render();
-			mEngine.endFrame();
-		}
-	}
+    void Application::mainLoop()
+    {
+        for (const auto& layer : mLayers)
+            layer->start();
+
+        while (mEngine.runs())
+        {
+            mEngine.startFrame();
+
+            for (const auto& layer : mLayers)
+                layer->update(mEngine.deltaTime());
+
+            for (const auto& layer : mLayers)
+                layer->render();
+
+            mEngine.endFrame();
+            executeLayerTransitions();
+        }
+    }
+
+    void Application::executeLayerTransitions()
+    {
+        if (mLayerTransitions.empty()) return;
+        for (auto& transition : mLayerTransitions)
+        {
+            for (auto& layer : mLayers)
+            {
+                if (transition.from == layer.get())
+                {
+                    transition.to->start();
+                    layer = std::move(transition.to);
+                    break;
+                }
+            }
+        }
+       
+        mLayerTransitions.clear();
+    }
 }
