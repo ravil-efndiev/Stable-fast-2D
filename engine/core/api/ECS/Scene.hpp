@@ -16,7 +16,7 @@ namespace s2f
 		Entity newEntity();
 		void removeEntity(Entity entity);
 
-		void update();
+		void update(f32 deltaTime);
 		void onFrameEnd();
 	
 		SystemId addSystem(const System& system);

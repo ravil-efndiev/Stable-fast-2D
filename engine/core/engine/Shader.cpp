@@ -2,6 +2,7 @@
 #include "GLState.hpp"
 #include "utils.hpp"
 #include "GLAPI.hpp"
+#include "Engine.hpp"
 
 namespace s2f
 {
@@ -17,6 +18,7 @@ namespace s2f
 
 	Shader::~Shader()
 	{
+		Engine::get()->renderer().glState().invalidateShader();
 		glDeleteProgram(mID);
 		S2F_INFO_VERBOSE("Deleted shader with ID " << mID);
 	}

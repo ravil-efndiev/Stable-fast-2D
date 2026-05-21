@@ -1,4 +1,5 @@
 #include "VertexArray.hpp"
+#include "Engine.hpp"
 
 namespace s2f
 {
@@ -10,6 +11,7 @@ namespace s2f
 
 	VertexArray::~VertexArray()
 	{
+		Engine::get()->renderer().glState().invalidateVA();
 		glDeleteVertexArrays(1, &mID);
 		S2F_INFO_VERBOSE("Deleted vertex array with ID " << mID);
 	}

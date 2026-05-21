@@ -11,13 +11,13 @@ public:
 		Application::get()->renderInfo().clearColor = { 1.f, 0.f, 0.f, 1.f };
 	}
 
-	void update(f32 dt) override
+	void onUpdate(f32 dt) override
 	{
 		if (Input::keyPressed(Key::Space))
 			transitionTo<GameLayer>();
 	}
 
-	void render() override
+	void onRender() override
 	{
 	}
 };
@@ -32,18 +32,25 @@ public:
 		sprite.add<Transform>();
 		sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
 		sprite.get<Sprite>()->setSubTexture({ 0, 0 }, { 200, 200 });
+		useCamera(mCamera);
 	}
 
-	void update(f32 dt) override
+	void onUpdate(f32 dt) override
 	{
 		if (Input::keyPressed(Key::Space))
 			transitionTo<TestLayer>();
+
+		if (Input::keyDown(Key::D))
+			mCamera.position.x += 10.f * dt;
 	}
 
-	void render() override
+	void onRender() override
 	{
 		mSceneRenderer.render();
 	}
+
+private:
+	Camera mCamera;
 };
 
 int main()

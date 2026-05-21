@@ -47,7 +47,7 @@ namespace s2f
 		sortLayers();
 	}
 
-	void SceneRenderer::pushRenderLayer(SceneRendererDrawFunc drawFunc, u32 order)
+	void SceneRenderer::pushRenderLayer(const SceneRendererDrawFunc& drawFunc, u32 order)
 	{
 		mRenderLayers.emplace_back(drawFunc, order);
 		sortLayers();

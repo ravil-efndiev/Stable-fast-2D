@@ -20,7 +20,7 @@ namespace s2f
 		void render();
 
 		void pushRenderLayer(const RenderLayer& layer);
-		void pushRenderLayer(SceneRendererDrawFunc drawFunc, u32 order);
+		void pushRenderLayer(const SceneRendererDrawFunc& drawFunc, u32 order);
 
 	private:
 		void sortLayers();

@@ -29,6 +29,8 @@ namespace s2f
 		void endFrame();
 
 		f32 deltaTime() const { return (f32)mTime.deltaTime; }
+		f32 currentTime() const { return (f32)mTime.currentTime; }
+		f32 fixedDeltaTime() const { return mTime.fixedDeltaTime; }
 		Time time() const { return mTime; }
 		RenderInfo& renderInfo() { return mRenderInfo; }
 		Renderer& renderer() { return mRenderer; }

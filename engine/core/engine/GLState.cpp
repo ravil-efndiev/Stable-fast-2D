@@ -49,4 +49,14 @@ namespace s2f
 			if (active == id) active = 0;
 		}
 	}
+
+	void GLState::invalidateVA()
+	{
+		activeVA = 0;
+	}
+
+	void GLState::invalidateShader()
+	{
+		activeShader = 0;
+	}
 }

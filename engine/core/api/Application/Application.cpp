@@ -6,6 +6,7 @@ namespace s2f
 
     Application* Application::get()
     {
+        S2F_ASSERT(sInstance, "Application::get() Application was not initialized");
         return sInstance;
     }
 

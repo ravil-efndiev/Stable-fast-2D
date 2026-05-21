@@ -18,6 +18,9 @@ namespace s2f
 		void bindVA(const VertexArray& va);
 		void bindShader(const Shader& shader);
 		void bindTexture(const Texture& texture, u32 textureSlot);
+
 		void invalidateTexture(GLuint id);
+		void invalidateVA();
+		void invalidateShader();
 	};
 }

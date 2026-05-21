@@ -16,11 +16,11 @@ namespace s2f
 		mEntitiesToRemove.push_back(entity);
 	}
 
-	void Scene::update()
+	void Scene::update(f32 deltaTime)
 	{
 		for (auto& [_, system] : mSystems)
 		{
-			system(mEntities);
+			system(mEntities, deltaTime);
 		}
 	}
 

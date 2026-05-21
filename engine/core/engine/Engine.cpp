@@ -8,6 +8,7 @@ namespace s2f
 
 	Engine* Engine::get()
 	{
+		S2F_ASSERT(sInstance, "Engine::get() Engine was not initialized");
 		return sInstance;
 	}
 
@@ -35,7 +36,7 @@ namespace s2f
 
 	void Engine::startFrame()
 	{
-		updateTime(mTime, mWindow.getTime());
+		mTime.update(mWindow.getTime());
 		glapi::clearScreen(mRenderInfo.clearColor);
 		mRenderer.begin();
 	}
