@@ -14,6 +14,7 @@ namespace s2f
 		~Scene() = default;
 
 		Entity newEntity();
+		Entity newEntity(const std::string& name);
 		void removeEntity(Entity entity);
 
 		void update(f32 deltaTime);
@@ -29,7 +30,8 @@ namespace s2f
 		ComponentRegistry mRegistry;
 		std::vector<Entity> mEntities;
 
-		std::vector<Entity> mEntitiesToRemove;
+		std::vector<Entity> mEntityRemoveQueue;
+		std::vector<SystemId> mSystemRemoveQueue;
 
 		static EntityId sEntityCounter;
 		static EntityId sSystemCounter;

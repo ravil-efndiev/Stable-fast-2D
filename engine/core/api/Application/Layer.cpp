@@ -8,7 +8,6 @@ namespace s2f
 
 	void Layer::update(f32 deltaTime)
 	{
-		mScene.update(deltaTime);
 		onUpdate(deltaTime);
 	}
 

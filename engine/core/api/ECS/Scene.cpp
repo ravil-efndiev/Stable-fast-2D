@@ -1,5 +1,7 @@
 #include "Scene.hpp"
 #include "Entity.hpp"
+#include "DefaultComponents/transform.hpp"
+#include "DefaultComponents/tag.hpp"
 
 namespace s2f
 {
@@ -8,12 +10,25 @@ namespace s2f
 
 	Entity Scene::newEntity()
 	{
-		return mEntities.emplace_back(this, sEntityCounter++);
+		Entity entity = mEntities.emplace_back(this, sEntityCounter++);
+		EntityId id = entity.id();
+		mRegistry.add(id, Tag{ std::string("Entity ") + std::to_string(id) });
+		mRegistry.add(id, Transform{});
+		return entity;
+	}
+
+	Entity Scene::newEntity(const std::string& name)
+	{
+		Entity entity = mEntities.emplace_back(this, sEntityCounter++);
+		EntityId id = entity.id();
+		mRegistry.add(id, Tag{ name });
+		mRegistry.add(id, Transform{});
+		return entity;
 	}
 
 	void Scene::removeEntity(Entity entity)
 	{
-		mEntitiesToRemove.push_back(entity);
+		mEntityRemoveQueue.push_back(entity);
 	}
 
 	void Scene::update(f32 deltaTime)
@@ -26,12 +41,24 @@ namespace s2f
 
 	void Scene::onFrameEnd()
 	{
-		for (const auto& entity : mEntitiesToRemove) 
+		if (!mEntityRemoveQueue.empty())
 		{
-			mEntities.erase(std::remove(mEntities.begin(), mEntities.end(), entity), mEntities.end());
-			mRegistry.eraseAll(entity.id());
+			for (const auto& entity : mEntityRemoveQueue)
+			{
+				mEntities.erase(std::remove(mEntities.begin(), mEntities.end(), entity), mEntities.end());
+				mRegistry.eraseAll(entity.id());
+			}
+			mEntityRemoveQueue.clear();
 		}
-		mEntitiesToRemove.clear();
+
+		if (!mSystemRemoveQueue.empty())
+		{
+			for (const auto& systemID : mSystemRemoveQueue)
+			{
+				mSystems.erase(systemID);
+			}
+			mSystemRemoveQueue.clear();
+		}
 	}
 
 	SystemId Scene::addSystem(const System& system)
@@ -43,6 +70,6 @@ namespace s2f
 
 	void Scene::removeSystem(const SystemId& systemID)
 	{
-		mSystems.erase(systemID);
+		mSystemRemoveQueue.push_back(systemID);
 	}
 }

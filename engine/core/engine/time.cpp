@@ -12,21 +12,21 @@ namespace s2f
 
 	Time Time::get() 
 	{
-		Engine::get()->time();
+		return Engine::get()->time();
 	}
 
 	f32 Time::current()
 	{
-		Engine::get()->currentTime();
+		return Engine::get()->currentTime();
 	}
 
 	f32 Time::delta()
 	{
-		Engine::get()->deltaTime();
+		return Engine::get()->deltaTime();
 	}
 
 	f32 Time::fixedDelta()
 	{
-		Engine::get()->fixedDeltaTime();
+		return Engine::get()->fixedDeltaTime();
 	}
 }

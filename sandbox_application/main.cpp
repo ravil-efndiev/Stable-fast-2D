@@ -22,6 +22,16 @@ public:
 	}
 };
 
+void testSystem(const std::vector<Entity>& entities, f32 dt)
+{
+	for (auto& entity : entities)
+	{
+		if (!entity.has<Transform>() || !entity.has<Sprite>()) return;
+
+		entity.get<Transform>()->rotation += 1.f * dt;
+	}
+}
+
 class GameLayer : public Layer
 {
 public:
@@ -29,14 +39,16 @@ public:
 	{
 		Application::get()->renderInfo().clearColor = { 0.f, 0.f, 0.f, 1.f };
 		Entity sprite = mScene.newEntity();
-		sprite.add<Transform>();
 		sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
-		sprite.get<Sprite>()->setSubTexture({ 0, 0 }, { 200, 200 });
+		//sprite.get<Sprite>()->setSubTexture({ 0, 0 }, { 200, 200 });
 		useCamera(mCamera);
+
+		mScene.addSystem(testSystem);
 	}
 
 	void onUpdate(f32 dt) override
 	{
+		mScene.update(dt);
 		if (Input::keyPressed(Key::Space))
 			transitionTo<TestLayer>();
 

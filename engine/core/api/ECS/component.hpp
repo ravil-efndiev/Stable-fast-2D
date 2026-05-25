@@ -3,7 +3,7 @@
 
 namespace s2f
 {
-	static ComponentTypeId sComponentTypeCounter{ 0 };
+	inline ComponentTypeId sComponentTypeCounter{ 0 };
 
 	template <class T>
 	ComponentTypeId getComponentType()

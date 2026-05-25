@@ -14,28 +14,28 @@ namespace s2f
         template <class ComponentT, class ...Args>
         ComponentT* add(Args&&... args) const 
         {
-            S2F_ASSERT(*this, mErrorStr);
+            S2F_ASSERT(*this, sErrorStr);
             return mScene->mRegistry.add<ComponentT>(mID, ComponentT{ std::forward<Args>(args)... });
         }
 
         template <class ComponentT>
-        ComponentT* get() const 
+        ComponentT* get() const
         {
-            S2F_ASSERT(*this, mErrorStr);
+            S2F_ASSERT(*this, sErrorStr);
             return mScene->mRegistry.get<ComponentT>(mID);
         }
 
         template <class ComponentT>
-        bool has() const 
+        bool has() const
         {
-            S2F_ASSERT(*this, mErrorStr);
+            S2F_ASSERT(*this, sErrorStr);
             return mScene->mRegistry.has<ComponentT>(mID);
         }
 
         template <class ComponentT>
-        void remove() const 
+        void remove() const
         {
-            S2F_ASSERT(*this, mErrorStr);
+            S2F_ASSERT(*this, sErrorStr);
             mScene->mRegistry.remove<ComponentT>(mID);
         }
 
@@ -46,7 +46,7 @@ namespace s2f
 
 	private:
 		Scene* mScene;
-        const char* mErrorStr = "Entity wasn't initialized or doesnt belong to the scene";
 		EntityId mID;
+        static constexpr char sErrorStr[] { "Entity wasn't initialized or doesnt belong to the scene" };
 	};
 }
