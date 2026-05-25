@@ -23,7 +23,7 @@ namespace s2f
         if (!status.success)
             status.error = "File [" + texturePath.string() + "] " + status.error;
 
-		S2F_INFO_VERBOSE("Created texture from file: " << texturePath.string() << ", valid = " << mValid);
+		log::infoVerbose("Created texture from file: \"{}\", valid = {}", texturePath.string(), mValid);
         return status;
     }
 
@@ -58,7 +58,7 @@ namespace s2f
     void Texture::destroy()
     {
         glDeleteTextures(1, &mID);
-        S2F_INFO_VERBOSE("Deleted texture with ID " << mID);
+        log::infoVerbose("Deleted texture with ID {}", mID);
         mValid = false;
         mWidth = 0;
         mHeight = 0;

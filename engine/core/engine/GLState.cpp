@@ -21,7 +21,12 @@ namespace s2f
 	void GLState::bindShader(const Shader& shader)
 	{
 		GLuint id = shader.id();
-		if (activeShader == id || !shader.valid()) return;
+		if (!shader.valid())
+		{
+			log::error("Attempted to bind an invalid shader");
+			return;
+		}
+		if (activeShader == id) return;
 
 		glUseProgram(id);
 		activeShader = id;
@@ -32,7 +37,7 @@ namespace s2f
 		GLuint id = texture.id();
 		if (!texture.valid())
 		{
-			S2F_ERROR("Attempted to bind an invalid texture to slot " << textureSlot);
+			log::error("Attempted to bind an invalid texture to slot {}", textureSlot);
 			return;
 		}
 		if (activeTextures[textureSlot] == id) return;

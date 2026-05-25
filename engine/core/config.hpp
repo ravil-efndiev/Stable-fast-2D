@@ -13,4 +13,9 @@ namespace s2f
 	{
 		LogMode logMode{ LogMode::Normal };
 	};
+
+	namespace globals
+	{
+		inline GlobalConfig gConfig{};
+	}
 }

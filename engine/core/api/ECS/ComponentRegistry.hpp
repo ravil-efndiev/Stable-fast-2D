@@ -14,7 +14,7 @@ namespace s2f
         ComponentT* add(EntityId entityId, const ComponentT& component)
         {
             auto* cmp = getOrCreateStorage<ComponentT>().add(entityId, component);
-            if (!cmp) S2F_ERROR("Component already exists on an entity");
+            if (!cmp) log::error("Component already exists on an entity");
             return cmp;
         }
 
@@ -22,7 +22,7 @@ namespace s2f
         ComponentT* get(EntityId entityId)
         {
             auto* cmp = getOrCreateStorage<ComponentT>().get(entityId);
-            if (!cmp) S2F_ERROR("Component does not exist in an entity");
+            if (!cmp) log::error("Component does not exist in an entity");
             return cmp;
         }
 

@@ -15,15 +15,15 @@ namespace s2f
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-			const GLubyte* version = glGetString(GL_VERSION);
-			const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
-			S2F_INFO("OpenGL Version: " << version);
-			S2F_INFO("GLSL Version: " << glslVersion);
+			auto version = (const char*)glGetString(GL_VERSION);
+			auto glslVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+			log::info("OpenGL Version: {}", version);
+			log::info("GLSL Version: {}", glslVersion);
 		}
 
 		void setViewport(const glm::ivec2& size)
 		{
-			S2F_INFO_VERBOSE("glapi::setViewport() size = (" << size.x << ", " << size.y << ")");
+			log::infoVerbose("glapi::setViewport() size = ({}, {})", size.x, size.y);
 			glViewport(0, 0, size.x, size.y);
 		}
 

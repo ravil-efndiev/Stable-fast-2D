@@ -8,7 +8,7 @@ namespace s2f
 	{
 		initGLFW();
 		setupCallbacks();
-		S2F_INFO_VERBOSE("Created window with title \"" << mTitle << "\", size (" << mSize.x << ", " << mSize.y << ")");
+		log::infoVerbose("Created window with title \"{}\", size ({}, {})", mTitle, mSize.x, mSize.y);
 	}
 
 	Window::~Window() 

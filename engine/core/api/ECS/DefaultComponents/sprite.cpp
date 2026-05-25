@@ -23,7 +23,7 @@ namespace s2f
 	{
 		if (!texture || (texture && !texture->valid()))
 		{
-			S2F_WARN("Trying to set subtexture to a sprite that doesn't have initialized or valid texture");
+			log::warn("Trying to set subtexture to a sprite that doesn't have initialized or valid texture");
 			return;
 		}
 
