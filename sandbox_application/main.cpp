@@ -49,7 +49,7 @@ public:
 	void onUpdate(f32 dt) override
 	{
 		mScene.update(dt);
-		if (Input::keyPressed(Key::Space))
+		if (Input::mouseButtonPressed(Mouse::Left))
 			transitionTo<TestLayer>();
 
 		if (Input::keyDown(Key::D))

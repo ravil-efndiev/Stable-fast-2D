@@ -39,22 +39,4 @@ namespace s2f
 		i32 width;
 		i32 height;
 	};
-
-	struct KeyPressEvent : public Event 
-	{
-		KeyPressEvent(Key key) : key(key) {}
-
-		S2F_EVENT_BODY(KeyPress)
-
-		Key key;
-	};
-
-	struct KeyReleaseEvent : public Event
-	{
-		KeyReleaseEvent(Key key) : key(key) {}
-
-		S2F_EVENT_BODY(KeyRelease)
-
-		Key key;
-	};
 }

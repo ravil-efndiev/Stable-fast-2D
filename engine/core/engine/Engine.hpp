@@ -45,6 +45,7 @@ namespace s2f
 		void start();
 
 		bool onKeyEvent(Key key, bool press);
+		bool onMouseEvent(Mouse button, bool press);
 
 	private:
 		WindowInfo mWindowInfo;

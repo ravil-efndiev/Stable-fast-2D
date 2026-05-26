@@ -1,4 +1,5 @@
 #pragma once
+#define S2F_MOUSE_BUTTONS_START 1024
 
 namespace s2f
 {
@@ -128,8 +129,8 @@ namespace s2f
 
     enum class Mouse
     {
-        Left = 1024,
-        Right = 1025,
-        Middle = 1026,
+        Left = 0,
+        Right = 1,
+        Middle = 2,
     };
 }

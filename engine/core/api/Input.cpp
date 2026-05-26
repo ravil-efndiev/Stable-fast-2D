@@ -14,6 +14,12 @@ namespace s2f
 		S2F_ASSERT(sInputState, "Input was not initialized when calling its methods, use Input::init()");
 		return static_cast<u32>(key);
 	}
+
+	u32 Input::assertInputAndGetMouseCode(Mouse mouseButton)
+	{
+		S2F_ASSERT(sInputState, "Input was not initialized when calling its methods, use Input::init()");
+		return static_cast<u32>(mouseButton);
+	}
 	
 	bool Input::keyPressed(Key key)
 	{
@@ -32,4 +38,23 @@ namespace s2f
 		auto keyCode = assertInputAndGetKeyCode(key);
 		return sInputState->keys[keyCode];
 	}
+
+	bool Input::mouseButtonPressed(Mouse mouseButton)
+	{
+		auto mouseCode = assertInputAndGetMouseCode(mouseButton);
+		return sInputState->mouseButtons[mouseCode] && !sInputState->previousMouseButtons[mouseCode];
+	}
+
+	bool Input::mouseButtonReleased(Mouse mouseButton)
+	{
+		auto mouseCode = assertInputAndGetMouseCode(mouseButton);
+		return !sInputState->mouseButtons[mouseCode] && sInputState->previousMouseButtons[mouseCode];
+	}
+
+	bool Input::mouseButtonDown(Mouse mouseButton)
+	{
+		auto mouseCode = assertInputAndGetMouseCode(mouseButton);
+		return sInputState->mouseButtons[mouseCode];
+	}
+
 }

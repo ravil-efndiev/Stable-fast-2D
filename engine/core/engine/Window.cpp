@@ -59,6 +59,21 @@ namespace s2f
 				win->onEvent(event);
 			}
 		});
+
+		glfwSetMouseButtonCallback(mWindow, [](GLFWwindow* window, i32 button, i32 action, i32 mods)
+		{
+			auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
+			if (action == GLFW_PRESS)
+			{
+				MouseButtonPressEvent event(static_cast<Mouse>(button));
+				win->onEvent(event);
+			}
+			else
+			{
+				MouseButtonReleaseEvent event(static_cast<Mouse>(button));
+				win->onEvent(event);
+			}
+		});
 	}
 
 	void Window::onEvent(Event& event)

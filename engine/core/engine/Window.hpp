@@ -2,6 +2,7 @@
 #include "include.hpp"
 #include "inputState.hpp"
 #include "events/Event.hpp"
+#include "events/inputEvents.hpp"
 
 namespace s2f 
 {

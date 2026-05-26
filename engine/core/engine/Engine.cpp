@@ -34,8 +34,10 @@ namespace s2f
 		mWindow.setEventFunc([this](Event& event)
 		{
 			EventDispatcher dispatcher(event);
-			dispatcher.dispatch<KeyPressEvent>([this](KeyPressEvent& event) { return onKeyEvent(event.key, true); });
-			dispatcher.dispatch<KeyReleaseEvent>([this](KeyReleaseEvent& event) { return onKeyEvent(event.key, false); });
+			dispatcher.dispatch<KeyPressEvent>([&](auto& event) { return onKeyEvent(event.key, true); });
+			dispatcher.dispatch<KeyReleaseEvent>([&](auto& event) { return onKeyEvent(event.key, false); });
+			dispatcher.dispatch<MouseButtonPressEvent>([&](auto& event) { return onMouseEvent(event.button, true); });
+			dispatcher.dispatch<MouseButtonReleaseEvent>([&](auto& event) { return onMouseEvent(event.button, false); });
 			dispatcher.dispatch<ResizeEvent>(onResizeEvent);
 
 			if (mEventFunc) mEventFunc(event);
@@ -64,6 +66,12 @@ namespace s2f
 	bool Engine::onKeyEvent(Key key, bool press)
 	{
 		mInputState.keys[static_cast<u32>(key)] = press;
+		return S2F_EVENT_PROPAGATED;
+	}
+
+	bool Engine::onMouseEvent(Mouse button, bool press)
+	{
+		mInputState.mouseButtons[static_cast<u32>(button)] = press;
 		return S2F_EVENT_PROPAGATED;
 	}
 

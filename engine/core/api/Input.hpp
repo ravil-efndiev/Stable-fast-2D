@@ -11,8 +11,13 @@ namespace s2f
 		static bool keyReleased(Key key);
 		static bool keyDown(Key key);
 
+		static bool mouseButtonPressed(Mouse mouseButton);
+		static bool mouseButtonReleased(Mouse mouseButton);
+		static bool mouseButtonDown(Mouse mouseButton);
+
 	private:
 		static u32 assertInputAndGetKeyCode(Key key);
+		static u32 assertInputAndGetMouseCode(Mouse mouseButton);
 
 	private:
 		static InputState* sInputState;
