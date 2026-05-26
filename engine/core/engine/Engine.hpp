@@ -3,6 +3,8 @@
 #include "time.hpp"
 #include "Renderer.hpp"
 #include "inputState.hpp"
+#include "events/Event.hpp"
+#include "events/EventDispatcher.hpp"
 
 namespace s2f
 {
@@ -21,12 +23,14 @@ namespace s2f
 	{
 	public:
 		Engine(const WindowInfo& windowInfo, const RenderInfo& renderInfo = {});
-		~Engine();
+		~Engine() = default;
 
 		bool runs() const;
 
 		void startFrame();
 		void endFrame();
+
+		void setEventFunc(const EventFunc& eventFunc) { mEventFunc = eventFunc; }
 
 		f32 deltaTime() const { return (f32)mTime.deltaTime; }
 		f32 currentTime() const { return (f32)mTime.currentTime; }
@@ -40,6 +44,8 @@ namespace s2f
 	private:
 		void start();
 
+		bool onKeyEvent(Key key, bool press);
+
 	private:
 		WindowInfo mWindowInfo;
 		RenderInfo mRenderInfo;
@@ -47,5 +53,6 @@ namespace s2f
 		Window mWindow;
 		Renderer mRenderer;
 		InputState mInputState{};
+		EventFunc mEventFunc;
 	};
 }

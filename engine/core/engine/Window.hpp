@@ -1,13 +1,14 @@
 #pragma once
 #include "include.hpp"
 #include "inputState.hpp"
+#include "events/Event.hpp"
 
 namespace s2f 
 {
 	class Window 
 	{
 	public:
-		Window(const glm::ivec2& size, const char* title, InputState& inputState);
+		Window(const glm::ivec2& size, const char* title);
 		~Window();
 
 		Window() = delete;
@@ -21,15 +22,18 @@ namespace s2f
 
 		glm::ivec2 size() const { return mSize; }
 
+		void setEventFunc(const EventFunc& eventFunc) { mEventFunc = eventFunc; }
+
 	private:
 		void initGLFW();
 		void setupCallbacks();
+
+		void onEvent(Event& event);
 
 	private:
 		glm::ivec2 mSize;
 		const char* mTitle;
 		GLFWwindow* mWindow;
-		InputState& mInputState;
+		EventFunc mEventFunc;
 	};
-
 }

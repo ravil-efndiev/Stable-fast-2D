@@ -1,10 +1,9 @@
 #include "Window.hpp"
-#include "GLAPI.hpp"
 
 namespace s2f 
 {
-	Window::Window(const glm::ivec2& size, const char* title, InputState& inputState)
-		: mSize(size), mTitle(title), mInputState(inputState)
+	Window::Window(const glm::ivec2& size, const char* title)
+		: mSize(size), mTitle(title)
 	{
 		initGLFW();
 		setupCallbacks();
@@ -42,14 +41,30 @@ namespace s2f
 		{
 			auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
 			win->mSize = { width, height };
-			glapi::setViewport(win->mSize);
+			ResizeEvent event(width, height);
+			win->onEvent(event);
 		});
 
 		glfwSetKeyCallback(mWindow, [](GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mods)
 		{
 			auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
-			win->mInputState.keys[key] = action;
+			if (action == GLFW_PRESS)
+			{
+				KeyPressEvent event(static_cast<Key>(key));
+				win->onEvent(event);
+			}
+			else
+			{
+				KeyReleaseEvent event(static_cast<Key>(key));
+				win->onEvent(event);
+			}
 		});
+	}
+
+	void Window::onEvent(Event& event)
+	{
+		if (!mEventFunc) return;
+		mEventFunc(event);
 	}
 
 	bool Window::shouldClose() const

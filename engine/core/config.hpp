@@ -1,10 +1,8 @@
 #pragma once
 
-using u8 = uint8_t;
-
 namespace s2f 
 {
-	enum class LogMode : u8
+	enum class LogMode : uint8_t
 	{
 		Normal, Verbose, None
 	};

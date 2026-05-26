@@ -2,6 +2,12 @@
 
 using namespace s2f;
 
+bool onKeyPress(KeyPressEvent& event)
+{
+	log::info("key {} pressed, caught from event func", (u32)event.key);
+	return S2F_EVENT_HANDLED;
+}
+
 int main()
 {
 	globals::gConfig.logMode = LogMode::Verbose;
@@ -14,6 +20,12 @@ int main()
 	Entity sprite = scene.newEntity();
 	sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
 
+	engine.setEventFunc([](Event& event) 
+	{
+		EventDispatcher dispatcher(event);
+		dispatcher.dispatch<KeyPressEvent>(onKeyPress);
+	});
+
 	while (engine.runs()) 
 	{
 		engine.startFrame();
@@ -23,12 +35,6 @@ int main()
 
 		if (Input::keyDown(Key::D))
 			camera.position.x += 10.f * dt;
-
-		if (Input::keyPressed(Key::Space))
-			S2F_INFO("Space key was pressed!");
-
-		if (Input::keyReleased(Key::Space))
-			S2F_INFO("Space key was released!");
 
 		renderer.setProjview(camera.projview());
 		sr.render();

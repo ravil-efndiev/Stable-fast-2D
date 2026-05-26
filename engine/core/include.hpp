@@ -12,6 +12,7 @@
 #include <stack>
 #include <unordered_map>
 #include <format>
+#include <concepts>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

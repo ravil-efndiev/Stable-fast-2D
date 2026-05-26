@@ -1,6 +1,7 @@
 #pragma once
 #include "api/ECS/Scene.hpp"
 #include "api/ECS/SceneRenderer.hpp"
+#include "engine/events/Event.hpp"
 #include "api/objects/Camera.hpp"
 
 namespace s2f
@@ -15,6 +16,7 @@ namespace s2f
 		virtual void start() = 0;
 		virtual void onUpdate(f32 dt) = 0;
 		virtual void onRender() = 0;
+		virtual void onEvent(Event& event) {}
 
 		void update(f32 deltaTime);
 		void render();

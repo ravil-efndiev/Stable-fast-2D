@@ -23,7 +23,7 @@ namespace s2f
 		inline void vinfo(std::string_view fmt, Args&&... args)
 		{
 			if (globals::gConfig.logMode == LogMode::None) return;
-			std::cout << COL_GREEN << "[Info] " << COL_WHITE << std::vformat(fmt, std::make_format_args(args)...) << '\n';
+			std::cout << COL_GREEN << "[Info] " << COL_WHITE << std::vformat(fmt, std::make_format_args(args...)) << '\n';
 		}
 
 		template<class... Args>

@@ -28,7 +28,7 @@ void testSystem(const std::vector<Entity>& entities, f32 dt)
 	{
 		if (!entity.has<Transform>() || !entity.has<Sprite>()) return;
 
-		entity.get<Transform>()->rotation += 1.f * dt;
+		entity.get<Transform>()->rotation.z += 1.f * dt;
 	}
 }
 
@@ -61,8 +61,55 @@ public:
 		mSceneRenderer.render();
 	}
 
+	void onEvent(Event& event)
+	{
+		EventDispatcher dispatcher(event);
+		dispatcher.dispatch<KeyPressEvent>([this](KeyPressEvent& event) { return onKeyPress(event); });
+	}
+
+	bool onKeyPress(KeyPressEvent& event)
+	{
+		log::info("caugh key press event in GameLayer, key: {}, handled here", (u32)event.key);
+		return S2F_EVENT_HANDLED;
+	}
+
 private:
 	Camera mCamera;
+};
+
+
+class OverlayLayer : public Layer
+{
+public:
+	void start() override
+	{
+		Entity sprite = mScene.newEntity();
+		sprite.add<Sprite>(glm::vec4(1.f, 1.f, 1.f, 1.f));
+		sprite.get<Transform>()->scale = { 0.3f, 0.3f, 0.3f };
+		sprite.get<Transform>()->position = {-0.5f, 0.5f, 0.1f};
+	}
+
+	void onUpdate(f32 dt) override
+	{
+		mScene.update(dt);
+	}
+
+	void onRender() override
+	{
+		mSceneRenderer.render();
+	}
+
+	void onEvent(Event& event)
+	{
+		EventDispatcher dispatcher(event);
+		dispatcher.dispatch<KeyPressEvent>([this](KeyPressEvent& event) { return onKeyPress(event); });
+	}
+
+	bool onKeyPress(KeyPressEvent& event)
+	{
+		log::info("caugh key press event in OverlayLayer, key: {}, propagated further", (u32)event.key);
+		return S2F_EVENT_PROPAGATED;
+	}
 };
 
 int main()
@@ -70,6 +117,7 @@ int main()
 	globals::gConfig.logMode = LogMode::Verbose;
 	Application app({ { 1000, 700 }, "Sandbox" });
 	app.pushLayer<GameLayer>();
+	app.pushLayer<OverlayLayer>();
 	app.mainLoop();
 	return 0;
 }

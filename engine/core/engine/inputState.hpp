@@ -13,5 +13,7 @@ namespace s2f
 
 		std::array<bool, sMaxMouseButtons> mouseButtons{ false };
 		std::array<bool, sMaxMouseButtons> previousMouseButtons{ false };
+
+		void update();
 	};
 }

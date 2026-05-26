@@ -15,6 +15,12 @@ namespace s2f
     {
         S2F_ASSERT(!sInstance, "Application instance can only be created once");
         sInstance = this;
+
+        mEngine.setEventFunc([this](Event& event)
+        {
+            for (auto it = mLayers.rbegin(); it != mLayers.rend(); ++it)
+                (*it)->onEvent(event);
+        });
     }
 
     void Application::mainLoop()
