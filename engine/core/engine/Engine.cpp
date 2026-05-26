@@ -21,6 +21,8 @@ namespace s2f
 		start();
 	}
 
+	bool onResizeEvent(ResizeEvent& event);
+
 	void Engine::start()
 	{
 		glapi::init();
@@ -34,17 +36,11 @@ namespace s2f
 			EventDispatcher dispatcher(event);
 			dispatcher.dispatch<KeyPressEvent>([this](KeyPressEvent& event) { return onKeyEvent(event.key, true); });
 			dispatcher.dispatch<KeyReleaseEvent>([this](KeyReleaseEvent& event) { return onKeyEvent(event.key, false); });
+			dispatcher.dispatch<ResizeEvent>(onResizeEvent);
 
 			if (mEventFunc) mEventFunc(event);
 		});
 	}
-
-	bool Engine::onKeyEvent(Key key, bool press)
-	{
-		mInputState.keys[static_cast<u32>(key)] = press;
-		return S2F_EVENT_PROPAGATED;
-	}
-
 	void Engine::startFrame()
 	{
 		mTime.update(mWindow.getTime());
@@ -63,5 +59,17 @@ namespace s2f
 	bool Engine::runs() const
 	{
 		return !mWindow.shouldClose();
+	}
+
+	bool Engine::onKeyEvent(Key key, bool press)
+	{
+		mInputState.keys[static_cast<u32>(key)] = press;
+		return S2F_EVENT_PROPAGATED;
+	}
+
+	bool onResizeEvent(ResizeEvent& event)
+	{
+		glapi::setViewport({ event.width, event.height });
+		return S2F_EVENT_PROPAGATED;
 	}
 }
