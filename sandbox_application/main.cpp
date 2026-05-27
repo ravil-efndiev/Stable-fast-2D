@@ -92,6 +92,8 @@ public:
 	void onUpdate(f32 dt) override
 	{
 		mScene.update(dt);
+		glm::vec2 mouse = Input::mousePosition();
+		log::info("mouse pos = ({}, {})", mouse.x, mouse.y);
 	}
 
 	void onRender() override

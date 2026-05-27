@@ -74,6 +74,13 @@ namespace s2f
 				win->onEvent(event);
 			}
 		});
+
+		glfwSetCursorPosCallback(mWindow, [](GLFWwindow* window, f64 mouseX, f64 mouseY)
+		{
+			auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
+			MouseMoveEvent event((f32)mouseX, (f32)mouseY);
+			win->onEvent(event);
+		});
 	}
 
 	void Window::onEvent(Event& event)
@@ -85,6 +92,11 @@ namespace s2f
 	bool Window::shouldClose() const
 	{
 		return glfwWindowShouldClose(mWindow);
+	}
+
+	void Window::close()
+	{
+		glfwSetWindowShouldClose(mWindow, true);
 	}
 
 	void Window::swapBuffers()

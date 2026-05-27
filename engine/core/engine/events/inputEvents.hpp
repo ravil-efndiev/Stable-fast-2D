@@ -34,4 +34,12 @@ namespace s2f
 
 		Mouse button;
 	};
+
+	struct MouseMoveEvent : public Event
+	{
+		MouseMoveEvent(f32 mouseX, f32 mouseY) : mouseX(mouseX), mouseY(mouseY) {}
+		S2F_EVENT_BODY(MouseMove)
+
+		f32 mouseX, mouseY;
+	};
 }

@@ -14,6 +14,8 @@ namespace s2f
 		std::array<bool, sMaxMouseButtons> mouseButtons{ false };
 		std::array<bool, sMaxMouseButtons> previousMouseButtons{ false };
 
+		glm::vec2 mousePosition{ 0.f };
+
 		void update();
 	};
 }

@@ -1,8 +1,7 @@
 #pragma once
 #include "include.hpp"
 #include "inputState.hpp"
-#include "events/Event.hpp"
-#include "events/inputEvents.hpp"
+#include "events/events.hpp"
 
 namespace s2f 
 {
@@ -17,6 +16,7 @@ namespace s2f
 		Window& operator=(const Window&) = delete;
 
 		bool shouldClose() const;
+		void close();
 		void swapBuffers();
 		void pollEvents();
 		f64 getTime() const;

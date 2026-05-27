@@ -15,6 +15,8 @@ namespace s2f
 		static bool mouseButtonReleased(Mouse mouseButton);
 		static bool mouseButtonDown(Mouse mouseButton);
 
+		static glm::vec2 mousePosition();
+
 	private:
 		static u32 assertInputAndGetKeyCode(Key key);
 		static u32 assertInputAndGetMouseCode(Mouse mouseButton);

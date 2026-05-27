@@ -3,8 +3,7 @@
 #include "time.hpp"
 #include "Renderer.hpp"
 #include "inputState.hpp"
-#include "events/Event.hpp"
-#include "events/EventDispatcher.hpp"
+#include "events/events.hpp"
 
 namespace s2f
 {
@@ -26,6 +25,7 @@ namespace s2f
 		~Engine() = default;
 
 		bool runs() const;
+		void stop();
 
 		void startFrame();
 		void endFrame();
@@ -46,6 +46,7 @@ namespace s2f
 
 		bool onKeyEvent(Key key, bool press);
 		bool onMouseEvent(Mouse button, bool press);
+		bool onMouseMove(MouseMoveEvent& event);
 
 	private:
 		WindowInfo mWindowInfo;

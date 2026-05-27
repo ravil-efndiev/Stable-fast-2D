@@ -27,6 +27,8 @@ namespace s2f
 		Renderer& renderer() { return mEngine.renderer(); }
 		Time time() { return mEngine.time(); }
 
+		void stop();
+
 		static Application* get();
 
 	private:

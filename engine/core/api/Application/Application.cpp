@@ -61,4 +61,9 @@ namespace s2f
        
         mLayerTransitions.clear();
     }
+
+    void Application::stop()
+    {
+        mEngine.stop();
+    }
 }
