@@ -13,7 +13,7 @@ namespace s2f
 	class Application
 	{
 	public:
-		Application(const WindowInfo& windowInfo, const RenderInfo& renderInfo = {});
+		Application(const EngineInfo& engineInfo);
 
 		void mainLoop();
 
@@ -23,7 +23,7 @@ namespace s2f
 			mLayers.push_back(std::make_unique<LayerT>(std::forward<Args>(args)...));
 		}
 
-		RenderInfo& renderInfo() { return mEngine.renderInfo(); }
+		Engine& engine() { return mEngine; }
 		Renderer& renderer() { return mEngine.renderer(); }
 		Time time() { return mEngine.time(); }
 

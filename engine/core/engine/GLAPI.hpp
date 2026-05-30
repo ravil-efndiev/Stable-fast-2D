@@ -9,7 +9,7 @@ namespace s2f
 		void setViewport(const glm::ivec2& size);
 		void clearScreen(const glm::vec4& color);
 		i32 getMaxTextureSlots();
-		void drawIndexed(size_t indexCount);
+		void drawIndexed(size_t indexCount, RenderMode mode);
 		glm::ivec2 getViewportSize();
 	}
 }

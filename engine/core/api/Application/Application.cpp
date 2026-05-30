@@ -10,8 +10,8 @@ namespace s2f
         return sInstance;
     }
 
-	Application::Application(const WindowInfo& windowInfo, const RenderInfo& renderInfo)
-		: mEngine(windowInfo, renderInfo) 
+	Application::Application(const EngineInfo& engineInfo)
+		: mEngine(engineInfo)
     {
         S2F_ASSERT(!sInstance, "Application instance can only be created once");
         sInstance = this;

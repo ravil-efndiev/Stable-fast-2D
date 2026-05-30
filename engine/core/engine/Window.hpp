@@ -5,10 +5,17 @@
 
 namespace s2f 
 {
+	struct WindowInfo
+	{
+		glm::ivec2 size;
+		std::string title;
+		bool resizable{ true };
+	};
+
 	class Window 
 	{
 	public:
-		Window(const glm::ivec2& size, const char* title);
+		Window(const WindowInfo& info);
 		~Window();
 
 		Window() = delete;
@@ -21,7 +28,8 @@ namespace s2f
 		void pollEvents();
 		f64 getTime() const;
 
-		glm::ivec2 size() const { return mSize; }
+		glm::ivec2 size() const { return mInfo.size; }
+		std::string title() const { return mInfo.title; }
 
 		void setEventFunc(const EventFunc& eventFunc) { mEventFunc = eventFunc; }
 
@@ -32,8 +40,7 @@ namespace s2f
 		void onEvent(Event& event);
 
 	private:
-		glm::ivec2 mSize;
-		const char* mTitle;
+		WindowInfo mInfo;
 		GLFWwindow* mWindow;
 		EventFunc mEventFunc;
 	};

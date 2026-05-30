@@ -7,21 +7,17 @@
 
 namespace s2f
 {
-	struct WindowInfo 
-	{
-		glm::ivec2 size;
-		const char* title;
-	};
-
-	struct RenderInfo 
+	struct EngineInfo 
 	{
 		glm::vec4 clearColor{ 0.f, 0.f, 0.f, 0.f };
+		RendererInfo rendererInfo{ RenderMode::Fill, 5000 };
+		WindowInfo windowInfo;
 	};
 
 	class Engine 
 	{
 	public:
-		Engine(const WindowInfo& windowInfo, const RenderInfo& renderInfo = {});
+		Engine(const EngineInfo& info);
 		~Engine() = default;
 
 		bool runs() const;
@@ -36,8 +32,9 @@ namespace s2f
 		f32 currentTime() const { return (f32)mTime.currentTime; }
 		f32 fixedDeltaTime() const { return mTime.fixedDeltaTime; }
 		Time time() const { return mTime; }
-		RenderInfo& renderInfo() { return mRenderInfo; }
 		Renderer& renderer() { return mRenderer; }
+
+		void setClearColor(const glm::vec4& clearColor) { mClearColor = clearColor; }
 
 		static Engine* get();
 
@@ -49,12 +46,11 @@ namespace s2f
 		bool onMouseMove(MouseMoveEvent& event);
 
 	private:
-		WindowInfo mWindowInfo;
-		RenderInfo mRenderInfo;
 		Time mTime;
 		Window mWindow;
 		Renderer mRenderer;
 		InputState mInputState{};
 		EventFunc mEventFunc;
+		glm::vec4 mClearColor;
 	};
 }

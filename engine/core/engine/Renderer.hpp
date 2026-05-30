@@ -11,6 +11,12 @@
 
 namespace s2f
 {
+	struct RendererInfo
+	{
+		RenderMode mode;
+		u64 quadBatchSize;
+	};
+
 	struct RendererStatistics
 	{
 		u32 drawCalls{ 0 };
@@ -21,7 +27,7 @@ namespace s2f
 	class Renderer
 	{
 	public:
-		Renderer();
+		Renderer(const RendererInfo& info);
 		~Renderer() = default;
 
 		void init();
@@ -44,6 +50,9 @@ namespace s2f
 		);
 
 		void setProjview(const ProjViewData& projview) { mProjview = projview; }
+		void resetProjview();
+
+		void setRenderMode(RenderMode mode) { mRenderMode = mode; }
 
 		RendererStatistics frameStatistics() const { return mStats; }
 		void resetStatistics() { mStats = {}; }
@@ -57,26 +66,27 @@ namespace s2f
 		void reset();
 
 	private:
-		GLState mGLState;
 		ProjViewData mProjview;
+		GLState mGLState;
+		Shader mQuadShader;
+		Layout mQuadVBLayout;
 		VertexArray mQuadVA;
 		Buffer mQuadVB;
 		Buffer mQuadIB;
-		Shader mQuadShader;
-		Layout mQuadVBLayout;
-
-		static constexpr u64 sQuadsPerDraw{ 5000 };
-		static constexpr u64 sQuadVerticesPerDraw{ 4 * sQuadsPerDraw };
-		static constexpr u64 sQuadIndicesPerDraw{ 6 * sQuadsPerDraw };
 
 		std::vector<u32> mQuadBatchIndices;
 		std::vector<meshes::QuadVertex> mQuadVertexData;
 		u32 mQuadVertexCount{ 0 };
 		u32 mQuadIndexCount{ 0 };
 
+		const u64 mQuadBatchSize;
+		const u64 mQuadVerticesPerDraw;
+		const u64 mQuadIndicesPerDraw;
+
 		std::vector<Texture*> mTextures;
 		u32 mTextureSlotIndex{ 1 };
 
 		RendererStatistics mStats{};
+		RenderMode mRenderMode;
 	};
 }

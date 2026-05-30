@@ -8,7 +8,7 @@ class TestLayer : public Layer
 public:
 	void start() override
 	{
-		Application::get()->renderInfo().clearColor = { 1.f, 0.f, 0.f, 1.f };
+		Engine::get()->setClearColor({ 1.f, 0.f, 0.f, 1.f });
 	}
 
 	void onUpdate(f32 dt) override
@@ -35,7 +35,7 @@ class GameLayer : public Layer
 public:
 	void start() override
 	{
-		Application::get()->renderInfo().clearColor = { 0.f, 0.f, 0.f, 1.f };
+		Engine::get()->setClearColor({ 0.f, 0.f, 0.f, 1.f });
 		Entity sprite = mScene.newEntity();
 		sprite.add<Sprite>(ASSETS_PATH / "textures" / "melee_undead.png");
 		auto& animator = *sprite.add<SpriteAnimator>();
@@ -91,8 +91,6 @@ public:
 	void onUpdate(f32 dt) override
 	{
 		mScene.update(dt);
-		glm::vec2 mouse = Input::mousePosition();
-		log::info("mouse pos = ({}, {})", mouse.x, mouse.y);
 	}
 
 	void onRender() override
@@ -103,7 +101,7 @@ public:
 	void onEvent(Event& event)
 	{
 		EventDispatcher dispatcher(event);
-		dispatcher.dispatch<KeyPressEvent>([this](KeyPressEvent& event) { return onKeyPress(event); });
+		dispatcher.dispatchMember<KeyPressEvent>(this, &OverlayLayer::onKeyPress);
 	}
 
 	bool onKeyPress(KeyPressEvent& event)
@@ -116,7 +114,11 @@ public:
 int main()
 {
 	globals::gConfig.logMode = LogMode::Verbose;
-	Application app({ { 1000, 700 }, "Sandbox" });
+
+	EngineInfo engineInfo;
+	engineInfo.windowInfo = { { 1000, 700 }, "Sandbox" };
+
+	Application app(engineInfo);
 	app.pushLayer<GameLayer>();
 	app.pushLayer<OverlayLayer>();
 	app.mainLoop();

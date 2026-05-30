@@ -49,6 +49,11 @@ namespace s2f
 
 	const std::filesystem::path ASSETS_PATH{ "assets" };
 	const std::filesystem::path SHADER_PATH{ ASSETS_PATH / "shaders" };
+
+	enum class RenderMode : u8
+	{
+		Fill, Wireframe
+	};
 }
 
 #ifdef S2F_DEBUG

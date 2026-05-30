@@ -12,9 +12,8 @@ namespace s2f
 		return sInstance;
 	}
 
-	Engine::Engine(const WindowInfo& windowInfo, const RenderInfo& renderInfo) 
-		: mWindowInfo(windowInfo), mRenderInfo(renderInfo), 
-		mWindow(mWindowInfo.size, mWindowInfo.title) 
+	Engine::Engine(const EngineInfo& info) 
+		: mClearColor(info.clearColor), mWindow(info.windowInfo), mRenderer(info.rendererInfo)
 	{
 		S2F_ASSERT(!sInstance, "Engine instance can only be created once");
 		sInstance = this;
@@ -48,13 +47,11 @@ namespace s2f
 	void Engine::startFrame()
 	{
 		mTime.update(mWindow.getTime());
-		glapi::clearScreen(mRenderInfo.clearColor);
-		mRenderer.begin();
+		glapi::clearScreen(mClearColor);
 	}
 
 	void Engine::endFrame()
 	{
-		mRenderer.end();
 		mWindow.swapBuffers();
 		mInputState.update();
 		mWindow.pollEvents();

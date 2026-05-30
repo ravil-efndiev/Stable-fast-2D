@@ -41,8 +41,9 @@ namespace s2f
 			return std::min(maxTextureUnits, 32);
 		}
 
-		void drawIndexed(size_t indexCount)
+		void drawIndexed(size_t indexCount, RenderMode mode)
 		{
+			glPolygonMode(GL_FRONT_AND_BACK, mode == RenderMode::Fill ? GL_FILL : GL_LINE);
 			glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 		}
 

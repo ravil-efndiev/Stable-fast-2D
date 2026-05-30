@@ -2,24 +2,27 @@
 
 namespace s2f
 {
-	Renderer::Renderer() 
-		: mQuadBatchIndices(sQuadIndicesPerDraw)
+	Renderer::Renderer(const RendererInfo& info) : 
+		mQuadBatchSize(info.quadBatchSize),
+		mQuadVerticesPerDraw(mQuadBatchSize * 4),
+		mQuadIndicesPerDraw(mQuadBatchSize * 6),
+		mRenderMode(info.mode)
 	{
-		mQuadVertexData.reserve(sQuadVerticesPerDraw);
+		mQuadBatchIndices.resize(mQuadIndicesPerDraw);
+		mQuadVertexData.reserve(mQuadVerticesPerDraw);
 	}
 
 	void Renderer::init()
 	{
 		mGLState.init();
-		auto viewport = glapi::getViewportSize();
-		mProjview = makeOrthoPojectionView({ 0.f, 0.f }, 0.f, 1.f, (f32)viewport.x / (f32)viewport.y);
+		resetProjview();
 
 		mQuadVA.create();
-		mQuadVB.create(BufferType::Vertex, sQuadVerticesPerDraw * sizeof(meshes::QuadVertex));
+		mQuadVB.create(BufferType::Vertex, mQuadVerticesPerDraw * sizeof(meshes::QuadVertex));
 
 		fillQuadBatchIndices();
 		mQuadIB.create(BufferType::Index,
-			sQuadIndicesPerDraw * sizeof(u32),
+			mQuadIndicesPerDraw * sizeof(u32),
 			mQuadBatchIndices.data()
 		);
 
@@ -53,7 +56,7 @@ namespace s2f
 	void Renderer::fillQuadBatchIndices()
 	{
 		size_t offset{ 0 };
-		for (size_t i{ 0 }; i < sQuadIndicesPerDraw; i += 6)
+		for (size_t i{ 0 }; i < mQuadIndicesPerDraw; i += 6)
 		{
 			for (size_t j{ 0 }; j < meshes::quadIndices.size(); j++)
 			{
@@ -90,13 +93,13 @@ namespace s2f
 		for (u32 i{ 1 }; i < mTextureSlotIndex; i++)
 			mGLState.bindTexture(*mTextures[i], (u32)i);
 		
-		glapi::drawIndexed(mQuadIndexCount);
+		glapi::drawIndexed(mQuadIndexCount, mRenderMode);
 		mStats.drawCalls++;
 	}
 
 	void Renderer::drawQuad(const glm::mat4& transform, const glm::vec4& color)
 	{
-		if (mQuadIndexCount >= sQuadIndicesPerDraw) 
+		if (mQuadIndexCount >= mQuadIndicesPerDraw) 
 			reset();
 
 		for (u32 i{ 0 }; i < 4; i++)
@@ -135,7 +138,7 @@ namespace s2f
 		const std::array<glm::vec2, 4>& textureCoords,
 		const glm::vec4& tint
 	) {
-		if (mQuadIndexCount >= sQuadIndicesPerDraw)
+		if (mQuadIndexCount >= mQuadIndicesPerDraw)
 			reset();
 
 		GLuint texID = texture->id();
@@ -176,6 +179,12 @@ namespace s2f
 		mQuadVertexCount += 4;
 		mQuadIndexCount += 6;
 		mStats.quadCount++;
+	}
+
+	void Renderer::resetProjview()
+	{
+		auto viewport = glapi::getViewportSize();
+		mProjview = makeOrthoPojectionView({ 0.f, 0.f }, 0.f, 1.f, (f32)viewport.x / (f32)viewport.y);
 	}
 
     void Renderer::reset()

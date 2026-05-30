@@ -2,12 +2,12 @@
 
 namespace s2f 
 {
-	Window::Window(const glm::ivec2& size, const char* title)
-		: mSize(size), mTitle(title)
+	Window::Window(const WindowInfo& info)
+		: mInfo(info)
 	{
 		initGLFW();
 		setupCallbacks();
-		log::infoVerbose("Created window with title \"{}\", size ({}, {})", mTitle, mSize.x, mSize.y);
+		log::infoVerbose("Created window with title \"{}\", size ({}, {})", mInfo.title, mInfo.size.x, mInfo.size.y);
 	}
 
 	Window::~Window() 
@@ -24,10 +24,11 @@ namespace s2f
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_RESIZABLE, mInfo.resizable);
 #ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-		mWindow = glfwCreateWindow(mSize.x, mSize.y, mTitle, nullptr, nullptr);
+		mWindow = glfwCreateWindow(mInfo.size.x, mInfo.size.y, mInfo.title.c_str(), nullptr, nullptr);
 		S2F_ASSERT(mWindow, "Failed to create GLFW window");
 
 		glfwMakeContextCurrent(mWindow);
@@ -40,7 +41,7 @@ namespace s2f
 		glfwSetFramebufferSizeCallback(mWindow, [](GLFWwindow* window, i32 width, i32 height) 
 		{
 			auto* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
-			win->mSize = { width, height };
+			win->mInfo.size = { width, height };
 			ResizeEvent event(width, height);
 			win->onEvent(event);
 		});

@@ -15,7 +15,11 @@ namespace s2f
 	{
 		if (mCamera)
 			mRenderer.setProjview(mCamera->projview());
+		else
+			mRenderer.resetProjview();
 		
+		mRenderer.begin();
 		onRender();
+		mRenderer.end();
 	}
 }

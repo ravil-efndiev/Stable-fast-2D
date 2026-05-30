@@ -11,7 +11,10 @@ bool onKeyPress(KeyPressEvent& event)
 int main()
 {
 	globals::gConfig.logMode = LogMode::Verbose;
-	Engine engine({ {1000, 700}, "Sandbox" });
+	EngineInfo engineInfo;
+	engineInfo.windowInfo = { { 1000, 700 }, "Sandbox" };
+
+	Engine engine(engineInfo);
 	Renderer& renderer = engine.renderer();
 	Camera camera;
 
@@ -37,7 +40,9 @@ int main()
 			camera.position.x += 10.f * dt;
 
 		renderer.setProjview(camera.projview());
+		renderer.begin();
 		sr.render();
+		renderer.end();
 
 		engine.endFrame();
 	}
