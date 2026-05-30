@@ -7,12 +7,14 @@ namespace s2f
 	{
 	public:
 		SubTexture() = default;
-		SubTexture(const glm::ivec2& baseTextureSize, const glm::uvec2& gridPosition, const glm::uvec2& size);
+		SubTexture(const glm::ivec2& baseTextureSize, const glm::uvec2& position, const glm::uvec2& size);
 
-		void setGridPosition(const glm::uvec2 gridPosition);
-		void setSize(const glm::uvec2 size);
+		static SubTexture fromGrid(const glm::ivec2& baseTextureSize, const glm::uvec2& gridCoords, const glm::uvec2& size);
 
-		glm::uvec2 gridPosition() const { return mGridPosition; }
+		void setPosition(const glm::uvec2& position);
+		void setSize(const glm::uvec2& size);
+
+		glm::uvec2 position() const { return mPosition; }
 		glm::uvec2 size() const { return mSize; }
 
 		std::array<glm::vec2, 4> textureCoords() const { return mTextureCoords; }
@@ -23,7 +25,7 @@ namespace s2f
 		void calculateCoords();
 
 	private:
-		glm::uvec2 mGridPosition{ 0 };
+		glm::uvec2 mPosition{ 0 };
 		glm::uvec2 mSize{ 0 };
 
 		glm::ivec2 mBaseTextureSize{ 0 };

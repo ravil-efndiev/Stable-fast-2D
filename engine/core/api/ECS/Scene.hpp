@@ -10,7 +10,7 @@ namespace s2f
 		friend class Entity;
 
 	public:
-		Scene() = default;
+		Scene();
 		~Scene() = default;
 
 		Entity newEntity();

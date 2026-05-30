@@ -34,16 +34,17 @@ namespace s2f
 		mWindow.setEventFunc([this](Event& event)
 		{
 			EventDispatcher dispatcher(event);
-			dispatcher.dispatch<KeyPressEvent>([&](auto& event) { return onKeyEvent(event.key, true); });
-			dispatcher.dispatch<KeyReleaseEvent>([&](auto& event) { return onKeyEvent(event.key, false); });
-			dispatcher.dispatch<MouseButtonPressEvent>([&](auto& event) { return onMouseEvent(event.button, true); });
-			dispatcher.dispatch<MouseButtonReleaseEvent>([&](auto& event) { return onMouseEvent(event.button, false); });
-			dispatcher.dispatch<MouseMoveEvent>([&](auto& event) { return onMouseMove(event); });
+			dispatcher.dispatch<KeyPressEvent>([this](auto& event) { return onKeyEvent(event.key, true); });
+			dispatcher.dispatch<KeyReleaseEvent>([this](auto& event) { return onKeyEvent(event.key, false); });
+			dispatcher.dispatch<MouseButtonPressEvent>([this](auto& event) { return onMouseEvent(event.button, true); });
+			dispatcher.dispatch<MouseButtonReleaseEvent>([this](auto& event) { return onMouseEvent(event.button, false); });
+			dispatcher.dispatch<MouseMoveEvent>([this](auto& event) { return onMouseMove(event); });
 			dispatcher.dispatch<ResizeEvent>(onWindowResize);
 
 			if (mEventFunc) mEventFunc(event);
 		});
 	}
+
 	void Engine::startFrame()
 	{
 		mTime.update(mWindow.getTime());

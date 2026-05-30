@@ -1,5 +1,11 @@
 #include "sprite.hpp"
 
+#define CHECK_TEXTURE_VALID \
+	if (!texture || (texture && !texture->valid())) { \
+		log::warn("Trying to set subtexture to a sprite that doesn't have initialized or valid texture"); \
+		return; \
+	}
+
 namespace s2f
 {
 	Sprite::Sprite()
@@ -19,14 +25,15 @@ namespace s2f
 		texture->create(texturePath);
 	}
 
-	void Sprite::setSubTexture(const glm::uvec2& gridPosition, const glm::uvec2& size)
+	void Sprite::setSubTexture(const glm::uvec2& position, const glm::uvec2& size)
 	{
-		if (!texture || (texture && !texture->valid()))
-		{
-			log::warn("Trying to set subtexture to a sprite that doesn't have initialized or valid texture");
-			return;
-		}
+		CHECK_TEXTURE_VALID;
+		subTexture = SubTexture(texture->size(), position, size);
+	}
 
-		subTexture = SubTexture(texture->size(), gridPosition, size);
+	void Sprite::setSubTextureFromGrid(const glm::uvec2& gridCoords, const glm::uvec2& size)
+	{
+		CHECK_TEXTURE_VALID;
+		subTexture = SubTexture::fromGrid(texture->size(), gridCoords, size);
 	}
 }

@@ -9,3 +9,4 @@
 #include "core/api/ECS/SceneRenderer.hpp"
 #include "core/api/ECS/DefaultComponents/sprite.hpp"
 #include "core/api/ECS/DefaultComponents/transform.hpp"
+#include "core/api/ECS/DefaultComponents/spriteAnimator.hpp"

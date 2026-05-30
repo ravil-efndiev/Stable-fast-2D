@@ -26,9 +26,7 @@ void testSystem(const std::vector<Entity>& entities, f32 dt)
 {
 	for (auto& entity : entities)
 	{
-		if (!entity.has<Transform>() || !entity.has<Sprite>()) return;
-
-		entity.get<Transform>()->rotation.z += 1.f * dt;
+		entity.get<SpriteAnimator>()->playAnimation("attack");
 	}
 }
 
@@ -39,8 +37,9 @@ public:
 	{
 		Application::get()->renderInfo().clearColor = { 0.f, 0.f, 0.f, 1.f };
 		Entity sprite = mScene.newEntity();
-		sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
-		//sprite.get<Sprite>()->setSubTexture({ 0, 0 }, { 200, 200 });
+		sprite.add<Sprite>(ASSETS_PATH / "textures" / "melee_undead.png");
+		auto& animator = *sprite.add<SpriteAnimator>();
+		animator.addAnimation("attack", { 10, 0, 2, 4, { 48, 48 } });
 		useCamera(mCamera);
 
 		mScene.addSystem(testSystem);

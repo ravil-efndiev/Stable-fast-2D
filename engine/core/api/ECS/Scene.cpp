@@ -2,12 +2,18 @@
 #include "Entity.hpp"
 #include "DefaultComponents/transform.hpp"
 #include "DefaultComponents/tag.hpp"
+#include "DefaultSystems/defaultSystems.hpp"
 
 namespace s2f
 {
 	EntityId Scene::sEntityCounter{ 0 };
 	EntityId Scene::sSystemCounter{ 0 };
-
+	
+	Scene::Scene()
+	{
+		addSystem(spriteAnimationSystem);
+	}
+	
 	Entity Scene::newEntity()
 	{
 		Entity entity = mEntities.emplace_back(this, sEntityCounter++);

@@ -14,6 +14,12 @@
 #include <format>
 #include <concepts>
 
+#ifdef WIN32
+	#ifndef NOMINMAX
+		#define NOMINMAX
+	#endif
+#endif
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -47,14 +53,14 @@ namespace s2f
 
 #ifdef S2F_DEBUG
 
-#define S2F_ASSERT(cond, s) \
-	if (!(cond)) { \
-		s2f::log::verror(s); \
-		std::abort(); \
-	} \
+	#define S2F_ASSERT(cond, s) \
+		if (!(cond)) { \
+			s2f::log::verror(s); \
+			std::abort(); \
+		} \
 
 #else
 
-#define S2F_ASSERT(cond, s)
+	#define S2F_ASSERT(cond, s)
 
 #endif

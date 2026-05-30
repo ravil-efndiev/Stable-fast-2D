@@ -6,6 +6,9 @@ namespace s2f
 	template <std::derived_from<Event> EventT>
 	using EventDispatcherFunc = std::function<bool(EventT&)>;
 
+	template <class T, std::derived_from<Event> EventT>
+	using EventDispatcherMemFunc = bool (T::*)(EventT&);
+
 	class EventDispatcher
 	{
 	public:
@@ -16,8 +19,17 @@ namespace s2f
 		{
 			if (mEvent.type() == EventT::typeStatic() && !mEvent.handled)
 			{
-				mEvent.handled = eventFunc(*(EventT*)&mEvent);
+				mEvent.handled = eventFunc(static_cast<EventT&>(mEvent));
 			}
+		}
+
+		template <std::derived_from<Event> EventT, class T>
+		void dispatchMember(T* obj, EventDispatcherMemFunc<T, EventT> eventFunc)
+		{
+			dispatch<EventT>([obj, eventFunc](EventT& event)
+			{
+				return (obj->*eventFunc)(event);
+			});
 		}
 
 	private:

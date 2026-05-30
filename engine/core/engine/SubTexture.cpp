@@ -2,19 +2,24 @@
 
 namespace s2f
 {
-	SubTexture::SubTexture(const glm::ivec2& baseTextureSize, const glm::uvec2& gridPosition, const glm::uvec2& size)
-		: mBaseTextureSize(baseTextureSize), mGridPosition(gridPosition), mSize(size) 
+	SubTexture::SubTexture(const glm::ivec2& baseTextureSize, const glm::uvec2& position, const glm::uvec2& size)
+		: mBaseTextureSize(baseTextureSize), mPosition(position), mSize(size) 
 	{
 		calculateCoords();
 	}
 
-	void SubTexture::setGridPosition(const glm::uvec2 gridPosition)
+	SubTexture SubTexture::fromGrid(const glm::ivec2& baseTextureSize, const glm::uvec2& gridCoords, const glm::uvec2& size)
 	{
-		mGridPosition = gridPosition;
+		return SubTexture(baseTextureSize, gridCoords * size, size);
+	}
+
+	void SubTexture::setPosition(const glm::uvec2& position)
+	{
+		mPosition = position;
 		calculateCoords();
 	}
 
-	void SubTexture::setSize(const glm::uvec2 size)
+	void SubTexture::setSize(const glm::uvec2& size)
 	{
 		mSize = size;
 		calculateCoords();
@@ -22,19 +27,16 @@ namespace s2f
 
 	void SubTexture::calculateCoords()
 	{
-		f32 minX = (f32)(mGridPosition.x * mSize.x) / (f32)mBaseTextureSize.x;
-		f32 maxX = (f32)((mGridPosition.x + 1) * mSize.x) / (f32)mBaseTextureSize.x;
+		f32 minX = (f32)mPosition.x / (f32)mBaseTextureSize.x;
+		f32 maxX = (f32)(mPosition.x + mSize.x) / (f32)mBaseTextureSize.x;
 
-		f32 minY = 1.f - (f32)((mGridPosition.y + 1) * mSize.y) / (f32)mBaseTextureSize.y;
-		f32 maxY = 1.f - (f32)(mGridPosition.y * mSize.y) / (f32)mBaseTextureSize.y;
+		f32 minY = 1.f - (f32)(mPosition.y + mSize.y) / (f32)mBaseTextureSize.y;
+		f32 maxY = 1.f - (f32)(mPosition.y) / (f32)mBaseTextureSize.y;
 
-		glm::vec2 min{ minX, minY };
-		glm::vec2 max{ maxX, maxY };
-
-		mTextureCoords[0] = { min.x, max.y };
-		mTextureCoords[1] = { max.x, max.y };
-		mTextureCoords[2] = { max.x, min.y };
-		mTextureCoords[3] = { min.x, min.y };
+		mTextureCoords[0] = { minX, maxY };
+		mTextureCoords[1] = { maxX, maxY };
+		mTextureCoords[2] = { maxX, minY };
+		mTextureCoords[3] = { minX, minY };
 	}
 
 	bool SubTexture::valid() const
