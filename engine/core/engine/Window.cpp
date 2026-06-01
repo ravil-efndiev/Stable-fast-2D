@@ -114,4 +114,16 @@ namespace s2f
 	{
 		return glfwGetTime();
 	}
+
+	void Window::setTitle(const std::string& title)
+	{
+		mInfo.title = title;
+		glfwSetWindowTitle(mWindow, mInfo.title.c_str());
+	}
+
+	void Window::setResizable(bool resizable)
+	{
+		mInfo.resizable = resizable;
+		glfwSetWindowAttrib(mWindow, GLFW_RESIZABLE, mInfo.resizable);
+	}
 }

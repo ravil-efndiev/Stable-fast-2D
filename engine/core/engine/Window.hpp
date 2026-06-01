@@ -30,6 +30,10 @@ namespace s2f
 
 		glm::ivec2 size() const { return mInfo.size; }
 		std::string title() const { return mInfo.title; }
+		bool resizable() const { return mInfo.resizable; }
+
+		void setTitle(const std::string& title);
+		void setResizable(bool resizable);
 
 		void setEventFunc(const EventFunc& eventFunc) { mEventFunc = eventFunc; }
 
