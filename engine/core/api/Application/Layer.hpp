@@ -71,10 +71,7 @@ namespace s2f
 		* @param ...args Arguments for constructor of user-defined ToLayerT type
 		*/
 		template <std::derived_from<Layer> ToLayerT, class... Args>
-		void transitionTo(Args&& ...args)
-		{
-			Application::get()->template enqueueLayerTransition<ToLayerT>(this, std::forward<Args>(args)...);
-		}
+		void transitionTo(Args&& ...args);
 
 		/*
 		* @brief Sets camera pointer to a user-defined camera object

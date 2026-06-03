@@ -79,3 +79,5 @@ namespace s2f
 		friend class Layer;
 	};
 }
+
+#include "Layer.inl"

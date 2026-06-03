@@ -65,6 +65,46 @@ namespace s2f
 		*/
 		void removeSystem(const SystemId& systemID);
 
+		/*
+        * @brief Adds a component to a registry and binds it to ID of the entity
+        * @tparam ComponentT type of a component being added
+        * @param args arguments for a constructor of ComponentT
+		* @param entity entity to add component to
+		* @return pointer to a component created inside registry
+        */
+        template <class ComponentT, class ...Args>
+        ComponentT* addComponent(Entity entity, Args&&... args);
+
+        /*
+        * @brief Fetches a component that should belong to the entity
+        * 
+        * If entity doesn't own a searched component, returns nullptr
+        * @tparam ComponentT type of a searched component
+		* @param entity entity to get component of
+        * @return pointer to a found component or nullptr
+        */
+        template <class ComponentT>
+        ComponentT* getComponent(Entity entity);
+
+        /*
+        * @brief Checks if component with a searched type belongs to the entity
+        * @tparam ComponentT type of a searched component
+		* @param entity entity to check if component belongs to
+        * @return boolean value that means wether entity has searched component or no
+        */
+        template <class ComponentT>
+        bool hasComponent(Entity entity);
+
+        /*
+        * @brief Removes component belonging to the entity from component registry
+        * 
+        * Does nothing if component doesn't belong to the entity
+        * @tparam ComponentT type of a component to remove
+		* @param entity entity to remove component from
+        */
+        template <class ComponentT>
+        void removeComponent(Entity entity);
+
 		std::vector<Entity> entities() const { return mEntities; }
 
 	private:

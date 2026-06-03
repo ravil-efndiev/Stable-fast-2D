@@ -2,26 +2,6 @@
 
 using namespace s2f;
 
-class GameLayer;
-class TestLayer : public Layer
-{
-public:
-	void start() override
-	{
-		Engine::get()->setClearColor({ 1.f, 0.f, 0.f, 1.f });
-	}
-
-	void onUpdate(f32 dt) override
-	{
-		if (Input::keyPressed(Key::Space))
-			transitionTo<GameLayer>();
-	}
-
-	void onRender() override
-	{
-	}
-};
-
 void testSystem(const std::vector<Entity>& entities, f32 dt)
 {
 	for (auto& entity : entities)
@@ -48,8 +28,6 @@ public:
 	void onUpdate(f32 dt) override
 	{
 		mScene.update(dt);
-		if (Input::mouseButtonPressed(Mouse::Left))
-			transitionTo<TestLayer>();
 
 		if (Input::keyDown(Key::D))
 			mCamera.position.x += 10.f * dt;
@@ -63,7 +41,7 @@ public:
 	void onEvent(Event& event)
 	{
 		EventDispatcher dispatcher(event);
-		dispatcher.dispatch<KeyPressEvent>([this](KeyPressEvent& event) { return onKeyPress(event); });
+		dispatcher.dispatchMember<KeyPressEvent>(this, &GameLayer::onKeyPress);
 	}
 
 	bool onKeyPress(KeyPressEvent& event)

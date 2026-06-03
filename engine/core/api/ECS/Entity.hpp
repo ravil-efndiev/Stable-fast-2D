@@ -80,3 +80,5 @@ namespace s2f
         static constexpr char sErrorStr[] { "Entity wasn't initialized or doesnt belong to the scene" };
 	};
 }
+
+#include "Scene.inl"

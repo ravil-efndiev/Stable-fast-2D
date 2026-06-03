@@ -1,6 +1,6 @@
 #pragma once
 #include "core/engine/Engine.hpp"
-#include "core/api/objects/camera.hpp"
+#include "core/api/objects/Camera.hpp"
 #include "core/api/Input.hpp"
 #include "core/api/Application/Application.hpp"
 #include "core/api/Application/Layer.hpp"
