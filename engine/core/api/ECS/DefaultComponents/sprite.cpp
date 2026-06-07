@@ -2,7 +2,7 @@
 
 #define CHECK_TEXTURE_VALID \
 	if (!texture || (texture && !texture->valid())) { \
-		log::warn("Trying to set subtexture to a sprite that doesn't have initialized or valid texture"); \
+		Logger::warn("Trying to set subtexture to a sprite that doesn't have initialized or valid texture"); \
 		return; \
 	}
 

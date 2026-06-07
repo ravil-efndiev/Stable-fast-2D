@@ -17,13 +17,13 @@ namespace s2f
 
 			auto version = (const char*)glGetString(GL_VERSION);
 			auto glslVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
-			log::info("OpenGL Version: {}", version);
-			log::info("GLSL Version: {}", glslVersion);
+			Logger::info("OpenGL Version: {}", version);
+			Logger::info("GLSL Version: {}", glslVersion);
 		}
 
 		void setViewport(const glm::ivec2& size)
 		{
-			log::infoVerbose("glapi::setViewport() size = ({}, {})", size.x, size.y);
+			Logger::infoVerbose("glapi::setViewport() size = ({}, {})", size.x, size.y);
 			glViewport(0, 0, size.x, size.y);
 		}
 

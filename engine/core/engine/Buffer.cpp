@@ -10,7 +10,7 @@ namespace s2f
 	Buffer::~Buffer()
 	{
 		glDeleteBuffers(1, &mID);
-		log::infoVerbose("Deleted buffer with ID {}", mID);
+		Logger::infoVerbose("Deleted buffer with ID {}", mID);
 	}
 
 	void Buffer::create(BufferType type, size_t size, void* data)
@@ -20,7 +20,7 @@ namespace s2f
 			"Buffer type must be specified when creating a buffer");
 		glCreateBuffers(1, &mID);
 		glNamedBufferData(mID, size, data, GL_DYNAMIC_DRAW);
-		log::infoVerbose("Created buffer with ID {}, size = {}", mID, size);
+		Logger::infoVerbose("Created buffer with ID {}, size = {}", mID, size);
 	}
 
 	void Buffer::setData(size_t size, void* data) const

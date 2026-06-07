@@ -32,7 +32,7 @@ namespace s2f
 		* @param name name string for default-added Tag component
 		* @return Entity object (returned by value since Entity is only meant to hold an ID)
 		*/
-		Entity newEntity(const std::string& name);
+		Entity newEntity(std::string_view name);
 
 		/*
 		* @brief Adds entity to a remove queue, removals are processed at the end of a frame

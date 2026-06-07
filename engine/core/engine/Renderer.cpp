@@ -49,8 +49,8 @@ namespace s2f
 		mTextures.resize(maxTexSlots);
 		mQuadShader.setUniformIntArray("uTextures", maxTexSlots, texSlotIndices.data(), &mGLState);
 
-		log::infoVerbose("Renderer: Initialized");
-		log::infoVerbose("Renderer: Maximum GPU supported texture slots = {}", maxTexSlots);
+		Logger::infoVerbose("Renderer: Initialized");
+		Logger::infoVerbose("Renderer: Maximum GPU supported texture slots = {}", maxTexSlots);
 	}
 
 	void Renderer::fillQuadBatchIndices()
@@ -156,7 +156,7 @@ namespace s2f
 		{
 			if (mTextureSlotIndex >= mTextures.size())
 			{
-				log::warn("Texture slot limit reached for this batch, consider using sprite atlases");
+				Logger::warn("Texture slot limit reached for this batch, consider using sprite atlases");
 				reset();
 			}
 

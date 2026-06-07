@@ -24,9 +24,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "config.hpp"
 #include "keys.hpp"
-#include "logging.hpp"
+#include "Logger.hpp"
 
 #define S2F_DEBUG
 
@@ -60,7 +59,7 @@ namespace s2f
 
 	#define S2F_ASSERT(cond, s) \
 		if (!(cond)) { \
-			s2f::log::verror(s); \
+			s2f::Logger::verror(s); \
 			std::abort(); \
 		} \
 

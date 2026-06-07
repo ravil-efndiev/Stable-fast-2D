@@ -21,7 +21,7 @@ namespace s2f
 		{
 			if (!status.success)
 			{
-				log::verror(status.error);
+				Logger::verror(status.error);
 				return false;
 			}
 		}	

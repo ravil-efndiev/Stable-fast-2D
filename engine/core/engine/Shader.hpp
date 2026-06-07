@@ -12,10 +12,10 @@ namespace s2f
 
 	public:
 		Shader() = default;
-		Shader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
+		Shader(std::string_view vertexShaderSource, std::string_view fragmentShaderSource);
 		Shader(const Path& vertexShaderPath, const Path& fragmentShaderPath);
 
-		void create(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
+		void create(std::string_view vertexShaderSource, std::string_view fragmentShaderSource);
 		void create(const Path& vertexShaderPath, const Path& fragmentShaderPath);
 
 		~Shader();

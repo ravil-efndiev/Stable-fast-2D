@@ -34,7 +34,7 @@ namespace s2f
 		}
 	}
 
-	void SpriteAnimator::addAnimation(const std::string& name, const SpriteAnimationInfo& animationInfo)
+	void SpriteAnimator::addAnimation(std::string_view name, const SpriteAnimationInfo& animationInfo)
 	{
 		animations.emplace(name, SpriteAnimation(animationInfo));
 		if (mCurrentAnimationName.empty())
@@ -46,7 +46,7 @@ namespace s2f
 		auto it = animations.find(name);
 		if (it == animations.end())
 		{
-			log::error("SpriteAnimator::playAnimation() animation with name \"{}\" doesn't exist", name);
+			Logger::error("SpriteAnimator::playAnimation() animation with name \"{}\" doesn't exist", name);
 			return;
 		}
 
@@ -61,7 +61,7 @@ namespace s2f
 	{
 		if (!mCurrentAnimationName.empty())
 			return &animations.at(mCurrentAnimationName);
-		log::error("SpriteAnimator::currentAnimation() SpriteAnimator component has no animations");
+		Logger::error("SpriteAnimator::currentAnimation() SpriteAnimator component has no animations");
 		return nullptr;
 	}
 

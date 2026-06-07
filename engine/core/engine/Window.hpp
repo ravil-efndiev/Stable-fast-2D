@@ -32,7 +32,7 @@ namespace s2f
 		std::string title() const { return mInfo.title; }
 		bool resizable() const { return mInfo.resizable; }
 
-		void setTitle(const std::string& title);
+		void setTitle(std::string_view title);
 		void setResizable(bool resizable);
 
 		void setEventFunc(const EventFunc& eventFunc) { mEventFunc = eventFunc; }

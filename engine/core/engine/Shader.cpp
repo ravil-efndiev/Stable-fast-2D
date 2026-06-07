@@ -6,7 +6,7 @@
 
 namespace s2f
 {
-	Shader::Shader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
+	Shader::Shader(std::string_view vertexShaderSource, std::string_view fragmentShaderSource)
 	{
 		create(vertexShaderSource, fragmentShaderSource);
 	}
@@ -20,7 +20,7 @@ namespace s2f
 	{
 		Engine::get()->renderer().glState().invalidateShader();
 		glDeleteProgram(mID);
-		log::infoVerbose("Deleted shader with ID {}", mID);
+		Logger::infoVerbose("Deleted shader with ID {}", mID);
 	}
 
 	void Shader::create(const Path& vertexShaderPath, const Path& fragmentShaderPath)
@@ -30,7 +30,7 @@ namespace s2f
 		init();
 	}
 
-	void Shader::create(const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
+	void Shader::create(std::string_view vertexShaderSource, std::string_view fragmentShaderSource)
 	{
 		mVertexShaderSource = vertexShaderSource;
 		mFragmentShaderSource = fragmentShaderSource;
@@ -59,7 +59,7 @@ namespace s2f
 			glDeleteProgram(mID);
 		}
 
-		log::infoVerbose("Created shader with ID {}, valid = {}", mID, mValid);
+		Logger::infoVerbose("Created shader with ID {}, valid = {}", mID, mValid);
 	}
 
 	Status Shader::compileShader(GLuint shaderID, const char* shaderSource)

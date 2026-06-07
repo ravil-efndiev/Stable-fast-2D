@@ -46,7 +46,7 @@ public:
 
 	bool onKeyPress(KeyPressEvent& event)
 	{
-		log::info("caugh key press event in GameLayer, key: {}, handled here", (u32)event.key);
+		Logger::info("caugh key press event in GameLayer, key: {}, handled here", (u32)event.key);
 		return S2F_EVENT_HANDLED;
 	}
 
@@ -84,16 +84,17 @@ public:
 
 	bool onKeyPress(KeyPressEvent& event)
 	{
-		log::info("caugh key press event in OverlayLayer, key: {}, propagated further", (u32)event.key);
+		Logger::info("caugh key press event in OverlayLayer, key: {}, propagated further", (u32)event.key);
 		return S2F_EVENT_PROPAGATED;
 	}
 };
 
 int main()
 {
-	globals::gConfig.logMode = LogMode::Verbose;
+	Logger::setLogMode(LogMode::Verbose);
+	Logger::setLogFile("D:/raf.txt");
 
-	EngineInfo engineInfo;
+	EngineInfo engineInfo{};
 	engineInfo.windowInfo = { { 1000, 700 }, "Sandbox" };
 
 	Application app(engineInfo);

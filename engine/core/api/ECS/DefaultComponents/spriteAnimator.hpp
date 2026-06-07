@@ -36,7 +36,7 @@ namespace s2f
 	public:
 		std::unordered_map<std::string, SpriteAnimation> animations;
 
-		void addAnimation(const std::string& name, const SpriteAnimationInfo& animationInfo);
+		void addAnimation(std::string_view name, const SpriteAnimationInfo& animationInfo);
 		void playAnimation(const std::string& name);
 		const SpriteAnimation* currentAnimation() const;
 		bool currentAnimationFinished() const;

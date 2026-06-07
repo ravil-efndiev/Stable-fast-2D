@@ -7,7 +7,7 @@ namespace s2f
 	{
 		initGLFW();
 		setupCallbacks();
-		log::infoVerbose("Created window with title \"{}\", size ({}, {})", mInfo.title, mInfo.size.x, mInfo.size.y);
+		Logger::infoVerbose("Created window with title \"{}\", size ({}, {})", mInfo.title, mInfo.size.x, mInfo.size.y);
 	}
 
 	Window::~Window() 
@@ -115,7 +115,7 @@ namespace s2f
 		return glfwGetTime();
 	}
 
-	void Window::setTitle(const std::string& title)
+	void Window::setTitle(std::string_view title)
 	{
 		mInfo.title = title;
 		glfwSetWindowTitle(mWindow, mInfo.title.c_str());

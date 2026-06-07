@@ -23,11 +23,11 @@ namespace s2f
 		return entity;
 	}
 
-	Entity Scene::newEntity(const std::string& name)
+	Entity Scene::newEntity(std::string_view name)
 	{
 		Entity entity = mEntities.emplace_back(this, sEntityCounter++);
 		EntityId id = entity.id();
-		mRegistry.add(id, Tag{ name });
+		mRegistry.add(id, Tag{ std::string(name) });
 		mRegistry.add(id, Transform{});
 		return entity;
 	}

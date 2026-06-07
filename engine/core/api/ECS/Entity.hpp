@@ -15,7 +15,11 @@ namespace s2f
         // Creates entity from its ID and a scene pointer, entities can only be created from API provided by Scene
 		explicit Entity(Scene* scene, EntityId id) : mScene(scene), mID(id) {}
 
-		EntityId id() const { return mID; }
+		EntityId id() const 
+        {
+            S2F_ASSERT(*this, sErrorStr);
+            return mID; 
+        }
 
         /*
         * @brief Adds a component to a registry and binds it to ID of the entity
@@ -77,7 +81,7 @@ namespace s2f
 	private:
 		Scene* mScene;
 		EntityId mID;
-        static constexpr char sErrorStr[] { "Entity wasn't initialized or doesnt belong to the scene" };
+        static constexpr auto sErrorStr { "Entity wasn't initialized or doesnt belong to the scene" };
 	};
 }
 

@@ -6,14 +6,14 @@ namespace s2f
 	void VertexArray::create()
 	{
 		glCreateVertexArrays(1, &mID);
-		log::infoVerbose("Created vertex array with ID {}", mID);
+		Logger::infoVerbose("Created vertex array with ID {}", mID);
 	}
 
 	VertexArray::~VertexArray()
 	{
 		Engine::get()->renderer().glState().invalidateVA();
 		glDeleteVertexArrays(1, &mID);
-		log::infoVerbose("Deleted vertex array with ID {}", mID);
+		Logger::infoVerbose("Deleted vertex array with ID {}", mID);
 	}
 
 	void VertexArray::setVertexBuffer(const Buffer& vertexBuffer, const Layout& layout)

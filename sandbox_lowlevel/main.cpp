@@ -4,14 +4,15 @@ using namespace s2f;
 
 bool onKeyPress(KeyPressEvent& event)
 {
-	log::info("key {} pressed, caught from event func", (u32)event.key);
+	Logger::info("key {} pressed, caught from event func", (u32)event.key);
 	return S2F_EVENT_HANDLED;
 }
 
 int main()
 {
-	globals::gConfig.logMode = LogMode::Verbose;
-	EngineInfo engineInfo;
+	Logger::setLogMode(LogMode::Verbose);
+
+	EngineInfo engineInfo{};
 	engineInfo.windowInfo = { { 1000, 700 }, "Sandbox" };
 
 	Engine engine(engineInfo);
