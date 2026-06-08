@@ -13,6 +13,8 @@ namespace s2f
 	struct EngineInfo 
 	{
 		glm::vec4 clearColor{ 0.f, 0.f, 0.f, 0.f };
+		std::string applicationName{ "Sf2D application"};
+		Version applicationVersion{ 0, 0, 0 };
 		RendererInfo rendererInfo{ RenderMode::Fill, 5000 };
 		WindowInfo windowInfo;
 	};

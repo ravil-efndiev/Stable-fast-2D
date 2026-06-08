@@ -93,13 +93,11 @@ int main()
 {
 	Logger::setLogMode(LogMode::Verbose);
 
-	WindowInfo windowInfo{};
-	windowInfo.size = { 1000, 700 };
-	windowInfo.title = "Sandbox";
-	windowInfo.openglVersion = { 4, 1 };
-
 	EngineInfo engineInfo{};
-	engineInfo.windowInfo = windowInfo;
+	engineInfo.applicationName = "Sandbox";
+	engineInfo.windowInfo.size = { 1000, 700 };
+	engineInfo.windowInfo.title = engineInfo.applicationName;
+	engineInfo.windowInfo.openglVersion = { 4, 1 };
 
 	Application app(engineInfo);
 	app.pushLayer<GameLayer>();
