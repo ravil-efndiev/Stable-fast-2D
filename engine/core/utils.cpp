@@ -11,4 +11,15 @@ namespace s2f
 		fileData << file.rdbuf();
 		return fileData.str();
 	}
+
+	std::string getVersionString(const Version& version)
+	{
+		return std::to_string(version.major) + "." + std::to_string(version.minor) + "." + std::to_string(version.patch);
+	}
+
+	std::string getVersionStringGLSL(const Version& version)
+	{
+		return std::to_string(version.major) + std::to_string(version.minor) + "0";
+	}
+
 }

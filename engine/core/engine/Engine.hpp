@@ -13,6 +13,8 @@ namespace s2f
 	struct EngineInfo 
 	{
 		glm::vec4 clearColor{ 0.f, 0.f, 0.f, 0.f };
+		std::string applicationName{ "Sf2D application"};
+		Version applicationVersion{ 0, 0, 0 };
 		RendererInfo rendererInfo{ RenderMode::Fill, 5000 };
 		WindowInfo windowInfo;
 	};
@@ -73,6 +75,7 @@ namespace s2f
 		f32 fixedDeltaTime() const { return mTime.fixedDeltaTime; }
 		Time time() const { return mTime; }
 		Renderer& renderer() { return mRenderer; }
+		Window& window() { return mWindow; }
 
 		/*
 		* @brief Sets color that is used to clear the screen on every frame

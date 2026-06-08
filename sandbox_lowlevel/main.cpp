@@ -13,7 +13,8 @@ int main()
 	Logger::setLogMode(LogMode::Verbose);
 
 	EngineInfo engineInfo{};
-	engineInfo.windowInfo = { { 1000, 700 }, "Sandbox" };
+	engineInfo.windowInfo.size = { 1000, 700 };
+	engineInfo.windowInfo.title = "Sandbox";
 
 	Engine engine(engineInfo);
 	Renderer& renderer = engine.renderer();
