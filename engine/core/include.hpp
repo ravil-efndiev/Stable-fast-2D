@@ -53,6 +53,13 @@ namespace s2f
 	{
 		Fill, Wireframe
 	};
+
+	struct Version
+	{
+		u32 major{ 0 };
+		u32 minor{ 0 };
+		u32 patch{ 0 };
+	};
 }
 
 #ifdef S2F_DEBUG

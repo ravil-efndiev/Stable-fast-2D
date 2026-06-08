@@ -6,14 +6,14 @@
 
 namespace s2f
 {
-	Shader::Shader(std::string_view vertexShaderSource, std::string_view fragmentShaderSource)
+	Shader::Shader(std::string_view vertexShaderSource, std::string_view fragmentShaderSource, bool useStandardHeader)
 	{
-		create(vertexShaderSource, fragmentShaderSource);
+		create(vertexShaderSource, fragmentShaderSource, useStandardHeader);
 	}
 
-	Shader::Shader(const Path& vertexShaderPath, const Path& fragmentShaderPath)
+	Shader::Shader(const Path& vertexShaderPath, const Path& fragmentShaderPath, bool useStandardHeader)
 	{
-		create(vertexShaderPath, fragmentShaderPath);
+		create(vertexShaderPath, fragmentShaderPath, useStandardHeader);
 	}
 
 	Shader::~Shader()
@@ -23,28 +23,34 @@ namespace s2f
 		Logger::infoVerbose("Deleted shader with ID {}", mID);
 	}
 
-	void Shader::create(const Path& vertexShaderPath, const Path& fragmentShaderPath)
+	void Shader::create(const Path& vertexShaderPath, const Path& fragmentShaderPath, bool useStandardHeader)
 	{
 		mVertexShaderSource = getTextFromFile(vertexShaderPath);
 		mFragmentShaderSource = getTextFromFile(fragmentShaderPath);
+		mUseStandardHeader = useStandardHeader;
 		init();
 	}
 
-	void Shader::create(std::string_view vertexShaderSource, std::string_view fragmentShaderSource)
+	void Shader::create(std::string_view vertexShaderSource, std::string_view fragmentShaderSource, bool useStandardHeader)
 	{
 		mVertexShaderSource = vertexShaderSource;
 		mFragmentShaderSource = fragmentShaderSource;
+		mUseStandardHeader = useStandardHeader;
 		init();
 	}
 
 	void Shader::init()
 	{
-		auto maxTextureSlots = glapi::getMaxTextureSlots();
-		std::string fragmentShaderHeader
-			= (mShaderHeader + "#define MAX_TEXTURE_SLOTS ") + std::to_string(maxTextureSlots) + "\n";
+		if (mUseStandardHeader)
+		{
+			std::string header = getStandardHeader();
+			auto maxTextureSlots = glapi::getMaxTextureSlots();
+			std::string fragmentShaderHeader
+				= (header + "#define MAX_TEXTURE_SLOTS ") + std::to_string(maxTextureSlots) + "\n";
 
-		mVertexShaderSource = mShaderHeader + mVertexShaderSource;
-		mFragmentShaderSource = fragmentShaderHeader + mFragmentShaderSource;
+			mVertexShaderSource = header + mVertexShaderSource;
+			mFragmentShaderSource = fragmentShaderHeader + mFragmentShaderSource;
+		}
 
 		mID = glCreateProgram();
 		mVertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -133,5 +139,11 @@ namespace s2f
 		bind(glState);
 		GLint location = glGetUniformLocation(mID, name);
 		glUniform1iv(location, size, values);
+	}
+
+	std::string Shader::getStandardHeader() const
+	{
+		auto glVersion = Engine::get()->window().openglVersion();
+		return std::string("#version ") + getVersionStringGLSL(glVersion) + "core\n";
 	}
 }

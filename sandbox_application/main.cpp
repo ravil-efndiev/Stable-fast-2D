@@ -92,10 +92,14 @@ public:
 int main()
 {
 	Logger::setLogMode(LogMode::Verbose);
-	Logger::setLogFile("D:/raf.txt");
+
+	WindowInfo windowInfo{};
+	windowInfo.size = { 1000, 700 };
+	windowInfo.title = "Sandbox";
+	windowInfo.openglVersion = { 4, 1 };
 
 	EngineInfo engineInfo{};
-	engineInfo.windowInfo = { { 1000, 700 }, "Sandbox" };
+	engineInfo.windowInfo = windowInfo;
 
 	Application app(engineInfo);
 	app.pushLayer<GameLayer>();

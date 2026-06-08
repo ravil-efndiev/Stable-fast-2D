@@ -21,8 +21,8 @@ namespace s2f
 		auto initRes = glfwInit();
 		S2F_ASSERT(initRes, "Failed to initialize GLFW");
 
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, mInfo.openglVersion.major);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, mInfo.openglVersion.minor);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_RESIZABLE, mInfo.resizable);
 #ifdef __APPLE__

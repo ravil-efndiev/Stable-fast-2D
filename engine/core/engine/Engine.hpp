@@ -73,6 +73,7 @@ namespace s2f
 		f32 fixedDeltaTime() const { return mTime.fixedDeltaTime; }
 		Time time() const { return mTime; }
 		Renderer& renderer() { return mRenderer; }
+		Window& window() { return mWindow; }
 
 		/*
 		* @brief Sets color that is used to clear the screen on every frame

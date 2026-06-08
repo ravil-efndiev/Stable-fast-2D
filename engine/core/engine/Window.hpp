@@ -10,6 +10,7 @@ namespace s2f
 		glm::ivec2 size;
 		std::string title;
 		bool resizable{ true };
+		Version openglVersion{ 4, 5 };
 	};
 
 	class Window 
@@ -31,6 +32,7 @@ namespace s2f
 		glm::ivec2 size() const { return mInfo.size; }
 		std::string title() const { return mInfo.title; }
 		bool resizable() const { return mInfo.resizable; }
+		Version openglVersion() const { return mInfo.openglVersion; }
 
 		void setTitle(std::string_view title);
 		void setResizable(bool resizable);
