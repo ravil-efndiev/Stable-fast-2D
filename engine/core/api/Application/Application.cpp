@@ -18,8 +18,8 @@ namespace s2f
 
         mEngine.setEventFunc([this](Event& event)
         {
-            for (auto it = mLayers.rbegin(); it != mLayers.rend(); ++it)
-                (*it)->onEvent(event);
+            for (const auto& layer : std::views::reverse(mLayers))
+                layer->onEvent(event);
         });
     }
 

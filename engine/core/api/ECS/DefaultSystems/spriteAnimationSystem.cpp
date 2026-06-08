@@ -1,18 +1,15 @@
 #include "defaultSystems.hpp"
+#include "api/ECS/entityQuery.hpp"
 
 namespace s2f
 {
 	void spriteAnimationSystem(const std::vector<Entity>& entities, f32 dt)
 	{
-		for (const auto& entity : entities)
+		auto queried = queryEntities<Sprite, SpriteAnimator>(entities);
+		for (auto&& [entity, sprite, animator] : queried)
 		{
-			if (!entity.has<Sprite>() || !entity.has<SpriteAnimator>()) return;
-
-			auto& sprite = *entity.get<Sprite>();
-			auto& animator = *entity.get<SpriteAnimator>();
-
-			if (animator.animations.empty()) return;
-			if (animator.currentAnimationFinished()) return;
+			if (animator.animations.empty()) continue;
+			if (animator.currentAnimationFinished()) continue;
 
 			RectU gridCell = animator.currentAnimation()->subtextureGridCell();
 			sprite.setSubTextureFromGrid(gridCell.position, gridCell.size);
