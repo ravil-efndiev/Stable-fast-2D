@@ -73,10 +73,9 @@ namespace s2f
             mScene->mRegistry.remove<ComponentT>(mID);
         }
 
-        operator bool() const
-        {
-            return mScene != nullptr;
-        }
+        operator bool() const { return mScene != nullptr; }
+
+        bool operator==(const Entity& other) const { return mID == other.mID; }
 
 	private:
 		Scene* mScene;

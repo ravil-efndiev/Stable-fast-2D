@@ -7,7 +7,7 @@
 namespace s2f
 {
 	EntityId Scene::sEntityCounter{ 0 };
-	EntityId Scene::sSystemCounter{ 0 };
+	SystemId Scene::sSystemCounter{ 0 };
 	
 	Scene::Scene()
 	{
@@ -39,7 +39,7 @@ namespace s2f
 
 	void Scene::update(f32 deltaTime)
 	{
-		for (auto& [_, system] : mSystems)
+		for (auto& system : mSystems)
 		{
 			system(mEntities, deltaTime);
 		}
@@ -61,20 +61,25 @@ namespace s2f
 		{
 			for (const auto& systemID : mSystemRemoveQueue)
 			{
-				mSystems.erase(systemID);
+				mSystems.erase(std::remove_if(mSystems.begin(), mSystems.end(), 
+					[systemID](const auto& system)
+					{
+						return systemID == system.id;
+					}
+				), mSystems.end());
 			}
 			mSystemRemoveQueue.clear();
 		}
 	}
 
-	SystemId Scene::addSystem(const System& system)
+	SystemId Scene::addSystem(const SystemFunc& systemFunc)
 	{
 		SystemId currentID = sSystemCounter++;
-		mSystems.emplace(currentID, system);
+		mSystems.emplace_back(systemFunc, currentID);
 		return currentID;
 	}
 
-	void Scene::removeSystem(const SystemId& systemID)
+	void Scene::removeSystem(SystemId systemID)
 	{
 		mSystemRemoveQueue.push_back(systemID);
 	}

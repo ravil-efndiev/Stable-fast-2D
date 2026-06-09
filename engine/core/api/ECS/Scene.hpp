@@ -54,16 +54,17 @@ namespace s2f
 		void onFrameEnd();
 	
 		/*
-		* @brief Gives each system its unique ID and adds it to a system storage
+		* @brief Creates System object from SystemFunc and a unique SystemId
+		* @param systemFunc function that executes systems code in update
 		* @return id of an added system, it can be used to call removeSystem
 		*/
-		SystemId addSystem(const System& system);
+		SystemId addSystem(const SystemFunc& systemFunc);
 
 		/*
 		* @brief Adds system to a system removal queue, removals are processed at the end of a frame
 		* @param systemID id given to a system on addSystem() call
 		*/
-		void removeSystem(const SystemId& systemID);
+		void removeSystem(SystemId systemID);
 
 		/*
         * @brief Adds a component to a registry and binds it to ID of the entity
@@ -108,14 +109,14 @@ namespace s2f
 		std::vector<Entity> entities() const { return mEntities; }
 
 	private:
-		std::unordered_map<SystemId, System> mSystems;
 		ComponentRegistry mRegistry;
 		std::vector<Entity> mEntities;
+		std::vector<System> mSystems;
 
 		std::vector<Entity> mEntityRemoveQueue;
 		std::vector<SystemId> mSystemRemoveQueue;
 
 		static EntityId sEntityCounter;
-		static EntityId sSystemCounter;
+		static SystemId sSystemCounter;
 	};
 }
