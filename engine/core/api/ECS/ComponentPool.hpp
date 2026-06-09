@@ -32,10 +32,11 @@ namespace s2f
 
         ComponentT* get(EntityId entityId)
         {
-            if (!has(entityId))
+            auto it = mEntityIdToIndex.find(entityId);
+            if (it == mEntityIdToIndex.end())
                 return nullptr;
 
-            return &mComponents[mEntityIdToIndex.at(entityId)];
+            return &mComponents[it->second];
         }
 
         bool has(EntityId entityId) const

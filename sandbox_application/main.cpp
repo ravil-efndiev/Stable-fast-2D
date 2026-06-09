@@ -4,9 +4,9 @@ using namespace s2f;
 
 void testSystem(const std::vector<Entity>& entities, f32 dt)
 {
-	for (auto& entity : entities)
+	for (auto [entity, animator, _] : queryEntities<SpriteAnimator, Sprite>(entities))
 	{
-		entity.get<SpriteAnimator>()->playAnimation("attack");
+		animator.playAnimation("attack");
 	}
 }
 
@@ -97,7 +97,6 @@ int main()
 	engineInfo.applicationName = "Sandbox";
 	engineInfo.windowInfo.size = { 1000, 700 };
 	engineInfo.windowInfo.title = engineInfo.applicationName;
-	engineInfo.windowInfo.openglVersion = { 4, 1 };
 
 	Application app(engineInfo);
 	app.pushLayer<GameLayer>();
