@@ -36,6 +36,7 @@ public:
 	void onRender() override
 	{
 		mSceneRenderer.render();
+		mRenderer.submitQuad(Transform{}.matrix(), { 1.f, 0.f, 0.f, 1.f });
 	}
 
 	void onEvent(Event& event)

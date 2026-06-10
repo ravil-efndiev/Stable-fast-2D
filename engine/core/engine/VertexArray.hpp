@@ -4,6 +4,12 @@
 
 namespace s2f
 {
+	enum class Divisor : u32
+	{
+		PerVertex = 0,
+		PerInstnace = 1,
+	};
+
 	class VertexArray
 	{
 	public:
@@ -12,7 +18,7 @@ namespace s2f
 
 		void create();
 	
-		void addVertexBuffer(const Buffer& vertexBuffer, const Layout& layout);
+		void addVertexBuffer(const Buffer& vertexBuffer, const Layout& layout, Divisor divisor);
 		void setIndexBuffer(const Buffer& indexBuffer);
 
 		GLuint id() const { return mID; }

@@ -20,7 +20,7 @@ namespace s2f
 	struct RendererStatistics
 	{
 		u32 drawCalls{ 0 };
-		u32 quadCount{ 0 };
+		u32 quadInBatchCount{ 0 };
 		u32 textureSlotsUsed{ 0 };
 	};
 
@@ -49,8 +49,12 @@ namespace s2f
 			const glm::vec4& tint = glm::vec4(1.f)
 		);
 
-		void submitQuad(std::span<glm::mat4> transforms, const glm::vec4& tint = glm::vec4(1.f));
-		void submitQuad(std::span<glm::mat4> transforms, Texture* texture, const glm::vec4& tint = glm::vec4(1.f));
+		void submitQuad(const glm::mat4& transform, const glm::vec4& color);
+		void submitQuad(const glm::mat4& transform, const glm::vec4& color, Texture* texture);
+		void submitQuads(std::span<meshes::QuadInstanceVertex> instanceVertices);
+		void submitQuads(std::span<glm::mat4> transforms, std::span<glm::vec4> colors);
+		void submitQuads(std::span<glm::mat4> transforms, std::span<glm::vec4> colors, Texture* texture);
+		void submitQuads(std::span<meshes::QuadInstanceVertex> instanceVertices, Texture* texture);
 
 		void setProjview(const ProjViewData& projview) { mProjview = projview; }
 		void resetProjview();
@@ -71,6 +75,11 @@ namespace s2f
 		void createQuadBatchResources();
 		void createQuadSingleResources();
 
+		std::vector<meshes::QuadInstanceVertex> makeQuadInstanceVector(
+			std::span<glm::mat4> transforms, 
+			std::span<glm::vec4> colors
+		);
+
 	private:
 		ProjViewData mProjview;
 		GLState mGLState;
@@ -79,7 +88,9 @@ namespace s2f
 		Buffer mBatchQuadVB;
 		Buffer mBatchQuadIB;
 
-		Shader mQuadShader;
+		Shader mQuadShaderTex;
+		Shader mQuadShaderCol;
+
 		VertexArray mQuadVA;
 		Buffer mQuadVB;
 		Buffer mQuadIB;
@@ -93,7 +104,7 @@ namespace s2f
 		const u64 mQuadBatchSize;
 		const u64 mQuadVerticesPerDraw;
 		const u64 mQuadIndicesPerDraw;
-		u64 mInstanceBufferCapacity{ 256 * sizeof(glm::mat4) };
+		u64 mInstanceBufferCapacity{ 256 * sizeof(meshes::QuadInstanceVertex) };
 
 		std::vector<Texture*> mTextures;
 		u32 mTextureSlotIndex{ 1 };

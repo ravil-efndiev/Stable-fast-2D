@@ -30,4 +30,13 @@ namespace s2f
 		BufferType mType{ BufferType::Uninitialized };
 		u64 mElementCount{ 0 };
 	};
+
+	template <class T>
+	void createBufferFromCollection(Buffer& buffer, BufferType type, std::span<T> colleciton)
+	{
+		S2F_ASSERT(buffer.type() == BufferType::Uninitialized, 
+			"createBufferFromCollection() only works on uninitialized buffer");
+		
+		buffer.create(type, colleciton.size(), colleciton.size_bytes(), colleciton.data());
+	}
 }

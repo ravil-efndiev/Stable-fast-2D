@@ -16,8 +16,13 @@ namespace s2f
 		struct QuadVertex
 		{
 			glm::vec4 position{ 0.f };
-			glm::vec4 tint{ 0.f };
 			glm::vec2 texCoord{ 0.f };
+		};
+
+		struct QuadInstanceVertex
+		{
+			glm::mat4 transform;
+			glm::vec4 tint;
 		};
 
 		static std::array<glm::vec4, 4> quadVertexPositions

@@ -16,7 +16,7 @@ namespace s2f
 		Logger::infoVerbose("Deleted vertex array with ID {}", mID);
 	}
 
-	void VertexArray::addVertexBuffer(const Buffer& vertexBuffer, const Layout& layout)
+	void VertexArray::addVertexBuffer(const Buffer& vertexBuffer, const Layout& layout, Divisor divisor)
 	{
 		S2F_ASSERT(vertexBuffer.type() == BufferType::Vertex, 
 			"Buffer passed to addVertexBuffer must be of type Vertex");
@@ -40,6 +40,7 @@ namespace s2f
 						layout.stride,
 						(void*)((uintptr_t)(element.offset + sizeof(f32) * vec4Count * matVecIdx))
 					);
+					glVertexAttribDivisor(mCurrentAttribIndex, static_cast<u32>(divisor));
 					mCurrentAttribIndex++;
 				}
 			}
@@ -54,6 +55,7 @@ namespace s2f
 					layout.stride, 
 					(void*)((uintptr_t)element.offset)
 				);
+				glVertexAttribDivisor(mCurrentAttribIndex, static_cast<u32>(divisor));
 				mCurrentAttribIndex++;
 			}
 		}
