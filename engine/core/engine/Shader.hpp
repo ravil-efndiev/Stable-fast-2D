@@ -26,6 +26,7 @@ namespace s2f
 		void setUniformIntArray(
 			const char* name, size_t size, const i32* values, GLState* glState = nullptr
 		) const;
+		void setUniformInt(const char* name, i32 value, GLState* glState = nullptr) const;
 
 		GLuint id() const { return mID; }
 		bool valid() const { return mValid; }

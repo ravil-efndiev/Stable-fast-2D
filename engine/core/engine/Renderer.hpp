@@ -49,6 +49,9 @@ namespace s2f
 			const glm::vec4& tint = glm::vec4(1.f)
 		);
 
+		void submitQuad(std::span<glm::mat4> transforms, const glm::vec4& tint = glm::vec4(1.f));
+		void submitQuad(std::span<glm::mat4> transforms, Texture* texture, const glm::vec4& tint = glm::vec4(1.f));
+
 		void setProjview(const ProjViewData& projview) { mProjview = projview; }
 		void resetProjview();
 
@@ -65,23 +68,32 @@ namespace s2f
 		void beginBatch();
 		void reset();
 
+		void createQuadBatchResources();
+		void createQuadSingleResources();
+
 	private:
 		ProjViewData mProjview;
 		GLState mGLState;
+		Shader mBatchQuadShader;
+		VertexArray mBatchQuadVA;
+		Buffer mBatchQuadVB;
+		Buffer mBatchQuadIB;
+
 		Shader mQuadShader;
-		Layout mQuadVBLayout;
 		VertexArray mQuadVA;
 		Buffer mQuadVB;
 		Buffer mQuadIB;
+		Buffer mQuadInstanceVB;
 
 		std::vector<u32> mQuadBatchIndices;
-		std::vector<meshes::QuadVertex> mQuadVertexData;
+		std::vector<meshes::QuadBatchVertex> mQuadVertexData;
 		u32 mQuadVertexCount{ 0 };
 		u32 mQuadIndexCount{ 0 };
 
 		const u64 mQuadBatchSize;
 		const u64 mQuadVerticesPerDraw;
 		const u64 mQuadIndicesPerDraw;
+		u64 mInstanceBufferCapacity{ 256 * sizeof(glm::mat4) };
 
 		std::vector<Texture*> mTextures;
 		u32 mTextureSlotIndex{ 1 };

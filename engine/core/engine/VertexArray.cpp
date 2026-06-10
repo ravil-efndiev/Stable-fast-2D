@@ -16,10 +16,10 @@ namespace s2f
 		Logger::infoVerbose("Deleted vertex array with ID {}", mID);
 	}
 
-	void VertexArray::setVertexBuffer(const Buffer& vertexBuffer, const Layout& layout)
+	void VertexArray::addVertexBuffer(const Buffer& vertexBuffer, const Layout& layout)
 	{
 		S2F_ASSERT(vertexBuffer.type() == BufferType::Vertex, 
-			"Buffer passed to setVertexBuffer must be of type Vertex");
+			"Buffer passed to addVertexBuffer must be of type Vertex");
 
 		S2F_ASSERT(vertexBuffer.valid(), "Attempted to set an invalid or empty vertex buffer for a vertex array");
 
@@ -66,6 +66,7 @@ namespace s2f
 
 		S2F_ASSERT(indexBuffer.valid(), "Attempted to set an invalid or empty index buffer for a vertex array");
 
+		mIndexBufferIndexCount = indexBuffer.elementCount();
 		glBindVertexArray(mID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.id());
 	}

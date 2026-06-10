@@ -12,12 +12,14 @@ namespace s2f
 
 		void create();
 	
-		void setVertexBuffer(const Buffer& vertexBuffer, const Layout& layout);
+		void addVertexBuffer(const Buffer& vertexBuffer, const Layout& layout);
 		void setIndexBuffer(const Buffer& indexBuffer);
 
 		GLuint id() const { return mID; }
+		u64 indexBufferIndexCount() const { return mIndexBufferIndexCount; }
 
 	private:
+		u64 mIndexBufferIndexCount{ 0 };
 		GLuint mID{ 0 };
 		u32 mCurrentAttribIndex{ 0 };
 	};

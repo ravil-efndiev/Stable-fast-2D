@@ -17,40 +17,88 @@ namespace s2f
 		mGLState.init();
 		resetProjview();
 
-		mQuadVA.create();
-		mQuadVB.create(BufferType::Vertex, mQuadVerticesPerDraw * sizeof(meshes::QuadVertex));
+		createQuadBatchResources();
+		createQuadSingleResources();
 
-		fillQuadBatchIndices();
-		mQuadIB.create(BufferType::Index,
-			mQuadIndicesPerDraw * sizeof(u32),
-			mQuadBatchIndices.data()
-		);
-
-		mQuadVBLayout = Layout
-		{
-			{
-				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadVertex, position)),
-				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadVertex, tint)),
-				LayoutElement(LayoutElementType::Float2, offsetof(meshes::QuadVertex, texCoord)),
-				LayoutElement(LayoutElementType::Float,  offsetof(meshes::QuadVertex, texIndex))
-			},
-			sizeof(meshes::QuadVertex)
-		};
-
-		mQuadVA.setVertexBuffer(mQuadVB, mQuadVBLayout);
-		mQuadVA.setIndexBuffer(mQuadIB);
-
-		mQuadShader.create(SHADER_PATH / "quad.vert", SHADER_PATH / "quad.frag");
 		auto maxTexSlots = glapi::getMaxTextureSlots();
 		std::vector<i32> texSlotIndices(maxTexSlots);
 		for (i32 i{ 0 }; i < maxTexSlots; i++)
 			texSlotIndices[i] = i;
 
 		mTextures.resize(maxTexSlots);
-		mQuadShader.setUniformIntArray("uTextures", maxTexSlots, texSlotIndices.data(), &mGLState);
+		mBatchQuadShader.setUniformIntArray("uTextures", maxTexSlots, texSlotIndices.data(), &mGLState);
 
 		Logger::infoVerbose("Renderer: Initialized");
 		Logger::infoVerbose("Renderer: Maximum GPU supported texture slots = {}", maxTexSlots);
+	}
+
+	void Renderer::createQuadBatchResources()
+	{
+		mBatchQuadVA.create();
+		mBatchQuadVB.create(BufferType::Vertex, mQuadVerticesPerDraw, mQuadVerticesPerDraw * sizeof(meshes::QuadBatchVertex));
+
+		fillQuadBatchIndices();
+		mBatchQuadIB.create(BufferType::Index,
+			mQuadIndicesPerDraw,
+			mQuadIndicesPerDraw * sizeof(u32),
+			mQuadBatchIndices.data()
+		);
+
+		Layout quadVBLayout
+		{
+			{
+				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadBatchVertex, position)),
+				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadBatchVertex, tint)),
+				LayoutElement(LayoutElementType::Float2, offsetof(meshes::QuadBatchVertex, texCoord)),
+				LayoutElement(LayoutElementType::Float,  offsetof(meshes::QuadBatchVertex, texIndex))
+			},
+			sizeof(meshes::QuadBatchVertex)
+		};
+
+		mBatchQuadVA.addVertexBuffer(mBatchQuadVB, quadVBLayout);
+		mBatchQuadVA.setIndexBuffer(mBatchQuadIB);
+
+		mBatchQuadShader.create(SHADER_PATH / "quadBatch.vert", SHADER_PATH / "quadBatch.frag");
+	}
+
+	void Renderer::createQuadSingleResources()
+	{
+		std::array<meshes::QuadVertex, 4> quadVertices
+		{
+			meshes::QuadVertex{ { -0.5f, -0.5f, 0.f, 1.f }, {1.f, 1.f, 1.f, 1.f}, {0.f, 0.f} },
+			meshes::QuadVertex{ {  0.5f, -0.5f, 0.f, 1.f }, {1.f, 1.f, 1.f, 1.f}, {1.f, 0.f} },
+			meshes::QuadVertex{ {  0.5f,  0.5f, 0.f, 1.f }, {1.f, 1.f, 1.f, 1.f}, {1.f, 1.f} },
+			meshes::QuadVertex{ { -0.5f,  0.5f, 0.f, 1.f }, {1.f, 1.f, 1.f, 1.f}, {0.f, 1.f} },
+		};
+
+		mQuadVA.create();
+		mQuadVB.create(BufferType::Vertex, quadVertices.size(), quadVertices.size() * sizeof(meshes::QuadVertex));
+		mQuadIB.create(BufferType::Index, meshes::quadIndices.size(), meshes::quadIndices.size() * sizeof(u32), meshes::quadIndices.data());
+
+		Layout quadVBLayout
+		{
+			{
+				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadVertex, position)),
+				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadVertex, tint)),
+				LayoutElement(LayoutElementType::Float2, offsetof(meshes::QuadVertex, texCoord)),
+			},
+			sizeof(meshes::QuadVertex)
+		};
+
+		Layout quadInstanceLayout
+		{
+			{
+				LayoutElement(LayoutElementType::Float4x4, 0)
+			},
+			sizeof(glm::mat4)
+		};
+
+		mQuadVA.addVertexBuffer(mQuadVB, quadVBLayout);
+		mQuadVA.addVertexBuffer(mQuadInstanceVB, quadInstanceLayout);
+		mQuadVA.setIndexBuffer(mQuadIB);
+		
+		mQuadShader.create(SHADER_PATH / "quad.vert", SHADER_PATH / "quad.frag");
+        mQuadShader.setUniformInt("uTextureIndex", 0);
 	}
 
 	void Renderer::fillQuadBatchIndices()
@@ -68,7 +116,7 @@ namespace s2f
 
 	void Renderer::begin()
 	{
-		mQuadShader.setUniformMat4("uProjview", mProjview.projection * mProjview.view, &mGLState);
+		mBatchQuadShader.setUniformMat4("uProjview", mProjview.projection * mProjview.view, &mGLState);
 		beginBatch();
 	}
 
@@ -85,10 +133,10 @@ namespace s2f
 	{
 		if (mQuadVertexData.empty()) return;
 
-		mQuadVB.setData(mQuadVertexData.size() * sizeof(meshes::QuadVertex), mQuadVertexData.data());
+		mBatchQuadVB.setData(mQuadVertexData.size() * sizeof(meshes::QuadBatchVertex), mQuadVertexData.data());
 
-		mGLState.bindShader(mQuadShader);
-		mGLState.bindVA(mQuadVA);
+		mGLState.bindShader(mBatchQuadShader);
+		mGLState.bindVA(mBatchQuadVA);
 
 		for (u32 i{ 1 }; i < mTextureSlotIndex; i++)
 			mGLState.bindTexture(*mTextures[i], (u32)i);
@@ -181,7 +229,34 @@ namespace s2f
 		mStats.quadCount++;
 	}
 
-	void Renderer::resetProjview()
+    void Renderer::submitQuad(std::span<glm::mat4> transforms, const glm::vec4& tint)
+    {
+        mGLState.bindVA(mQuadVA);
+        mGLState.bindShader(mQuadShader);
+
+		auto tfSize = transforms.size_bytes();
+		if (tfSize > mInstanceBufferCapacity)
+		{
+			mInstanceBufferCapacity *= 2;
+			mQuadInstanceVB.realloc(mInstanceBufferCapacity);
+		}
+		mQuadInstanceVB.setData(tfSize, transforms.data());
+
+        mQuadShader.setUniformMat4("uProjview", mProjview.projection * mProjview.view, &mGLState);
+        glapi::drawIndexedInstanced(mQuadVA.indexBufferIndexCount(), transforms.size(), mRenderMode);
+
+		// TODO add proper color managing
+    }
+
+    void Renderer::submitQuad(std::span<glm::mat4> transforms, Texture *texture, const glm::vec4 &tint)
+    {
+		// TODO implement
+
+		mGLState.bindTexture(*texture, 0);
+        glapi::drawIndexedInstanced(mQuadVA.indexBufferIndexCount(), transforms.size(), mRenderMode);
+    }
+
+    void Renderer::resetProjview()
 	{
 		auto viewport = glapi::getViewportSize();
 		mProjview = makeOrthoPojectionView({ 0.f, 0.f }, 0.f, 1.f, (f32)viewport.x / (f32)viewport.y);

@@ -141,9 +141,16 @@ namespace s2f
 		glUniform1iv(location, size, values);
 	}
 
-	std::string Shader::getStandardHeader() const
+    void Shader::setUniformInt(const char *name, i32 value, GLState *glState) const
+    {
+		bind(glState);
+		GLint location = glGetUniformLocation(mID, name);
+		glUniform1i(location, value);
+    }
+
+    std::string Shader::getStandardHeader() const
 	{
 		auto glVersion = Engine::get()->window().openglVersion();
-		return std::string("#version ") + getVersionStringGLSL(glVersion) + "core\n";
+		return std::string("#version ") + getVersionStringGLSL(glVersion) + " core\n";
 	}
 }

@@ -5,12 +5,19 @@ namespace s2f
 {
 	namespace meshes
 	{
-		struct QuadVertex
+		struct QuadBatchVertex
 		{
 			glm::vec4 position{ 0.f };
 			glm::vec4 tint{ 0.f };
 			glm::vec2 texCoord{ 0.f };
 			f32 texIndex{ 0.f };
+		};
+
+		struct QuadVertex
+		{
+			glm::vec4 position{ 0.f };
+			glm::vec4 tint{ 0.f };
+			glm::vec2 texCoord{ 0.f };
 		};
 
 		static std::array<glm::vec4, 4> quadVertexPositions
