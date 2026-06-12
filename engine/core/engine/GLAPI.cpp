@@ -59,5 +59,25 @@ namespace s2f
 			glGetIntegerv(GL_VIEWPORT, viewport);
 			return { viewport[2], viewport[3] };
 		}
+
+		void setDepthFuncLequal()
+		{
+			glDepthFunc(GL_LEQUAL);
+			glDepthMask(GL_FALSE);
+		}
+
+		void setDepthFuncLess()
+		{
+			glDepthFunc(GL_LESS);
+			glDepthMask(GL_TRUE);
+		}
+
+		void toggleAdditiveBlend(bool flag)
+		{
+			if (flag)
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			else
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
 	}
 }

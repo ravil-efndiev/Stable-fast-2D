@@ -8,6 +8,8 @@ namespace s2f
     {
     public:
         Texture() = default;
+        Texture(const std::filesystem::path& texturePath);
+        Texture(i32 width, i32 height, void* data);
         ~Texture();
 
         Status create(const std::filesystem::path& texturePath);

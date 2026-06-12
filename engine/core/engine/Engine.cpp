@@ -1,6 +1,7 @@
 #include "Engine.hpp"
 #include "GLAPI.hpp"
 #include "api/Input.hpp"
+#include "api/Random.hpp"
 
 namespace s2f
 {
@@ -12,8 +13,9 @@ namespace s2f
 		return sInstance;
 	}
 
-	Engine::Engine(const EngineInfo& info) 
-		: mClearColor(info.clearColor), mWindow(info.windowInfo), mRenderer(info.rendererInfo)
+	Engine::Engine(const EngineInfo& info)
+		: mClearColor(info.clearColor), mWindow(info.windowInfo), mRenderer(info.rendererInfo),
+		mRandomGenerator(std::random_device{}())
 	{
 		S2F_ASSERT(!sInstance, "Engine instance can only be created once");
 		sInstance = this;
@@ -29,6 +31,7 @@ namespace s2f
 		mTime.lastTime = mWindow.getTime();
 		mRenderer.init();
 		Input::init(&mInputState);
+		Random::init(&mRandomGenerator);
 
 		mWindow.setEventFunc([this](Event& event)
 		{

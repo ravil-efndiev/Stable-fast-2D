@@ -11,4 +11,6 @@ namespace s2f
 
 		glm::mat4 matrix() const;
 	};
+
+	glm::mat4 makeTransform(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 }

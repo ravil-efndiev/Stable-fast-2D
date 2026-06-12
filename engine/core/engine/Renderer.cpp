@@ -22,7 +22,7 @@ namespace s2f
 
 		auto maxTexSlots = glapi::getMaxTextureSlots();
 		std::vector<i32> texSlotIndices(maxTexSlots);
-		for (i32 i{ 0 }; i < maxTexSlots; i++)
+		for (i32 i{}; i < maxTexSlots; i++)
 			texSlotIndices[i] = i;
 
 		mTextures.resize(maxTexSlots);
@@ -104,7 +104,7 @@ namespace s2f
 		size_t offset{ 0 };
 		for (size_t i{}; i < mQuadIndicesPerDraw; i += 6)
 		{
-			for (size_t j{}; j < meshes::quadIndices.size(); j++)
+			for (size_t j{}; j < meshes::quadIndices.size(); ++j)
 			{
 				mQuadBatchIndices[i + j] = offset + meshes::quadIndices[j];
 			}
@@ -146,7 +146,7 @@ namespace s2f
 	void Renderer::drawQuad(const glm::mat4& transform, const glm::vec4& color)
 	{
 		if (mQuadIndexCount >= mQuadIndicesPerDraw)
-			reset();
+			flushBatchAndReset();
 
 		for (u32 i{}; i < 4; ++i)
 		{
@@ -185,11 +185,11 @@ namespace s2f
 		const glm::vec4& tint
 	) {
 		if (mQuadIndexCount >= mQuadIndicesPerDraw)
-			reset();
+			flushBatchAndReset();
 
 		GLuint texID = texture->id();
 		f32 textureIndex{ 0.f };
-		for (u32 i{ 1 }; i < mTextureSlotIndex; i++)
+		for (u32 i{ 1 }; i < mTextureSlotIndex; ++i)
 		{
 			if (mTextures[i] && mTextures[i]->id() == texID)
 			{
@@ -203,7 +203,7 @@ namespace s2f
 			if (mTextureSlotIndex >= mTextures.size())
 			{
 				Logger::warn("Texture slot limit reached for this batch, consider using sprite atlases");
-				reset();
+				flushBatchAndReset();
 			}
 
 			textureIndex = (f32)mTextureSlotIndex;
@@ -290,7 +290,7 @@ namespace s2f
 		mProjview = makeOrthoPojectionView({ 0.f, 0.f }, 0.f, 1.f, (f32)viewport.x / (f32)viewport.y);
 	}
 
-    void Renderer::reset()
+    void Renderer::flushBatchAndReset()
 	{
 		end();
 		beginBatch();

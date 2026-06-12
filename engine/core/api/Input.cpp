@@ -1,6 +1,6 @@
 #include "Input.hpp"
 
-#define ASSERT_INPUT_INITIALIZED S2F_ASSERT(sInputState, "Input was not initialized when calling its methods, use Input::init()")
+#define ASSERT_INITIALIZED S2F_ASSERT(sInputState, "Input was not initialized when calling its methods, use Input::init()")
 
 namespace s2f
 {
@@ -13,13 +13,13 @@ namespace s2f
 
 	u32 Input::assertInputAndGetKeyCode(Key key)
 	{
-		ASSERT_INPUT_INITIALIZED;
+		ASSERT_INITIALIZED;
 		return static_cast<u32>(key);
 	}
 
 	u32 Input::assertInputAndGetMouseCode(Mouse mouseButton)
 	{
-		ASSERT_INPUT_INITIALIZED;
+		ASSERT_INITIALIZED;
 		return static_cast<u32>(mouseButton);
 	}
 
@@ -61,7 +61,7 @@ namespace s2f
 
 	glm::vec2 Input::mousePosition()
 	{
-		ASSERT_INPUT_INITIALIZED;
+		ASSERT_INITIALIZED;
 		return sInputState->mousePosition;
 	}
 }

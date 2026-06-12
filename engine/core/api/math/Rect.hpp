@@ -7,8 +7,7 @@ namespace s2f
 	* @brief Represents a rectangle in 2D space with top-left coordintate start
 	* @tparam T numeric type used to define position and size values
 	*/
-	template <class T>
-	requires std::integral<T> || std::floating_point<T>
+	template <Numeric T>
 	struct Rect
 	{	
 		glm::tvec2<T> position;

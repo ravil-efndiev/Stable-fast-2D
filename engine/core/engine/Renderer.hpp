@@ -66,11 +66,11 @@ namespace s2f
 
 		GLState& glState() { return mGLState; }
 
+		void flushBatchAndReset();
+
 	private:
 		void fillQuadBatchIndices();
-
 		void beginBatch();
-		void reset();
 
 		void createQuadBatchResources();
 		void createQuadSingleResources();

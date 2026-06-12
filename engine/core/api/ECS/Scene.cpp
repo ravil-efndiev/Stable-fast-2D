@@ -12,6 +12,7 @@ namespace s2f
 	Scene::Scene()
 	{
 		addSystem(spriteAnimationSystem);
+		addSystem(particleSystem);
 	}
 	
 	Entity Scene::newEntity()

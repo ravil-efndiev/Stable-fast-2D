@@ -4,6 +4,11 @@ namespace s2f
 {
 	glm::mat4 Transform::matrix() const
 	{
+		return makeTransform(position, rotation, scale);
+	}
+
+	glm::mat4 makeTransform(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+	{
 		glm::mat4 matrix{ 1.f };
 
 		matrix = glm::translate(matrix, position);

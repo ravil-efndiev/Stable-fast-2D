@@ -19,7 +19,7 @@ namespace s2f
 
 		GLuint id() const { return mID; }
 		BufferType type() const { return mType; }
-		u32 elementCount() const { return mElementCount; }
+		u64 elementCount() const { return mElementCount; }
 
 		bool valid() const;
 		void setData(u64 size, void* data) const;

@@ -12,5 +12,10 @@ namespace s2f
 		void drawIndexed(u64 indexCount, RenderMode mode);
 		void drawIndexedInstanced(u64 indexCount, u64 instanceCount, RenderMode mode);
 		glm::ivec2 getViewportSize();
+
+		void setDepthFuncLequal();
+		void setDepthFuncLess();
+
+		void toggleAdditiveBlend(bool flag);
 	}
 }

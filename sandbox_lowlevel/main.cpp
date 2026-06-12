@@ -23,7 +23,20 @@ int main()
 	Scene scene;
 	SceneRenderer sr(scene, renderer);
 	Entity sprite = scene.newEntity();
-	sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
+	//sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
+
+	Entity particleTest = scene.newEntity();
+	auto& emitter = *particleTest.add<ParticleEmitter>(100u, ParticleRenderPreference::Instancing);
+	emitter.useAdditiveBlend = true;
+
+	ParticlePorperties particleProps{};
+	particleProps.velocityVariation = { 1.f, 3.f };
+	particleProps.colorStart = { 1.f, 0.4f, 0.3f, 1.f };
+	particleProps.colorEnd = { 0.3f, 0.1f, 0.1f, 0.1f };
+	particleProps.lifetime = 3.f;
+	particleProps.sizeStart = 0.0005f;
+	particleProps.sizeEnd = 0.1f;
+	particleProps.rotationChange = 1.f;
 
 	engine.setEventFunc([](Event& event) 
 	{
@@ -37,6 +50,7 @@ int main()
 
 		f32 dt = engine.deltaTime();
 		scene.update(dt);
+		emitter.emit(particleProps);
 
 		if (Input::keyDown(Key::D))
 			camera.position.x += 10.f * dt;

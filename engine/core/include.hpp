@@ -15,6 +15,7 @@
 #include <concepts>
 #include <algorithm>
 #include <ranges>
+#include <random>
 
 #ifdef WIN32
 	#ifndef NOMINMAX
@@ -28,8 +29,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "keys.hpp"
 #include "Logger.hpp"
-
-#define S2F_DEBUG
 
 namespace s2f 
 {
@@ -62,9 +61,12 @@ namespace s2f
 		u32 minor{ 0 };
 		u32 patch{ 0 };
 	};
+
+	template <class T>
+	concept Numeric = std::integral<T> || std::floating_point<T>;
 }
 
-#ifdef S2F_DEBUG
+#ifndef S2F_DISABLE_ASSERTS
 
 	#define S2F_ASSERT(cond, s) \
 		if (!(cond)) { \

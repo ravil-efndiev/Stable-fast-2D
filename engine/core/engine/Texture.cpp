@@ -4,6 +4,16 @@
 
 namespace s2f
 {
+    Texture::Texture(const std::filesystem::path& texturePath)
+    {
+        create(texturePath);
+    }
+
+    Texture::Texture(i32 width, i32 height, void* data)
+    {
+        create(width, height, data);
+    }
+
     Status Texture::create(const std::filesystem::path& texturePath)
     {
         stbi_set_flip_vertically_on_load(true);

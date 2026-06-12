@@ -103,5 +103,6 @@ namespace s2f
 		InputState mInputState{};
 		EventFunc mEventFunc;
 		glm::vec4 mClearColor;
+		std::mt19937 mRandomGenerator;
 	};
 }

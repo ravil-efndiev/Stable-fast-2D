@@ -2,6 +2,7 @@
 #include "core/engine/Engine.hpp"
 #include "core/api/objects/Camera.hpp"
 #include "core/api/Input.hpp"
+#include "core/api/Random.hpp"
 #include "core/api/Application/Application.hpp"
 #include "core/api/Application/Layer.hpp"
 #include "core/api/ECS/Scene.hpp"
@@ -10,4 +11,5 @@
 #include "core/api/ECS/DefaultComponents/sprite.hpp"
 #include "core/api/ECS/DefaultComponents/transform.hpp"
 #include "core/api/ECS/DefaultComponents/spriteAnimator.hpp"
+#include "core/api/ECS/DefaultComponents/particleEmitter.hpp"
 #include "core/api/ECS/entityQuery.hpp"
