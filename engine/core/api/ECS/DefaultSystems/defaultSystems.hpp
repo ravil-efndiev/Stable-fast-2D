@@ -1,5 +1,8 @@
 #pragma once
+#include "api/ECS/DefaultComponents/transform.hpp"
 #include "api/ECS/DefaultComponents/sprite.hpp"
+#include "api/ECS/DefaultComponents/rigidbody.hpp"
+#include "api/ECS/DefaultComponents/collider.hpp"
 #include "api/ECS/DefaultComponents/spriteAnimator.hpp"
 #include "api/ECS/DefaultComponents/particleEmitter.hpp"
 #include "api/ECS/Entity.hpp"
@@ -17,4 +20,7 @@ namespace s2f
 
 	void particleSystem(const std::vector<Entity>& entities, f32 deltaTime);
 
+	void rigidbodySystem(const std::vector<Entity>& entities, f32 deltaTime);
+
+	void rigidbodyCollisionSystem(const std::vector<Entity>& entities, f32 deltaTime);
 }

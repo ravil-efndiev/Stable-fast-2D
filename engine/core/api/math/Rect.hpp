@@ -14,7 +14,10 @@ namespace s2f
 		glm::tvec2<T> size;
 
 		T left() const { return position.x; }
+		T right() const { return position.x + size.x; }
 		T top() const { return position.y; }
+		T botttom() const { return position.y + size.y; }
+
 		T width() const { return size.width; }
 		T height() const { return size.height; }
 	};
@@ -22,4 +25,14 @@ namespace s2f
 	using RectF = Rect<f32>;
 	using RectI = Rect<i32>;
 	using RectU = Rect<u32>;
+
+	template <Numeric T>
+    inline bool intersect(const Rect<T>& a, const Rect<T>& b)
+	{
+		return
+			a.left() <= b.right() &&
+			a.top() <= b.botttom() &&
+			a.right() >= b.left() &&
+			a.botttom() >= b.top()
+	}
 }

@@ -39,4 +39,30 @@ namespace s2f
 			}
 		}
 	}
+
+    void rigidbodySystem(const std::vector<Entity>& entities, f32 deltaTime)
+    {
+		for (auto&& [transform, rigidbody] : queryComponents<Transform, Rigidbody>(entities))
+		{
+			glm::vec2 acceleration = rigidbody.forces * rigidbody.massInverse;
+			rigidbody.velocity += acceleration * deltaTime;
+			transform.position += glm::vec3(rigidbody.velocity, 0.f) * deltaTime;
+		}
+    }
+
+    void rigidbodyCollisionSystem(const std::vector<Entity>& entities, f32 deltaTime)
+    {
+		for (auto&& [colliderA, rigidbodyA] : queryComponents<Collider, Rigidbody>(entities))
+		{
+			if (!rigidbodyA.resolveCollisions || colliderA.isTrigger) continue;
+			for (auto&& [colliderB, rigidbodyB] : queryComponents<Collider, Rigidbody>(entities))
+			{
+				if (!rigidbodyB.resolveCollisions || colliderB.isTrigger) continue;
+				if (intersect(colliderA.bounds, colliderB.bounds))
+				{
+					// TODO learn physics
+				}				
+			}
+		}
+    }
 }
