@@ -40,13 +40,29 @@ namespace s2f
 		}
 	}
 
+    void colliderPositionSystem(const std::vector<Entity> &entities, f32 deltaTime)
+    {
+		for (auto&& [transform, collider] : queryComponents<Transform, Collider>(entities))
+		{
+			collider.bounds.position = transform.position + glm::vec3(collider.offset, 0.f);
+		}
+
+		for (auto&& [transform, colliderList] : queryComponents<Transform, ColliderList>(entities))
+		{
+			for (auto& coll : colliderList.colliders)
+				coll.bounds.position = transform.position + glm::vec3(coll.offset, 0.f);
+		}
+    }
+
     void rigidbodySystem(const std::vector<Entity>& entities, f32 deltaTime)
     {
 		for (auto&& [transform, rigidbody] : queryComponents<Transform, Rigidbody>(entities))
 		{
 			glm::vec2 acceleration = rigidbody.forces * rigidbody.massInverse;
 			rigidbody.velocity += acceleration * deltaTime;
+			rigidbody.velocity *= glm::max(0.f, 1.f - rigidbody.linearDamping * deltaTime);
 			transform.position += glm::vec3(rigidbody.velocity, 0.f) * deltaTime;
+			rigidbody.forces = glm::vec2(0.f);
 		}
     }
 

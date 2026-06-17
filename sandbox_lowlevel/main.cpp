@@ -23,7 +23,9 @@ int main()
 	Scene scene;
 	SceneRenderer sr(scene, renderer);
 	Entity sprite = scene.newEntity();
-	//sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
+	sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
+	auto& rb = *sprite.add<Rigidbody>(1.f, 2.f);
+	rb.addForceX(10.f);
 
 	Entity particleTest = scene.newEntity();
 	auto& emitter = *particleTest.add<ParticleEmitter>(100u, ParticleRenderPreference::Instancing);

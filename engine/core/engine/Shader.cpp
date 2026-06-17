@@ -151,6 +151,6 @@ namespace s2f
     std::string Shader::getStandardHeader() const
 	{
 		auto glVersion = Engine::get()->window().openglVersion();
-		return std::string("#version ") + getVersionStringGLSL(glVersion) + " core\n";
+		return std::format("#version {} core\n", getVersionStringGLSL(glVersion));
 	}
 }
