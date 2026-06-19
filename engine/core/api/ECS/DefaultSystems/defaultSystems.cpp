@@ -74,10 +74,19 @@ namespace s2f
 			for (auto&& [colliderB, rigidbodyB] : queryComponents<Collider, Rigidbody>(entities))
 			{
 				if (!rigidbodyB.resolveCollisions || colliderB.isTrigger) continue;
-				if (intersect(colliderA.bounds, colliderB.bounds))
-				{
-					// TODO learn physics
-				}				
+				RectIntersectionInfo intInfo{};
+				bool intersects = intersectionInfo(colliderA.bounds, colliderB.bounds, intInfo);
+
+				if (!intersects) continue;
+				f32 vn = glm::dot(rigidbodyA.velocity - rigidbodyB.velocity, intInfo.normal);
+
+				if (vn > 0.f) continue;
+
+				f32 e = glm::min(rigidbodyA.restitution, rigidbodyB.restitution);
+				f32 j = -(1.f + e) * vn / (rigidbodyA.massInverse + rigidbodyB.massInverse);
+
+				rigidbodyA.velocity += j * rigidbodyA.massInverse * intInfo.normal;
+				rigidbodyB.velocity -= j * rigidbodyB.massInverse * intInfo.normal;
 			}
 		}
     }

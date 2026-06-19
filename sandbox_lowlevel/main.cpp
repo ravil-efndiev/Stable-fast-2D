@@ -23,9 +23,22 @@ int main()
 	Scene scene;
 	SceneRenderer sr(scene, renderer);
 	Entity sprite = scene.newEntity();
+	sprite.get<Transform>()->position.x = -1.f;
+	sprite.get<Transform>()->scale = glm::vec2{ 0.2f };
 	sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
-	auto& rb = *sprite.add<Rigidbody>(1.f, 2.f);
+	sprite.add<Collider>(glm::vec2(0.2f, 0.2f));
+	auto& rb = *sprite.add<Rigidbody>(1.f, 1.f);
 	rb.addForceX(10.f);
+	rb.resolveCollisions = true;
+
+	Entity sprite2 = scene.newEntity();
+	sprite2.get<Transform>()->position.x = 2.f;
+	sprite2.get<Transform>()->scale = glm::vec2 { 0.2f };
+	sprite2.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
+	sprite2.add<Collider>(glm::vec2(0.2f, 0.2f));
+	auto& rb2 = *sprite2.add<Rigidbody>(1.f, 1.f);
+	rb2.addForceX(-10.f);
+	rb2.resolveCollisions = true;
 
 	Entity particleTest = scene.newEntity();
 	auto& emitter = *particleTest.add<ParticleEmitter>(100u, ParticleRenderPreference::Instancing);

@@ -31,12 +31,12 @@ namespace s2f
 		u64 mElementCount{ 0 };
 	};
 
-	template <class T>
-	void createBufferFromCollection(Buffer& buffer, BufferType type, std::span<T> colleciton)
+	template <class T, size_t Extent>
+	void createBufferFromContainer(Buffer& buffer, BufferType type, std::span<T, Extent> container)
 	{
 		S2F_ASSERT(buffer.type() == BufferType::Uninitialized, 
-			"createBufferFromCollection() only works on uninitialized buffer");
+			"createBufferFromContainer() only works on uninitialized buffer");
 		
-		buffer.create(type, colleciton.size(), colleciton.size_bytes(), colleciton.data());
+		buffer.create(type, container.size(), container.size_bytes(), container.data());
 	}
 }

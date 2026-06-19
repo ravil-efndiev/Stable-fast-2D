@@ -38,7 +38,7 @@ namespace s2f
 		mBatchQuadVB.create(BufferType::Vertex, mQuadVerticesPerDraw, mQuadVerticesPerDraw * sizeof(meshes::QuadBatchVertex));
 
 		fillQuadBatchIndices();
-		createBufferFromCollection<u32>(mBatchQuadIB, BufferType::Index, mQuadBatchIndices);
+		createBufferFromContainer(mBatchQuadIB, BufferType::Index, std::span{ mQuadBatchIndices });
 
 		Layout quadVBLayout
 		{
@@ -68,8 +68,8 @@ namespace s2f
 		};
 
 		mQuadVA.create();
-		createBufferFromCollection<meshes::QuadVertex>(mQuadVB, BufferType::Vertex, quadVertices);
-		createBufferFromCollection<u32>(mQuadIB, BufferType::Index, meshes::quadIndices);
+		createBufferFromContainer(mQuadVB, BufferType::Vertex, std::span{ quadVertices });
+		createBufferFromContainer(mQuadIB, BufferType::Index, std::span{ meshes::quadIndices });
 		mQuadInstanceVB.create(BufferType::Vertex, 0, mInstanceBufferCapacity);
 
 		Layout quadVBLayout

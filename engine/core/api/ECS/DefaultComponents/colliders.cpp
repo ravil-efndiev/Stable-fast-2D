@@ -2,5 +2,5 @@
 
 namespace s2f
 {
-    
+
 }

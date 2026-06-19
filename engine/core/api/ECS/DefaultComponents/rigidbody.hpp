@@ -10,6 +10,7 @@ namespace s2f
         f32 mass{ 1.f };
         f32 massInverse{ 1.f };
         f32 linearDamping{ 0.f };
+        f32 restitution{ 0.2f };
         bool resolveCollisions{ false };
 
         Rigidbody(f32 mass, f32 linearDamping = 0.f);

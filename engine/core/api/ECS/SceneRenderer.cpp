@@ -32,7 +32,7 @@ namespace s2f
 			glm::mat4 tf = transform.matrix() * makeTransform(
 				glm::vec3(particle.position, 0.f),
 				glm::vec3(0.f, 0.f, particle.rotation),
-				glm::vec3(size, size, 0.f)
+				glm::vec2(size, size)
 			);
 
 			glm::vec4 color = glm::mix(particle.colorStart, particle.colorEnd, life);
@@ -62,7 +62,7 @@ namespace s2f
 				transform.matrix() * makeTransform(
 					glm::vec3(particle.position, 0.f),
 					glm::vec3(0.f, 0.f, particle.rotation),
-					glm::vec3(size, size, 0.f)
+					glm::vec2(size, size)
 				)
 			);
 

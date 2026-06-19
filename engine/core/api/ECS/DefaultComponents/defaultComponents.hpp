@@ -5,4 +5,4 @@
 #include "spriteAnimator.hpp"
 #include "particleEmitter.hpp"
 #include "rigidbody.hpp"
-#include "collider.hpp"
+#include "colliders.hpp"

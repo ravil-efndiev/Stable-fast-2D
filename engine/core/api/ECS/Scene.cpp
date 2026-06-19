@@ -14,6 +14,8 @@ namespace s2f
 		addSystem(spriteAnimationSystem);
 		addSystem(particleSystem);
 		addSystem(rigidbodySystem);
+		addSystem(colliderPositionSystem);
+		addSystem(rigidbodyCollisionSystem);
 	}
 	
 	Entity Scene::newEntity()
