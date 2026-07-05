@@ -81,7 +81,7 @@ namespace s2f
 		auto aLeft = a.left();
 		auto bLeft = b.left();
 		auto aTop = a.top();
-		auto bTop = a.top();
+		auto bTop = b.top();
 
 		f32 dx = glm::min(a.right(), b.right()) - glm::max(aLeft, bLeft);
 		if (dx <= 0.f) return false;

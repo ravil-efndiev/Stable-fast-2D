@@ -47,6 +47,13 @@ namespace s2f
 		void update(f32 deltaTime);
 
 		/*
+		* @brief Runs scene's fixed time systems, should be called in fixed time step inside main loop
+		* @param fixedDeltaTime = 1/60 by default but may vary, provided by Engine, also
+		* accessible via Time::fixedDelta()
+		*/
+		void tick(f32 fixedDeltaTime);
+
+		/*
 		* @brief Performs post-update operations, should be called after all update and render code
 		* 
 		* Responsible for executing entity and system removals
@@ -59,6 +66,13 @@ namespace s2f
 		* @return id of an added system, it can be used to call removeSystem
 		*/
 		SystemId addSystem(const SystemFunc& systemFunc);
+
+		/*
+		* @brief Creates System object from SystemFunc and a unique SystemId with a fixed time type
+		* @param systemFunc function that executes systems code in tick
+		* @return id of an added system, it can be used to call removeSystem
+		*/
+		SystemId addFixedSystem(const SystemFunc& systemFunc);
 
 		/*
 		* @brief Adds system to a system removal queue, removals are processed at the end of a frame

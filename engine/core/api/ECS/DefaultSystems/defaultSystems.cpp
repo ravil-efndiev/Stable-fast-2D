@@ -40,7 +40,7 @@ namespace s2f
 		}
 	}
 
-    void colliderPositionSystem(const std::vector<Entity> &entities, f32 deltaTime)
+    void colliderPositionSystem(const std::vector<Entity>& entities, f32 deltaTime)
     {
 		for (auto&& [transform, collider] : queryComponents<Transform, Collider>(entities))
 		{
@@ -54,14 +54,14 @@ namespace s2f
 		}
     }
 
-    void rigidbodySystem(const std::vector<Entity>& entities, f32 deltaTime)
+    void rigidbodySystemF(const std::vector<Entity>& entities, f32 fixedDeltaTime)
     {
 		for (auto&& [transform, rigidbody] : queryComponents<Transform, Rigidbody>(entities))
 		{
 			glm::vec2 acceleration = rigidbody.forces * rigidbody.massInverse;
-			rigidbody.velocity += acceleration * deltaTime;
-			rigidbody.velocity *= glm::max(0.f, 1.f - rigidbody.linearDamping * deltaTime);
-			transform.position += glm::vec3(rigidbody.velocity, 0.f) * deltaTime;
+			rigidbody.velocity += acceleration * fixedDeltaTime;
+			rigidbody.velocity *= glm::max(0.f, 1.f - rigidbody.linearDamping * fixedDeltaTime);
+			transform.position += glm::vec3(rigidbody.velocity, 0.f) * fixedDeltaTime;
 			rigidbody.forces = glm::vec2(0.f);
 		}
     }
@@ -78,12 +78,15 @@ namespace s2f
 				bool intersects = intersectionInfo(colliderA.bounds, colliderB.bounds, intInfo);
 
 				if (!intersects) continue;
-				f32 vn = glm::dot(rigidbodyA.velocity - rigidbodyB.velocity, intInfo.normal);
+				
+				f32 invMassSum = rigidbodyA.massInverse + rigidbodyB.massInverse;
+				if (invMassSum == 0.0f) continue;
 
+				f32 vn = glm::dot(rigidbodyA.velocity - rigidbodyB.velocity, intInfo.normal);
 				if (vn > 0.f) continue;
 
 				f32 e = glm::min(rigidbodyA.restitution, rigidbodyB.restitution);
-				f32 j = -(1.f + e) * vn / (rigidbodyA.massInverse + rigidbodyB.massInverse);
+				f32 j = -(1.f + e) * vn / (invMassSum);
 
 				rigidbodyA.velocity += j * rigidbodyA.massInverse * intInfo.normal;
 				rigidbodyB.velocity -= j * rigidbodyB.massInverse * intInfo.normal;

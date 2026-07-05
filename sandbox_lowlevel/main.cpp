@@ -8,6 +8,15 @@ bool onKeyPress(KeyPressEvent& event)
 	return S2F_EVENT_HANDLED;
 }
 
+void gravitySystemF(const std::vector<Entity>& entities, f32 fixedDT)
+{
+	for (auto&& [rb] : queryComponents<Rigidbody>(entities))
+	{
+		if (rb.massInverse == 0.f) continue;
+		rb.addForceY(rb.mass * -1.f);
+	}
+}
+
 int main()
 {
 	Logger::setLogMode(LogMode::Verbose);
@@ -21,24 +30,34 @@ int main()
 	Camera camera;
 
 	Scene scene;
+	scene.addFixedSystem(gravitySystemF);
+
 	SceneRenderer sr(scene, renderer);
 	Entity sprite = scene.newEntity();
 	sprite.get<Transform>()->position.x = -1.f;
-	sprite.get<Transform>()->scale = glm::vec2{ 0.2f };
+	sprite.get<Transform>()->scale = glm::vec2(0.2f);
 	sprite.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
 	sprite.add<Collider>(glm::vec2(0.2f, 0.2f));
-	auto& rb = *sprite.add<Rigidbody>(1.f, 1.f);
-	rb.addForceX(10.f);
+	auto& rb = *sprite.add<Rigidbody>(2.f, 1.f);
+	rb.addForceX(200.f);
 	rb.resolveCollisions = true;
 
 	Entity sprite2 = scene.newEntity();
 	sprite2.get<Transform>()->position.x = 2.f;
-	sprite2.get<Transform>()->scale = glm::vec2 { 0.2f };
+	sprite2.get<Transform>()->scale = glm::vec2(0.2f);
 	sprite2.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
-	sprite2.add<Collider>(glm::vec2(0.2f, 0.2f));
+	sprite2.add<Collider>(glm::vec2(0.2f));
 	auto& rb2 = *sprite2.add<Rigidbody>(1.f, 1.f);
-	rb2.addForceX(-10.f);
+	rb2.addForceX(-200.f);
 	rb2.resolveCollisions = true;
+
+	Entity sprite3 = scene.newEntity();
+	sprite3.get<Transform>()->position.y = -1.f;
+	sprite3.get<Transform>()->scale = glm::vec2(3.f, 0.2f);
+	sprite3.add<Sprite>(ASSETS_PATH / "textures" / "container.jpg");
+	sprite3.add<Collider>(glm::vec2(3.f, 0.2f));
+	auto& rb3 = *sprite3.add<Rigidbody>(0.f);
+	rb3.resolveCollisions = true;
 
 	Entity particleTest = scene.newEntity();
 	auto& emitter = *particleTest.add<ParticleEmitter>(100u, ParticleRenderPreference::Instancing);
@@ -59,6 +78,9 @@ int main()
 		dispatcher.dispatch<KeyPressEvent>(onKeyPress);
 	});
 
+	f32 tickTimer = engine.time().lastTime;
+	f32 fixedDt = engine.fixedDeltaTime();
+
 	while (engine.runs()) 
 	{
 		engine.startFrame();
@@ -75,7 +97,14 @@ int main()
 		sr.render();
 		renderer.end();
 
+		scene.onFrameEnd();
 		engine.endFrame();
+
+		if (engine.currentTime() - tickTimer > fixedDt)
+		{
+			tickTimer += fixedDt;
+			scene.tick(fixedDt);
+		}
 	}
 
 	return 0;

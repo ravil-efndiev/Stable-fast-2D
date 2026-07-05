@@ -3,12 +3,23 @@
 namespace s2f
 {
     Rigidbody::Rigidbody(f32 mass, f32 linearDamping)
-        : mass(mass), massInverse(1.f / mass), linearDamping(linearDamping) {}
+        : linearDamping(linearDamping) 
+    {
+        setMass(mass);
+    }
 
     void Rigidbody::setMass(f32 mass)
     {
-        this->mass = mass;
-        massInverse = 1.f / this->mass;
+        if (mass > 0.f)
+        {
+            this->mass = mass;
+            massInverse = 1.f / mass;
+        }
+        else
+        {
+            this->mass = 0.f;
+            massInverse = 0.f;
+        }
     }
 
     void Rigidbody::addForceX(f32 force)

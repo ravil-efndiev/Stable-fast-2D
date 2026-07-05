@@ -11,6 +11,11 @@ namespace s2f
 		onUpdate(deltaTime);
 	}
 
+	void Layer::tick(f32 fixedDeltaTime)
+	{
+		onTick(fixedDeltaTime);
+	}
+
 	void Layer::render()
 	{
 		if (mCamera)
@@ -21,5 +26,10 @@ namespace s2f
 		mRenderer.begin();
 		onRender();
 		mRenderer.end();
+	}
+
+	void Layer::onFrameEnd()
+	{
+		mScene.onFrameEnd();
 	}
 }

@@ -39,6 +39,15 @@ namespace s2f
 		virtual void onUpdate(f32 deltaTime) = 0;
 
 		/*
+		* @brief Virtual method that is called 60 times per second (number may vary) (fixed timestep)
+		*
+		* must be implemented
+		* @param fixedDeltaTime = 1/60 by default but may vary, provided by Engine, also
+		* accessible via Time::fixedDelta()
+		*/
+		virtual void onTick(f32 fixedDeltaTime) = 0;
+
+		/*
 		* @brief Virtual method that is called every frame in rendering stage
 		* 
 		* use to draw scene via SceneRenderer or call draw methods of Renderer
@@ -57,6 +66,16 @@ namespace s2f
 		* @brief Called from Application, calls virtual onUpdate and handles extra update code
 		*/
 		void update(f32 deltaTime);
+
+		/*
+		* @brief Called from Application, calls virtual onTick and handles extra update code
+		*/
+		void tick(f32 fixedDeltaTime);
+
+		/*
+		* @brief Called from Application, calls Scene::onFrameEnd()
+		*/
+		void onFrameEnd();
 
 		/*
 		* @brief Called from Application, calls virtual onRender and handles extra rendering code

@@ -13,16 +13,16 @@ namespace s2f
 	{
 		addSystem(spriteAnimationSystem);
 		addSystem(particleSystem);
-		addSystem(rigidbodySystem);
 		addSystem(colliderPositionSystem);
 		addSystem(rigidbodyCollisionSystem);
+		addFixedSystem(rigidbodySystemF);
 	}
 	
 	Entity Scene::newEntity()
 	{
 		Entity entity = mEntities.emplace_back(this, sEntityCounter++);
 		EntityId id = entity.id();
-		mRegistry.add(id, Tag{ std::string("Entity ") + std::to_string(id) });
+		mRegistry.add(id, Tag{ std::format("Entity {}", id)});
 		mRegistry.add(id, Transform{});
 		return entity;
 	}
@@ -45,7 +45,17 @@ namespace s2f
 	{
 		for (auto& system : mSystems)
 		{
+			if (system.type != SystemType::Normal) continue;
 			system(mEntities, deltaTime);
+		}
+	}
+
+	void Scene::tick(f32 fixedDeltaTime)
+	{
+		for (auto& system : mSystems)
+		{
+			if (system.type != SystemType::FixedTime) continue;
+			system(mEntities, fixedDeltaTime);
 		}
 	}
 
@@ -79,7 +89,14 @@ namespace s2f
 	SystemId Scene::addSystem(const SystemFunc& systemFunc)
 	{
 		SystemId currentID = sSystemCounter++;
-		mSystems.emplace_back(systemFunc, currentID);
+		mSystems.emplace_back(systemFunc, currentID, SystemType::Normal);
+		return currentID;
+	}
+
+	SystemId Scene::addFixedSystem(const SystemFunc& systemFunc)
+	{
+		SystemId currentID = sSystemCounter++;
+		mSystems.emplace_back(systemFunc, currentID, SystemType::FixedTime);
 		return currentID;
 	}
 

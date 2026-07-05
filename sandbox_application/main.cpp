@@ -63,7 +63,7 @@ public:
 	{
 		Entity sprite = mScene.newEntity();
 		sprite.add<Sprite>(glm::vec4(1.f, 1.f, 1.f, 1.f));
-		sprite.get<Transform>()->scale = { 0.3f, 0.3f, 0.3f };
+		sprite.get<Transform>()->scale = glm::vec2(0.3f);
 		sprite.get<Transform>()->position = {-0.5f, 0.5f, 0.1f};
 	}
 

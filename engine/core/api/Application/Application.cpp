@@ -28,6 +28,9 @@ namespace s2f
         for (const auto& layer : mLayers)
             layer->start();
 
+        f32 tickTimer = mEngine.time().lastTime;
+        f32 fixedDt = mEngine.fixedDeltaTime();
+
         while (mEngine.runs())
         {
             mEngine.startFrame();
@@ -37,6 +40,16 @@ namespace s2f
 
             for (const auto& layer : mLayers)
                 layer->render();
+
+            if (mEngine.currentTime() - tickTimer > fixedDt)
+            {
+                tickTimer += fixedDt;
+                for (const auto& layer : mLayers)
+                    layer->tick(fixedDt);
+            }
+
+            for (const auto& layer : mLayers)
+                layer->onFrameEnd();
 
             mEngine.endFrame();
             executeLayerTransitions();
