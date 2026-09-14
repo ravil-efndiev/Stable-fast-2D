@@ -68,10 +68,10 @@ namespace s2f
 
     void rigidbodyCollisionSystem(const std::vector<Entity>& entities, f32 deltaTime)
     {
-		for (auto&& [colliderA, rigidbodyA] : queryComponents<Collider, Rigidbody>(entities))
+		for (auto&& [colliderA, rigidbodyA, transformA] : queryComponents<Collider, Rigidbody, Transform>(entities))
 		{
 			if (!rigidbodyA.resolveCollisions || colliderA.isTrigger) continue;
-			for (auto&& [colliderB, rigidbodyB] : queryComponents<Collider, Rigidbody>(entities))
+			for (auto&& [colliderB, rigidbodyB, transformB] : queryComponents<Collider, Rigidbody, Transform>(entities))
 			{
 				if (!rigidbodyB.resolveCollisions || colliderB.isTrigger) continue;
 				RectIntersectionInfo intInfo{};
@@ -90,6 +90,10 @@ namespace s2f
 
 				rigidbodyA.velocity += j * rigidbodyA.massInverse * intInfo.normal;
 				rigidbodyB.velocity -= j * rigidbodyB.massInverse * intInfo.normal;
+
+				f32 separationAmount = intInfo.depth / invMassSum;
+				transformA.position += glm::vec3(separationAmount * rigidbodyA.massInverse * intInfo.normal, 0.f);
+				transformB.position -= glm::vec3(separationAmount * rigidbodyB.massInverse * intInfo.normal, 0.f);
 			}
 		}
     }
