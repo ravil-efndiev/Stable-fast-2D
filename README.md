@@ -4,7 +4,7 @@ C++ code-first ECS-driven game engine supporting multiple development paradigms 
 ### Multiple approaches
 You decide wether to initalize and manage all engine components yourself or use a more user-friendly `Application/Layer` system
 
-#### GLM - Stable Fast 2D uses glm as its main math library 
+#### GLM - Stable Fast 2D uses [glm](https://github.com/g-truc/glm) as its main math library 
 
 ##### Examples of hello world application
 #### Approach 1 (lowlevel)
