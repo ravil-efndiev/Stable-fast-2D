@@ -1,3 +1,5 @@
+<img width="680" height="680" alt="logo2png" src="https://github.com/user-attachments/assets/8b9a44e4-4acd-4685-88c4-71fe175531d9" />
+
 # Stable Fast 2D
 C++ code-first ECS-driven game engine supporting multiple development paradigms and allows you to choose the amount of control you want over your program
 
