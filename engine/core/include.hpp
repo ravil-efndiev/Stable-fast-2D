@@ -30,6 +30,9 @@
 #include "keys.hpp"
 #include "Logger.hpp"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 namespace s2f 
 {
 	using u8 = uint8_t;

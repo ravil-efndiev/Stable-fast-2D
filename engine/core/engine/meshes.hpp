@@ -11,6 +11,7 @@ namespace s2f
 			glm::vec4 tint{ 0.f };
 			glm::vec2 texCoord{ 0.f };
 			f32 texIndex{ 0.f };
+			f32 texType{ 0.f };
 		};
 
 		struct QuadVertex

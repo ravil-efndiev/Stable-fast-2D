@@ -24,6 +24,11 @@ namespace s2f
 		u32 textureSlotsUsed{ 0 };
 	};
 
+	enum class TextureType
+	{
+		RGB, RED
+	};
+
 	class Renderer
 	{
 	public:
@@ -40,13 +45,15 @@ namespace s2f
 			const glm::mat4& transform, 
 			Texture* texture, 
 			const SubTexture& subTexture, 
-			const glm::vec4& tint = glm::vec4(1.f)
+			const glm::vec4& tint = glm::vec4(1.f),
+			TextureType texType = TextureType::RGB
 		);
 		void drawQuad(
 			const glm::mat4& transform,
 			Texture* texture,
 			const std::array<glm::vec2, 4>& textureCoords,
-			const glm::vec4& tint = glm::vec4(1.f)
+			const glm::vec4& tint = glm::vec4(1.f),
+			TextureType texType = TextureType::RGB
 		);
 
 		void submitQuad(const glm::mat4& transform, const glm::vec4& color);

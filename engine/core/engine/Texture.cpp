@@ -4,18 +4,23 @@
 
 namespace s2f
 {
-    Texture::Texture(const std::filesystem::path& texturePath)
+    Texture::Texture(const std::filesystem::path& texturePath, const std::optional<GLTextureSettingsCallback>& settings)
     {
-        create(texturePath);
+        create(texturePath, settings);
+        Logger::infoVerbose("Created texture from file: \"{}\", valid = {}", texturePath.string(), mValid);
     }
 
-    Texture::Texture(i32 width, i32 height, void* data)
-    {
-        create(width, height, data);
+    Texture::Texture(
+        i32 width, i32 height, void* data, i32 numChannels, const std::optional<GLTextureSettingsCallback>& settings
+    ) {
+        create(width, height, data, numChannels, settings);
+        Logger::infoVerbose("Created texture from data array, size = {}x{}, valid = {}", width, height, mValid);
     }
 
-    Status Texture::create(const std::filesystem::path& texturePath)
-    {
+    Status Texture::create(
+        const std::filesystem::path& texturePath, 
+        const std::optional<GLTextureSettingsCallback>& settings
+    ) {
         stbi_set_flip_vertically_on_load(true);
 
         i32 width, height;
@@ -33,25 +38,57 @@ namespace s2f
         if (!status.success)
             status.error = "File [" + texturePath.string() + "] " + status.error;
 
-		Logger::infoVerbose("Created texture from file: \"{}\", valid = {}", texturePath.string(), mValid);
         return status;
     }
 
-    Status Texture::create(i32 width, i32 height, void* data)
-    {
+    Status Texture::create(
+        i32 width,
+        i32 height,
+        void* data,
+        i32 numChannels, const std::optional<GLTextureSettingsCallback>& settings
+    ) {
+        if (numChannels)
+            mNumChannels = numChannels;
+
         mValid = false;
         mWidth = width;
         mHeight = height;
 
-        GLenum dataFormat = (mNumChannels == 3) ? GL_RGB : GL_RGBA;
-        GLenum internalFormat = (mNumChannels == 3) ? GL_RGB8 : GL_RGBA8;
+        GLenum dataFormat, internalFormat;
+        switch (mNumChannels)
+        {
+        case 1:
+            dataFormat = GL_RED;
+			internalFormat = GL_R8;
+            break;
+        case 2:
+            dataFormat = GL_RG;
+            internalFormat = GL_RG8;
+            break;
+        case 3:
+            dataFormat = GL_RGB;
+			internalFormat = GL_RGB8;
+            break;
+        case 4:
+			dataFormat = GL_RGBA;
+            internalFormat = GL_RGBA8;
+			break;
+        default:
+            return statusError(std::format("Unsupported texture format provided (channels = {})", numChannels));
+        }
+
         u32 mipmapLevels = floor(log2(glm::max(mWidth, mHeight))) + 1;
 
         glCreateTextures(GL_TEXTURE_2D, 1, &mID);
-        glTextureParameteri(mID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTextureParameteri(mID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTextureParameteri(mID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTextureParameteri(mID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        if (settings)
+			settings.value()(mID);
+        else
+        {
+            glTextureParameteri(mID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTextureParameteri(mID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTextureParameteri(mID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTextureParameteri(mID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        }
 
         glTextureStorage2D(mID, mipmapLevels, internalFormat, mWidth, mHeight);
 

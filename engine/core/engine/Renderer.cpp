@@ -46,7 +46,8 @@ namespace s2f
 				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadBatchVertex, position)),
 				LayoutElement(LayoutElementType::Float4, offsetof(meshes::QuadBatchVertex, tint)),
 				LayoutElement(LayoutElementType::Float2, offsetof(meshes::QuadBatchVertex, texCoord)),
-				LayoutElement(LayoutElementType::Float,  offsetof(meshes::QuadBatchVertex, texIndex))
+				LayoutElement(LayoutElementType::Float,  offsetof(meshes::QuadBatchVertex, texIndex)),
+				LayoutElement(LayoutElementType::Float,  offsetof(meshes::QuadBatchVertex, texType))
 			},
 			sizeof(meshes::QuadBatchVertex)
 		};
@@ -173,16 +174,18 @@ namespace s2f
 		const glm::mat4& transform,
 		Texture* texture,
 		const SubTexture& subTexture,
-		const glm::vec4& tint
+		const glm::vec4& tint,
+		TextureType texType
 	) {
-		drawQuad(transform, texture, subTexture.textureCoords(), tint);
+		drawQuad(transform, texture, subTexture.textureCoords(), tint, texType);
 	}
 
 	void Renderer::drawQuad(
 		const glm::mat4& transform,
 		Texture* texture,
 		const std::array<glm::vec2, 4>& textureCoords,
-		const glm::vec4& tint
+		const glm::vec4& tint,
+		TextureType texType
 	) {
 		if (mQuadIndexCount >= mQuadIndicesPerDraw)
 			flushBatchAndReset();
@@ -218,7 +221,8 @@ namespace s2f
 				transform * meshes::quadVertexPositions[i],
 				tint,
 				textureCoords[i],
-				textureIndex
+				textureIndex,
+				texType == TextureType::RGB ? 0.f : 1.f
 			);
 		}
 

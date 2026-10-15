@@ -1,5 +1,6 @@
 #pragma once
 #include "core/engine/Engine.hpp"
+#include "core/engine/TextRenderer.hpp"
 #include "core/api/objects/Camera.hpp"
 #include "core/api/Input.hpp"
 #include "core/api/Random.hpp"

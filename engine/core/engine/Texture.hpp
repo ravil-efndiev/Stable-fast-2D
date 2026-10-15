@@ -4,16 +4,26 @@
 
 namespace s2f
 {
+	using GLTextureSettingsCallback = std::function<void(GLuint)>;
+
     class Texture
     {
     public:
         Texture() = default;
-        Texture(const std::filesystem::path& texturePath);
-        Texture(i32 width, i32 height, void* data);
+        Texture(
+            const std::filesystem::path& texturePath, const std::optional<GLTextureSettingsCallback>& settings = std::nullopt
+        );
+        Texture(
+            i32 width, i32 height, void* data, i32 numChannels, const std::optional<GLTextureSettingsCallback>& settings = std::nullopt
+        );
         ~Texture();
 
-        Status create(const std::filesystem::path& texturePath);
-        Status create(i32 width, i32 height, void* data);
+        Status create(
+            const std::filesystem::path& texturePath, const std::optional<GLTextureSettingsCallback>& settings = std::nullopt
+        );
+        Status create(
+            i32 width, i32 height, void* data, i32 numChannels = 0, const std::optional<GLTextureSettingsCallback>& settings = std::nullopt
+        );
         void destroy();
 
         GLuint id() const { return mID; }

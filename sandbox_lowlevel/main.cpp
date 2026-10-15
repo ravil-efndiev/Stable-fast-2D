@@ -81,6 +81,8 @@ int main()
 	f32 tickTimer = engine.time().lastTime;
 	f32 fixedDt = engine.fixedDeltaTime();
 
+	TextRenderer tr(renderer);
+
 	while (engine.runs()) 
 	{
 		engine.startFrame();
@@ -95,9 +97,11 @@ int main()
 		renderer.setProjview(camera.projview());
 		renderer.begin();
 		sr.render();
+		tr.drawString("raf", Transform{ {}, {}, {.01f, .01f} }.matrix());
 		renderer.end();
 
 		scene.onFrameEnd();
+
 		engine.endFrame();
 
 		if (engine.currentTime() - tickTimer > fixedDt)
