@@ -67,6 +67,12 @@ namespace s2f
 
 	template <class T>
 	concept Numeric = std::integral<T> || std::floating_point<T>;
+
+	template <class Func, class... Args>
+	concept Callback = requires(Func& f, Args&&... args)
+	{
+		{ std::invoke(f, std::forward<Args>(args)...) } -> std::same_as<void>;
+	};
 }
 
 #ifndef S2F_DISABLE_ASSERTS

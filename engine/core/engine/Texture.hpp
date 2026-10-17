@@ -1,28 +1,36 @@
 #pragma once
 #include "include.hpp"
 #include "status.hpp"
+#include "GLAPI.hpp"
 
 namespace s2f
 {
-	using GLTextureSettingsCallback = std::function<void(GLuint)>;
+    using DefaultCallbackT = decltype(glapi::callbacks::defaultTextureSettings);
 
     class Texture
     {
     public:
         Texture() = default;
+
+		template<class Func = DefaultCallbackT> requires Callback<Func, GLuint>
         Texture(
-            const std::filesystem::path& texturePath, const std::optional<GLTextureSettingsCallback>& settings = std::nullopt
+            const std::filesystem::path& texturePath, Func&& settings = glapi::callbacks::defaultTextureSettings
         );
+
+        template<class Func = DefaultCallbackT> requires Callback<Func, GLuint>
         Texture(
-            i32 width, i32 height, void* data, i32 numChannels, const std::optional<GLTextureSettingsCallback>& settings = std::nullopt
+            i32 width, i32 height, void* data, i32 numChannels, Func&& settings = glapi::callbacks::defaultTextureSettings
         );
         ~Texture();
 
+        template<class Func = DefaultCallbackT> requires Callback<Func, GLuint>
         Status create(
-            const std::filesystem::path& texturePath, const std::optional<GLTextureSettingsCallback>& settings = std::nullopt
+            const std::filesystem::path& texturePath, Func&& settings = glapi::callbacks::defaultTextureSettings
         );
+
+        template<class Func = DefaultCallbackT> requires Callback<Func, GLuint>
         Status create(
-            i32 width, i32 height, void* data, i32 numChannels = 0, const std::optional<GLTextureSettingsCallback>& settings = std::nullopt
+            i32 width, i32 height, void* data, i32 numChannels = 0, Func&& settings = glapi::callbacks::defaultTextureSettings
         );
         void destroy();
 
@@ -38,3 +46,5 @@ namespace s2f
         bool mValid{ false };
     };
 }
+
+#include "Texture.inl"

@@ -79,5 +79,21 @@ namespace s2f
 			else
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		}
+
+		void callbacks::defaultTextureSettings(GLuint texId)
+		{
+			glTextureParameteri(texId, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTextureParameteri(texId, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTextureParameteri(texId, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTextureParameteri(texId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		}
+
+		void callbacks::fontTextureSettings(GLuint texId)
+		{
+			glTextureParameteri(texId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(texId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(texId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTextureParameteri(texId, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		}
 	}
 }

@@ -17,5 +17,16 @@ namespace s2f
 		void setDepthFuncLess();
 
 		void toggleAdditiveBlend(bool flag);
+
+		template <Callback Func>
+		void runCustomUnpackAlignmentBlock(GLint alignment, Func&& block);
+
+		namespace callbacks
+		{
+			void defaultTextureSettings(GLuint texId);
+			void fontTextureSettings(GLuint texId);
+		}
 	}
 }
+
+#include "GLAPI.inl"

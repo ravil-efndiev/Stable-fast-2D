@@ -2,14 +2,6 @@
 
 namespace s2f
 {
-	static void fontTextureSettings(GLuint texId)
-	{
-		glTextureParameteri(texId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(texId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(texId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(texId, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	}
-
 	TextRenderer::TextRenderer(Renderer& renderer)
 		: mRenderer(renderer)
 	{
@@ -51,15 +43,21 @@ namespace s2f
 			FT_Done_Face(mFace);
 			mFace = nullptr;
 
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			Font font{ 
-				std::make_shared<Texture>(
+			std::shared_ptr<Texture> texture;
+
+			glapi::runCustomUnpackAlignmentBlock(1, [&]()
+			{
+				texture = std::make_shared<Texture>(
 					atlasSize.x,
 					atlasSize.y,
 					data.data(),
 					1,
-					fontTextureSettings
-				),
+					glapi::callbacks::fontTextureSettings
+				);
+			});
+
+			Font font{ 
+				std::move(texture),
 				std::move(metaArr)
 			};
 
