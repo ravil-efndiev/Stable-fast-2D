@@ -82,6 +82,22 @@ int main()
 	f32 fixedDt = engine.fixedDeltaTime();
 
 	TextRenderer tr(renderer);
+	ui::StyleLibrary styleLibrary;
+	sr.useUI(tr, styleLibrary);
+	
+	styleLibrary.addStyle("blueText", ui::Style{
+		.color = { 0.3f, 0.4f, 1.f, 1.f },
+	});
+
+	Entity textEntity = scene.newEntity();
+	textEntity.get<Transform>()->position = { -0.9f, 0.9f, 0.f };
+	textEntity.add<ui::Text>("Test", ui::Style{
+		.color = { 1.f, 0.4f, 0.3f, 1.f },
+	});
+
+	Entity textEntity2 = scene.newEntity();
+	textEntity2.get<Transform>()->position = { 0.9f, -0.9f, 0.f };
+	textEntity2.add<ui::Text>("Test2", "blueText");
 
 	while (engine.runs()) 
 	{
@@ -97,7 +113,7 @@ int main()
 		renderer.setProjview(camera.projview());
 		renderer.begin();
 		sr.render();
-		tr.drawString("raf", Transform{ {}, {}, {.01f, .01f} }.matrix());
+		tr.drawString("raf", Transform{ {}, {}, {1.f, 1.f} }.matrix());
 		renderer.end();
 
 		scene.onFrameEnd();

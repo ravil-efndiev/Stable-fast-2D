@@ -4,7 +4,9 @@
 namespace s2f
 {
 	Layer::Layer() 
-		: mRenderer(Application::get()->renderer()), mSceneRenderer(mScene, mRenderer) {}
+		: mRenderer(Application::get()->renderer()), 
+		  mSceneRenderer(mScene, mRenderer),
+		  mTextRenderer(mRenderer) {}
 
 	void Layer::update(f32 deltaTime)
 	{

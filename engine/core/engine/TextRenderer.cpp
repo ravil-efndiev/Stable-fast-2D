@@ -86,14 +86,17 @@ namespace s2f
 
 		const Font& font = it->second;
 
-		f32 cursorX = 0.0f;
-		constexpr f32 baselineY = 0.0f;
+		f32 cursorX{ 0.f };
+		constexpr f32 fontScale{ 0.1f / 48.f };
 
 		for (char c : text) 
 		{
 			CharacterData charData = font.charactersData[c];
-			f32 centerX = cursorX + charData.bmpBearing.x + static_cast<f32>(charData.bmpSize.x) * 0.5f;
-			f32 centerY = baselineY + charData.bmpBearing.y - static_cast<f32>(charData.bmpSize.y) * 0.5f;
+			f32 glyphWidth = static_cast<f32>(charData.bmpSize.x) * fontScale;
+			f32 glyphHeight = static_cast<f32>(charData.bmpSize.y) * fontScale;
+
+			f32 centerX = cursorX + charData.bmpBearing.x * fontScale + glyphWidth * 0.5f;
+			f32 centerY = charData.bmpBearing.y * fontScale - glyphHeight * 0.5f;
 
 			if (charData.bmpSize.x > 0 && charData.bmpSize.y > 0)
 			{
@@ -105,17 +108,13 @@ namespace s2f
 
 
 				glm::mat4 glyphTransform = glm::translate(
-					glm::mat4(1.0f),
-					glm::vec3(centerX, centerY, 0.0f)
+					glm::mat4(1.f),
+					glm::vec3(centerX, centerY, 0.f)
 				);
 
 				glyphTransform = glm::scale(
 					glyphTransform,
-					glm::vec3(
-						static_cast<f32>(charData.bmpSize.x),
-						static_cast<f32>(charData.bmpSize.y),
-						1.0f
-					)
+					glm::vec3(glyphWidth, glyphHeight, 1.f)
 				);
 
 				mRenderer.drawQuad(
@@ -125,7 +124,7 @@ namespace s2f
 					color,
 					TextureType::RED
 				);
-				cursorX += charData.advance;
+				cursorX += charData.advance * fontScale;
 			}
 		}
 

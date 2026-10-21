@@ -18,6 +18,8 @@ namespace s2f
 	class Layer
 	{
 	public:
+		friend class Application;
+
 		Layer();
 		virtual ~Layer() = default;
 
@@ -62,6 +64,28 @@ namespace s2f
 		*/
 		virtual void onEvent(Event& event) {}
 
+	protected:
+		/*
+		* @brief Enqueues layer transition from current to a different layer inside Application
+		* @tparam ToLayerT User-defined type derived from Layer that will be transitioned to
+		* @param ...args Arguments for constructor of user-defined ToLayerT type
+		*/
+		template <std::derived_from<Layer> ToLayerT, class... Args>
+		void transitionTo(Args&& ...args);
+
+		/*
+		* @brief Sets camera pointer to a user-defined camera object
+		* 
+		* camera will be used to set up view projection in Renderer
+		*/
+		void useCamera(Camera& camera) { mCamera = &camera; }
+
+		/*
+		* @brief Sets up UI rendering, must be called to use UI components
+		*/
+		void useUI() { mSceneRenderer.useUI(mTextRenderer, mUIStyleLibrary); }
+
+	private:
 		/*
 		* @brief Called from Application, calls virtual onUpdate and handles extra update code
 		*/
@@ -79,31 +103,18 @@ namespace s2f
 
 		/*
 		* @brief Called from Application, calls virtual onRender and handles extra rendering code
-		* 
+		*
 		* manages renderer's render stage (begin, end)
 		*/
 		void render();
 
-		/*
-		* @brief Enqueues layer transition from current to a different layer inside Application
-		* @tparam ToLayerT User-defined type derived from Layer that will be transitioned to
-		* @param ...args Arguments for constructor of user-defined ToLayerT type
-		*/
-		template <std::derived_from<Layer> ToLayerT, class... Args>
-		void transitionTo(Args&& ...args);
-
-		/*
-		* @brief Sets camera pointer to a user-defined camera object
-		* 
-		* camera will be used to set up view projection in Renderer
-		*/
-		void useCamera(Camera& camera) { mCamera = &camera; }
-
 	protected:
 		Renderer& mRenderer;
 		Scene mScene;
+		TextRenderer mTextRenderer;
+		ui::StyleLibrary mUIStyleLibrary;
 		SceneRenderer mSceneRenderer;
-	
+			
 	private:
 		Camera* mCamera{ nullptr };
 	};

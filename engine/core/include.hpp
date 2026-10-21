@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <ranges>
 #include <random>
+#include <variant>
 
 #ifdef WIN32
 	#ifndef NOMINMAX

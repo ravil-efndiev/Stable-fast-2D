@@ -11,3 +11,4 @@
 #include "core/api/ECS/SceneRenderer.hpp"
 #include "core/api/ECS/DefaultComponents/defaultComponents.hpp"
 #include "core/api/ECS/entityQuery.hpp"
+#include "core/api/ECS/UI/components.hpp"
