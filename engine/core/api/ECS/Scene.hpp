@@ -120,7 +120,7 @@ namespace s2f
         template <class ComponentT>
         void removeComponent(Entity entity);
 
-		std::vector<Entity> entities() const { return mEntities; }
+		std::vector<Entity> entities() const;
 
 	private:
 		ComponentRegistry mRegistry;

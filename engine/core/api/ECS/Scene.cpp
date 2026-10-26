@@ -104,4 +104,9 @@ namespace s2f
 	{
 		mSystemRemoveQueue.push_back(systemID);
 	}
+
+    std::vector<Entity> Scene::entities() const
+    {
+        return mEntities;
+    }
 }
