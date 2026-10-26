@@ -115,22 +115,22 @@ rb.resolveCollisions = true;
 Systems are functions that iterate over components or entities using `queryComponents` or `queryEntities`:
 
 ```cpp
-// Query specific components directly
+// Returns Entity object with its matching components
+void animationSystem(const std::vector<Entity>& entities, f32 dt)
+{
+    for (auto [entity, animator, _] : queryEntities<SpriteAnimator, Sprite>(entities))
+    {
+        animator.playAnimation("attack");
+    }
+}
+
+// queryComponents does the same thing as queryEntities but omits Entity object, only returns components
 void gravitySystem(const std::vector<Entity>& entities, f32 fixedDT)
 {
     for (auto&& [rb] : queryComponents<Rigidbody>(entities))
     {
         if (rb.massInverse == 0.f) continue;
         rb.addForceY(rb.mass * -1.f);
-    }
-}
-
-// Query entities with multiple matching components
-void animationSystem(const std::vector<Entity>& entities, f32 dt)
-{
-    for (auto [entity, animator, _] : queryEntities<SpriteAnimator, Sprite>(entities))
-    {
-        animator.playAnimation("attack");
     }
 }
 ```
