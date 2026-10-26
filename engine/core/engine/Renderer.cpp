@@ -69,9 +69,11 @@ namespace s2f
 		};
 
 		mQuadVA.create();
+		mRoundedQuadVA.create();
 		createBufferFromContainer(mQuadVB, BufferType::Vertex, std::span{ quadVertices });
 		createBufferFromContainer(mQuadIB, BufferType::Index, std::span{ meshes::quadIndices });
-		mQuadInstanceVB.create(BufferType::Vertex, 0, mInstanceBufferCapacity);
+		mQuadInstanceVB.create(BufferType::Vertex, 0, mQuadInstanceBufferCapacity);
+		mRoundedQuadInstanceVB.create(BufferType::Vertex, 0, mRoundedQuadInstanceBufferCapacity);
 
 		Layout quadVBLayout
 		{
@@ -91,12 +93,27 @@ namespace s2f
 			sizeof(meshes::QuadInstanceVertex)
 		};
 
+		Layout roundedQuadInstanceLayout
+		{
+			{
+				LayoutElement(LayoutElementType::Float4x4, offsetof(meshes::RoundedQuadInstanceVertex, transform)),
+				LayoutElement(LayoutElementType::Float4,   offsetof(meshes::RoundedQuadInstanceVertex, tint)),
+				LayoutElement(LayoutElementType::Float,    offsetof(meshes::RoundedQuadInstanceVertex, radius)),
+			},
+			sizeof(meshes::RoundedQuadInstanceVertex)
+		};
+
 		mQuadVA.addVertexBuffer(mQuadVB, quadVBLayout, Divisor::PerVertex);
 		mQuadVA.addVertexBuffer(mQuadInstanceVB, quadInstanceLayout, Divisor::PerInstnace);
 		mQuadVA.setIndexBuffer(mQuadIB);
+
+		mRoundedQuadVA.addVertexBuffer(mQuadVB, quadVBLayout, Divisor::PerVertex);
+		mRoundedQuadVA.addVertexBuffer(mRoundedQuadInstanceVB, roundedQuadInstanceLayout, Divisor::PerInstnace);
+		mRoundedQuadVA.setIndexBuffer(mQuadIB);
 		
 		mQuadShaderTex.create(SHADER_PATH / "quadInstancedTex.vert", SHADER_PATH / "quadInstancedTex.frag");
 		mQuadShaderCol.create(SHADER_PATH / "quadInstancedCol.vert", SHADER_PATH / "quadInstancedCol.frag");
+		mRoundedQuadShader.create(SHADER_PATH / "roundedQuadInstanced.vert", SHADER_PATH / "roundedQuadInstanced.frag");
 		mQuadShaderTex.setUniformInt("uTextureIndex", 0);
 	}
 
@@ -250,13 +267,21 @@ namespace s2f
 
 	void Renderer::submitQuads(std::span<glm::mat4> transforms, std::span<glm::vec4> colors)
 	{
-		auto instanceVec = makeQuadInstanceVector(transforms, colors);
+		auto instanceVec = makeInstanceVector<meshes::QuadInstanceVertex>(
+			[](const glm::mat4& t, const glm::vec4& c) { return meshes::QuadInstanceVertex{ t, c }; },
+			transforms,
+			colors
+		);
 		submitQuads(instanceVec, nullptr);
 	}
 
 	void Renderer::submitQuads(std::span<glm::mat4> transforms, std::span<glm::vec4> colors, Texture* texture)
 	{
-		auto instanceVec = makeQuadInstanceVector(transforms, colors);
+		auto instanceVec = makeInstanceVector<meshes::QuadInstanceVertex>(
+			[](const glm::mat4& t, const glm::vec4& c) { return meshes::QuadInstanceVertex{ t, c }; },
+			transforms,
+			colors
+		);
 		submitQuads(instanceVec, texture);
 	}
 
@@ -265,10 +290,10 @@ namespace s2f
 		mGLState.bindVA(mQuadVA);
 
 		auto instanceVerticesBytes = instanceVertices.size_bytes();
-		if (instanceVerticesBytes > mInstanceBufferCapacity)
+		if (instanceVerticesBytes > mQuadInstanceBufferCapacity)
 		{
-			mInstanceBufferCapacity *= 2;
-			mQuadInstanceVB.realloc(mInstanceBufferCapacity);
+			mQuadInstanceBufferCapacity *= 2;
+			mQuadInstanceVB.realloc(mQuadInstanceBufferCapacity);
 		}
 		mQuadInstanceVB.setData(instanceVerticesBytes, instanceVertices.data());
 
@@ -288,6 +313,42 @@ namespace s2f
 		mStats.drawCalls++;
 	}
 
+    void Renderer::submitRoundedQuad(const glm::mat4 &transform, const glm::vec4 &color, f32 radius)
+    {
+		meshes::RoundedQuadInstanceVertex instance{ transform, color, radius };
+		submitRoundedQuads(std::span(&instance, 1));
+    }
+
+    void Renderer::submitRoundedQuads(std::span<glm::mat4> transforms, std::span<glm::vec4> colors, std::span<f32> radii)
+    {
+		auto instanceVec = makeInstanceVector<meshes::RoundedQuadInstanceVertex>(
+			[](const glm::mat4& t, const glm::vec4& c, f32 r) { return meshes::RoundedQuadInstanceVertex{ t, c, r }; },
+			transforms,
+			colors,
+			radii
+		);
+		submitRoundedQuads(instanceVec);	
+    }
+
+    void Renderer::submitRoundedQuads(std::span<meshes::RoundedQuadInstanceVertex> instanceVertices)
+    {
+		mGLState.bindVA(mRoundedQuadVA);
+
+		auto instanceVerticesBytes = instanceVertices.size_bytes();
+		if (instanceVerticesBytes > mRoundedQuadInstanceBufferCapacity)
+		{
+			mRoundedQuadInstanceBufferCapacity *= 2;
+			mRoundedQuadInstanceVB.realloc(mRoundedQuadInstanceBufferCapacity);
+		}
+		mRoundedQuadInstanceVB.setData(instanceVerticesBytes, instanceVertices.data());
+
+		mGLState.bindShader(mRoundedQuadShader);
+		mRoundedQuadShader.setUniformMat4("uProjview", mProjview.projection * mProjview.view, &mGLState);
+
+		glapi::drawIndexedInstanced(mRoundedQuadVA.indexBufferIndexCount(), instanceVertices.size(), mRenderMode);
+		mStats.drawCalls++;
+    }
+
     void Renderer::resetProjview()
 	{
 		auto viewport = glapi::getViewportSize();
@@ -298,26 +359,5 @@ namespace s2f
 	{
 		end();
 		beginBatch();
-	}
-
-	std::vector<meshes::QuadInstanceVertex> Renderer::makeQuadInstanceVector(
-		std::span<glm::mat4> transforms,
-		std::span<glm::vec4> colors
-	) {
-		auto tfSize = transforms.size();
-		if (tfSize != colors.size())
-		{
-			Logger::error("makeQuadInstanceVector() transforms collection size must be same as colors");
-			return {};
-		}
-
-		std::vector<meshes::QuadInstanceVertex> zipped;
-		zipped.reserve(tfSize);
-
-		for (size_t i{}; i < tfSize; ++i)
-		{
-			zipped.emplace_back(transforms[i], colors[i]);
-		}
-		return zipped;
 	}
 }

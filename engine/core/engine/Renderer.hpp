@@ -63,6 +63,10 @@ namespace s2f
 		void submitQuads(std::span<glm::mat4> transforms, std::span<glm::vec4> colors, Texture* texture);
 		void submitQuads(std::span<meshes::QuadInstanceVertex> instanceVertices, Texture* texture);
 
+		void submitRoundedQuad(const glm::mat4& transform, const glm::vec4& color, f32 radius);
+		void submitRoundedQuads(std::span<glm::mat4> transforms, std::span<glm::vec4> colors, std::span<f32> radii);
+		void submitRoundedQuads(std::span<meshes::RoundedQuadInstanceVertex> instanceVertices);
+
 		void setProjview(const ProjViewData& projview) { mProjview = projview; }
 		void resetProjview();
 
@@ -82,10 +86,9 @@ namespace s2f
 		void createQuadBatchResources();
 		void createQuadSingleResources();
 
-		std::vector<meshes::QuadInstanceVertex> makeQuadInstanceVector(
-			std::span<glm::mat4> transforms, 
-			std::span<glm::vec4> colors
-		);
+		template <class VertexType, class VertexFactory, class... Spans>
+		std::vector<VertexType> makeInstanceVector(VertexFactory factory, std::span<glm::mat4> transforms, Spans... vertexSpans);
+
 
 	private:
 		ProjViewData mProjview;
@@ -97,11 +100,15 @@ namespace s2f
 
 		Shader mQuadShaderTex;
 		Shader mQuadShaderCol;
+		Shader mRoundedQuadShader;
 
 		VertexArray mQuadVA;
 		Buffer mQuadVB;
 		Buffer mQuadIB;
 		Buffer mQuadInstanceVB;
+
+		VertexArray mRoundedQuadVA;
+		Buffer mRoundedQuadInstanceVB;
 
 		std::vector<u32> mQuadBatchIndices;
 		std::vector<meshes::QuadBatchVertex> mQuadVertexData;
@@ -111,7 +118,8 @@ namespace s2f
 		const u64 mQuadBatchSize;
 		const u64 mQuadVerticesPerDraw;
 		const u64 mQuadIndicesPerDraw;
-		u64 mInstanceBufferCapacity{ 256 * sizeof(meshes::QuadInstanceVertex) };
+		u64 mQuadInstanceBufferCapacity{ 256 * sizeof(meshes::QuadInstanceVertex) };
+		u64 mRoundedQuadInstanceBufferCapacity{ 256 * sizeof(meshes::RoundedQuadInstanceVertex) };
 
 		std::vector<Texture*> mTextures;
 		u32 mTextureSlotIndex{ 1 };
@@ -120,3 +128,5 @@ namespace s2f
 		RenderMode mRenderMode;
 	};
 }
+
+#include "Renderer.inl"

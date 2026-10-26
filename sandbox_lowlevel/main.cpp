@@ -114,6 +114,8 @@ int main()
 		renderer.begin();
 		sr.render();
 		tr.drawString("raf", Transform{ {}, {}, {1.f, 1.f} }.matrix());
+
+		renderer.submitRoundedQuad(Transform{{}, {}, {0.6f, 0.4f}}.matrix(), glm::vec4(0.3f, 0.4f, 1.f, 1.f), 0.1f);
 		renderer.end();
 
 		scene.onFrameEnd();

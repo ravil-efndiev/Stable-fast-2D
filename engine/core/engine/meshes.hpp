@@ -26,6 +26,14 @@ namespace s2f
 			glm::vec4 tint;
 		};
 
+		struct RoundedQuadInstanceVertex
+		{
+			glm::mat4 transform;
+			glm::vec4 tint;
+			f32 radius{ 0.f };
+		};
+
+
 		static std::array<glm::vec4, 4> quadVertexPositions
 		{
 			glm::vec4(-0.5f,  0.5f, 0.0f, 1.f),
