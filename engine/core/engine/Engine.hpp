@@ -3,6 +3,7 @@
 #include "time.hpp"
 #include "Renderer.hpp"
 #include "inputState.hpp"
+#include "frameDataState.hpp"
 #include "events/events.hpp"
 
 namespace s2f
@@ -17,6 +18,7 @@ namespace s2f
 		Version applicationVersion{ 0, 0, 0 };
 		RendererInfo rendererInfo{ RenderMode::Fill, 5000 };
 		WindowInfo windowInfo;
+		bool useFrameDataCalculations{ true };
 	};
 
 	/*
@@ -74,6 +76,7 @@ namespace s2f
 		f32 currentTime() const { return (f32)mTime.currentTime; }
 		f32 fixedDeltaTime() const { return mTime.fixedDeltaTime; }
 		Time time() const { return mTime; }
+		FrameDataState frameDataState() const { return mFrameDataState; }
 		Renderer& renderer() { return mRenderer; }
 		Window& window() { return mWindow; }
 
@@ -82,7 +85,13 @@ namespace s2f
 		* @param clearColor background clear color
 		*/
 		void setClearColor(const glm::vec4& clearColor) { mClearColor = clearColor; }
-		
+
+		/*
+		* @brief Sets the interval at which average FPS is calculated in FrameDataState
+		* @param seconds the interval in seconds
+		*/
+		void setIntervalForFrameCalculation(f64 seconds) { mFrameDataState.measureIntervalSeconds = seconds; }
+
 		/*
 		* @brief Static method that returns Engine instance
 		* @return Engine instance pointer
@@ -101,8 +110,10 @@ namespace s2f
 		Window mWindow;
 		Renderer mRenderer;
 		InputState mInputState{};
+		FrameDataState mFrameDataState{};
 		EventFunc mEventFunc;
 		glm::vec4 mClearColor;
 		std::mt19937 mRandomGenerator;
+		bool mUseFrameDataCalculations;
 	};
 }

@@ -90,7 +90,7 @@ int main()
 	});
 
 	Entity textEntity = scene.newEntity();
-	textEntity.get<Transform>()->position = { -0.9f, 0.9f, 0.f };
+	textEntity.get<Transform>()->position = { 0.f, 0.9f, 0.f };
 	textEntity.add<ui::Text>("Test", ui::Style{
 		.color = { 1.f, 0.4f, 0.3f, 1.f },
 	});
@@ -99,11 +99,14 @@ int main()
 	textEntity2.get<Transform>()->position = { 0.9f, -0.9f, 0.f };
 	textEntity2.add<ui::Text>("Test2", "blueText");
 
+	engine.setIntervalForFrameCalculation(0.1f);
+
 	while (engine.runs()) 
 	{
 		engine.startFrame();
-
+		
 		f32 dt = engine.deltaTime();
+		
 		scene.update(dt);
 		emitter.emit(particleProps);
 
@@ -113,8 +116,7 @@ int main()
 		renderer.setProjview(camera.projview());
 		renderer.begin();
 		sr.render();
-		tr.drawString("raf", Transform{ {}, {}, {1.f, 1.f} }.matrix());
-
+		tr.drawString(std::format("FPS: {:.0f}", engine.frameDataState().averageFPS), Transform{ {-0.9f, 0.9f, 0.f}, {}, {1.f, 1.f} }.matrix());
 		renderer.submitRoundedQuad(Transform{{}, {}, {0.6f, 0.4f}}.matrix(), glm::vec4(0.3f, 0.4f, 1.f, 1.f), 0.1f);
 		renderer.end();
 

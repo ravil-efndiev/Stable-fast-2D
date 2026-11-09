@@ -86,8 +86,8 @@ namespace s2f
 		void createQuadBatchResources();
 		void createQuadSingleResources();
 
-		template <class VertexType, class VertexFactory, class... Spans>
-		std::vector<VertexType> makeInstanceVector(VertexFactory factory, std::span<glm::mat4> transforms, Spans... vertexSpans);
+		template <class VertexType, class... Spans>
+		std::vector<VertexType> makeInstanceVector(std::span<glm::mat4> transforms, Spans... vertexSpans);
 
 
 	private:

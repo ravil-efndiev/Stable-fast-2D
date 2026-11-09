@@ -2,8 +2,8 @@
 
 namespace s2f
 {
-    template <class VertexType, class VertexFactory, class... Spans>
-    std::vector<VertexType> Renderer::makeInstanceVector(VertexFactory factory, std::span<glm::mat4> transforms, Spans... attributes)
+    template <class VertexType, class... Spans>
+    std::vector<VertexType> Renderer::makeInstanceVector(std::span<glm::mat4> transforms, Spans... attributes)
     {
         auto count = transforms.size();
 
@@ -19,7 +19,7 @@ namespace s2f
         for (size_t i{}; i < count; ++i)
         {
             instances.emplace_back(
-                factory(transforms[i], attributes[i]...)
+                VertexType{ transforms[i], attributes[i]... }
             );
         }
 

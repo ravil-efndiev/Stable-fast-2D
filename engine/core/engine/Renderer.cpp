@@ -268,7 +268,6 @@ namespace s2f
 	void Renderer::submitQuads(std::span<glm::mat4> transforms, std::span<glm::vec4> colors)
 	{
 		auto instanceVec = makeInstanceVector<meshes::QuadInstanceVertex>(
-			[](const glm::mat4& t, const glm::vec4& c) { return meshes::QuadInstanceVertex{ t, c }; },
 			transforms,
 			colors
 		);
@@ -278,7 +277,6 @@ namespace s2f
 	void Renderer::submitQuads(std::span<glm::mat4> transforms, std::span<glm::vec4> colors, Texture* texture)
 	{
 		auto instanceVec = makeInstanceVector<meshes::QuadInstanceVertex>(
-			[](const glm::mat4& t, const glm::vec4& c) { return meshes::QuadInstanceVertex{ t, c }; },
 			transforms,
 			colors
 		);
@@ -322,7 +320,6 @@ namespace s2f
     void Renderer::submitRoundedQuads(std::span<glm::mat4> transforms, std::span<glm::vec4> colors, std::span<f32> radii)
     {
 		auto instanceVec = makeInstanceVector<meshes::RoundedQuadInstanceVertex>(
-			[](const glm::mat4& t, const glm::vec4& c, f32 r) { return meshes::RoundedQuadInstanceVertex{ t, c, r }; },
 			transforms,
 			colors,
 			radii

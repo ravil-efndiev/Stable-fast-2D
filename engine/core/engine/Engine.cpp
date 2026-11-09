@@ -15,7 +15,7 @@ namespace s2f
 
 	Engine::Engine(const EngineInfo& info)
 		: mClearColor(info.clearColor), mWindow(info.windowInfo), mRenderer(info.rendererInfo),
-		mRandomGenerator(std::random_device{}())
+		mRandomGenerator(std::random_device{}()), mUseFrameDataCalculations(info.useFrameDataCalculations)
 	{
 		S2F_ASSERT(!sInstance, "Engine instance can only be created once");
 		sInstance = this;
@@ -51,6 +51,17 @@ namespace s2f
 	{
 		mTime.update(mWindow.getTime());
 		glapi::clearScreen(mClearColor);
+
+		if (mUseFrameDataCalculations)
+		{
+			mFrameDataState.accumulatedTime += mTime.deltaTime;
+			if (mFrameDataState.accumulatedTime > mFrameDataState.measureIntervalSeconds)
+			{
+				mFrameDataState.averageFPS = mFrameDataState.frameCount / mFrameDataState.accumulatedTime;
+				mFrameDataState.frameCount = 0;
+				mFrameDataState.accumulatedTime = 0.0;
+			}
+		}
 	}
 
 	void Engine::endFrame()
@@ -58,6 +69,8 @@ namespace s2f
 		mWindow.swapBuffers();
 		mInputState.update();
 		mWindow.pollEvents();
+		if (mUseFrameDataCalculations)
+			mFrameDataState.frameCount++;
 	}
 
 	bool Engine::runs() const

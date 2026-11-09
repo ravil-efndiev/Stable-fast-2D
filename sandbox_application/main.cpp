@@ -33,6 +33,11 @@ public:
 			mCamera.position.x += 10.f * dt;
 	}
 
+	void onTick(f32 fixedDt) override
+	{
+		mScene.tick(fixedDt);
+	}
+
 	void onRender() override
 	{
 		mSceneRenderer.render();
@@ -75,6 +80,11 @@ public:
 	void onRender() override
 	{
 		mSceneRenderer.render();
+	}
+
+	void onTick(f32 fixedDt) override
+	{
+		mScene.tick(fixedDt);
 	}
 
 	void onEvent(Event& event)
